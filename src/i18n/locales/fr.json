@@ -192,7 +192,11 @@
     "error": "Une erreur est survenue. Veuillez réessayer.",
     "close": "Fermer",
     "logout": "Déconnexion",
-    "welcome": "Bonjour"
+    "welcome": "Bonjour",
+    "orDivider": "ou",
+    "emailPlaceholder": "Votre adresse email",
+    "emailSubmit": "Continuer avec l'email",
+    "invalidEmail": "Veuillez entrer une adresse email valide."
   },
   "quiz": {
     "label": "Mode Visuel",
@@ -215,6 +219,13 @@
     "profileAllergiesPlaceholder": "ex: jasmin, musc, bois de cèdre...",
     "yes": "Oui",
     "no": "Non",
+    "intensityQuestion": "Quelle intensité de parfum préférez-vous ?",
+    "intensityFrais": "Léger",
+    "intensityFraisDesc": "Frais et discret",
+    "intensityMix": "Équilibré",
+    "intensityMixDesc": "Un mix des deux",
+    "intensityPuissant": "Intense",
+    "intensityPuissantDesc": "Puissant et tenace",
     "submit": "Générer mes formules",
     "submitCatalog": "Voir mes parfums",
     "continue": "Continuer",
@@ -283,6 +294,9 @@
   },
   "quizResults": {
     "tapOtherCard": "Appuie sur l'autre carte pour changer de choix",
+    "continue": "Continuer",
+    "backToChoices": "Retour aux choix",
+    "personalizeTitle": "Personnalisez votre formule",
     "printed": "Imprimé",
     "printError": "Erreur d'impression.",
     "chooseYourFormula": "{name}, choisis ta formule",
@@ -305,8 +319,25 @@
     "yourRecommendations": "Vos recommandations",
     "compareFormulas": "Comparez les deux formules en toute lisibilité"
   },
-  "formulaQr": {
-    "localDevHint": "Si vous testez en local, configurez NEXT_PUBLIC_APP_URL avec l'URL publique du front."
+  "formulaPersonalizer": {
+    "invite": "Cliquez sur l'icône à côté d'une note pour voir ses alternatives.",
+    "currentNote": "Note actuelle",
+    "alternatives": "Alternatives",
+    "noAlternatives": "Aucune alternative disponible pour cette note.",
+    "error": "Impossible de remplacer cette note. Veuillez réessayer."
+  },
+  "sendMail": {
+    "button": "Recevoir par mail",
+    "title": "Recevoir votre formule",
+    "subtitle": "Renseignez vos coordonnées pour recevoir votre formule par email.",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "email": "Email",
+    "submit": "Envoyer",
+    "sending": "Envoi en cours…",
+    "sent": "Formule envoyée !",
+    "error": "Erreur d'envoi. Veuillez réessayer.",
+    "close": "Fermer"
   },
   "devNav": {
     "home": "Accueil",

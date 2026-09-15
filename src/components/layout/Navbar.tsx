@@ -37,6 +37,8 @@ export default function Navbar({ showActions = true, transparent = false }: Navb
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3" onClick={handleLogoClick}>
             <Image src={activeBrand.logo} alt={`Logo ${activeBrand.name}`} width={activeBrand.navLogoSize} height={activeBrand.navLogoSize} style={{ width: "auto", height: "auto" }} />
+            <span className="text-primary text-lg font-light">×</span>
+            <Image src="/logo-lampions.png" alt="Logo Lampion" width={56} height={56} style={{ width: "auto", height: "auto" }} />
             {isEster && (
               <div className="flex items-center gap-2">
                 <span className="text-primary text-xs font-semibold">v1.0</span>

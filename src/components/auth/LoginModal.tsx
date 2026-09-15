@@ -17,11 +17,17 @@ interface LoginModalProps {
   onClose: () => void;
 }
 
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
 export default function LoginModal({ open, onClose }: LoginModalProps) {
   const { login, isLoading, error, clearError } = useAuth();
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const [debugError, setDebugError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [emailFormError, setEmailFormError] = useState<string | null>(null);
 
   useEffect(() => {
     if (open) {
@@ -49,8 +55,20 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
   const handleGoogleSuccess = async (response: CredentialResponse) => {
     if (!response.credential) return;
     const decoded = decodeJwt(response.credential);
-    const email = decoded.email as string;
-    const success = await login(email);
+    const googleEmail = decoded.email as string;
+    const success = await login(googleEmail);
+    if (success) handleClose();
+  };
+
+  const handleEmailSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!isValidEmail(email)) {
+      setEmailFormError(t("auth.invalidEmail"));
+      return;
+    }
+    setEmailFormError(null);
+    clearError();
+    const success = await login(email.trim());
     if (success) handleClose();
   };
 
@@ -126,10 +144,39 @@ export default function LoginModal({ open, onClose }: LoginModalProps) {
           )}
         </div>
 
-        {/* Divider */}
-        <div className="flex items-center gap-3 my-6">
-          <span className="flex-1 h-px bg-primary/10" />
-        </div>
+        {!isLoading && error !== "no_sessions" && (
+          <>
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-6">
+              <span className="flex-1 h-px bg-primary/10" />
+              <span className="text-xs text-primary/40 font-medium uppercase tracking-wider">
+                {t("auth.orDivider")}
+              </span>
+              <span className="flex-1 h-px bg-primary/10" />
+            </div>
+
+            {/* Email-only form */}
+            <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => { setEmail(e.target.value); setEmailFormError(null); }}
+                placeholder={t("auth.emailPlaceholder")}
+                autoComplete="email"
+                className="w-full rounded-lg border border-primary/15 bg-white px-4 py-3 text-sm text-primary placeholder:text-primary/35 focus:outline-none focus:ring-2 focus:ring-primary/20"
+              />
+              {emailFormError && (
+                <span className="text-xs text-red-600 font-medium px-1">{emailFormError}</span>
+              )}
+              <button
+                type="submit"
+                className="w-full py-3 rounded-lg bg-primary text-white text-sm font-bold uppercase tracking-wider hover:bg-primary/90 transition-colors cursor-pointer"
+              >
+                {t("auth.emailSubmit")}
+              </button>
+            </form>
+          </>
+        )}
 
         {/* Close */}
         <button

@@ -14,6 +14,7 @@ import { persistLanguage, resolveStoredLanguage } from "@/lib/language";
 import { activeBrand } from "@/lib/brand";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
+const isEster = activeBrand.id === "ester";
 
 interface QuestionChoice { label: string; image?: string; }
 interface Question { id: number; question: string; choices: QuestionChoice[]; }
@@ -21,14 +22,16 @@ interface QuizAnswer { question_id: number; question_text: string; top_2: string
 interface Profile { gender: "homme" | "femme" | ""; age: string; pregnant: boolean | null; has_allergies: boolean | null; allergies: string; }
 
 type Step = "profile" | "questionnaire";
-type Phase = "top2" | "bottom2" | "confirm";
+type Phase = "top2" | "bottom2" | "confirm" | "intensity";
 type ProfileStep = "gender" | "age" | "pregnant" | "allergies" | "allergies_detail";
+type FormulaType = "frais" | "mix" | "puissant";
 
 // ── Mode multi ───────────────────────────────────────────────────────────
 interface ParticipantState {
   color: string;
   profile: Profile;
   answers: QuizAnswer[];
+  formulaType: FormulaType | null;
 }
 
 function BigButton({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
@@ -43,6 +46,25 @@ function BigButton({ label, selected, onClick }: { label: string; selected: bool
         }`}
     >
       {label}
+    </button>
+  );
+}
+
+// ── Choix d'intensité (frais / mix / puissant) ──────────────────────────
+function IntensityCard({ icon, label, description, selected, onClick }: { icon: string; label: string; description: string; selected: boolean; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`flex-1 flex flex-col items-center gap-2 py-6 px-4 rounded-xl border-2 transition-all
+        ${selected
+          ? "border-primary bg-primary text-white shadow-lg scale-[1.02]"
+          : "border-primary/20 bg-white text-primary hover:border-primary hover:shadow-md"
+        }`}
+    >
+      <MaterialIcon name={icon} className={`text-[28px] ${selected ? "text-white" : "text-primary"}`} />
+      <span className="text-base font-semibold">{label}</span>
+      <span className={`text-xs ${selected ? "text-white/80" : "text-primary/50"}`}>{description}</span>
     </button>
   );
 }
@@ -100,6 +122,7 @@ export default function QuizPage() {
     gender: "", age: "", pregnant: null, has_allergies: null, allergies: "",
   });
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
+  const [formulaType, setFormulaType] = useState<FormulaType | null>(null);
 
   // ── Mode multi ─────────────────────────────────────────────────────
   const initParticipants = (): ParticipantState[] =>
@@ -107,6 +130,7 @@ export default function QuizPage() {
       color,
       profile: { gender: "", age: "", pregnant: null, has_allergies: null, allergies: "" },
       answers: [],
+      formulaType: null,
     }));
   const [participants, setParticipants] = useState<ParticipantState[]>(initParticipants);
   const [currentParticipantIndex, setCurrentParticipantIndex] = useState(0);
@@ -252,9 +276,15 @@ export default function QuizPage() {
         if (currentIndex + 1 < questions.length) {
           setCurrentIndex((i) => i + 1);
           setPhase("top2"); setTop2([]); setBottom2([]);
-        } else {
-          // Toutes les questions terminées — on passe l'état final directement
+        } else if (activeBrand.id === "ester") {
+          // Catalogue Ester : pas de génération LLM, pas de choix d'intensité.
           submitMultiAnswers(updatedParticipants);
+        } else {
+          // Toutes les questions terminées — chaque participant choisit son intensité
+          // avant soumission finale, à tour de rôle comme pour les questions.
+          setParticipants(updatedParticipants);
+          setCurrentParticipantIndex(0);
+          setPhase("intensity");
         }
       }
     } else {
@@ -263,14 +293,36 @@ export default function QuizPage() {
       if (currentIndex + 1 < questions.length) {
         setCurrentIndex((i) => i + 1);
         setPhase("top2"); setTop2([]); setBottom2([]);
-      } else {
+      } else if (activeBrand.id === "ester") {
         submitAnswers(newAnswers);
+      } else {
+        setPhase("intensity");
       }
     }
   }, [currentQuestion, top2, bottom2, answers, currentIndex, questions.length, isMulti, currentParticipantIndex, participantColors.length, participants]);
 
+  // ── Choix d'intensité (solo + multi) ───────────────────────────────
+  const handleIntensitySelect = useCallback((type: FormulaType) => {
+    if (isMulti) {
+      const updatedParticipants = participants.map((p, i) =>
+        i === currentParticipantIndex ? { ...p, formulaType: type } : p
+      );
+      setParticipants(updatedParticipants);
+
+      const nextParticipantIdx = currentParticipantIndex + 1;
+      if (nextParticipantIdx < participantColors.length) {
+        setCurrentParticipantIndex(nextParticipantIdx);
+      } else {
+        submitMultiAnswers(updatedParticipants);
+      }
+    } else {
+      setFormulaType(type);
+      submitAnswers(answers, type);
+    }
+  }, [isMulti, participants, currentParticipantIndex, participantColors.length, answers]);
+
   // ── Soumission solo ────────────────────────────────────────────────
-  const submitAnswers = async (finalAnswers: QuizAnswer[]) => {
+  const submitAnswers = async (finalAnswers: QuizAnswer[], type?: FormulaType | null) => {
     setGenerating(true);
     try {
       const res = await fetch(`${API_BASE}/api/formulas/generate`, {
@@ -285,6 +337,7 @@ export default function QuizPage() {
           allergies: profile.allergies || undefined,
           pregnant: profile.pregnant ?? false,
           answers: finalAnswers,
+          formula_type: type ?? formulaType ?? undefined,
         }),
       });
       if (!res.ok) throw new Error(t("quiz.errorGenerating"));
@@ -315,6 +368,7 @@ export default function QuizPage() {
             allergies: p.profile.allergies || undefined,
             pregnant: p.profile.pregnant ?? false,
             answers: p.answers,
+            formula_type: p.formulaType ?? undefined,
           })),
         }),
       });
@@ -484,7 +538,7 @@ export default function QuizPage() {
               {currentProfileIndex > 0 && (
                 <button
                   onClick={goBackProfile}
-                  className="text-primary/40 text-xs hover:text-primary transition-colors flex items-center gap-1"
+                  className="text-primary/100 text-xs hover:text-primary transition-colors flex items-center gap-1"
                 >
                   <MaterialIcon name="arrow_back" className="text-[14px]" />
                   {t("quiz.back")}
@@ -513,6 +567,52 @@ export default function QuizPage() {
     </div>
   );
 
+  // ════════════════════════════════════════════════════════════════════
+  // CHOIX D'INTENSITÉ (léger / équilibré / intense) — avant génération
+  // ════════════════════════════════════════════════════════════════════
+  if (phase === "intensity") {
+    return (
+      <div className="relative flex h-dvh w-full flex-col transition-colors duration-500" style={isMulti && colorDef ? { backgroundColor: colorDef.bg } : {}}>
+        <Navbar showActions={false} transparent />
+        <main className="flex-1 flex flex-col items-center justify-center px-4 relative z-10">
+          <div className="w-full max-w-lg flex flex-col items-center gap-5">
+            {isMulti && currentColor && <ColorTurnBanner colorId={currentColor} />}
+            <div className="w-full bg-white rounded-2xl shadow-lg px-8 py-8 flex flex-col items-center gap-6">
+              <h2 className="text-2xl md:text-3xl font-extralight tracking-tight text-center leading-tight text-primary">
+                {t("quiz.intensityQuestion")}
+              </h2>
+              <div className="flex flex-col sm:flex-row gap-3 w-full">
+                <IntensityCard
+                  icon="air"
+                  label={t("quiz.intensityFrais")}
+                  description={t("quiz.intensityFraisDesc")}
+                  selected={(isMulti ? currentParticipant.formulaType : formulaType) === "frais"}
+                  onClick={() => handleIntensitySelect("frais")}
+                />
+                <IntensityCard
+                  icon="balance"
+                  label={t("quiz.intensityMix")}
+                  description={t("quiz.intensityMixDesc")}
+                  selected={(isMulti ? currentParticipant.formulaType : formulaType) === "mix"}
+                  onClick={() => handleIntensitySelect("mix")}
+                />
+                <IntensityCard
+                  icon="local_fire_department"
+                  label={t("quiz.intensityPuissant")}
+                  description={t("quiz.intensityPuissantDesc")}
+                  selected={(isMulti ? currentParticipant.formulaType : formulaType) === "puissant"}
+                  onClick={() => handleIntensitySelect("puissant")}
+                />
+              </div>
+            </div>
+          </div>
+        </main>
+        <div className="absolute top-0 right-0 -z-10 w-[40%] h-full opacity-[0.03] pointer-events-none bg-gradient-to-l from-primary to-transparent" />
+        <div className="absolute bottom-0 left-0 -z-10 w-[40%] h-[60%] opacity-[0.05] pointer-events-none bg-gradient-to-tr from-primary to-transparent blur-[120px]" />
+      </div>
+    );
+  }
+
   const visibleChoices = phase === "bottom2"
     ? currentQuestion?.choices.filter((c) => !top2.includes(c.label)) ?? []
     : currentQuestion?.choices ?? [];
@@ -540,7 +640,7 @@ export default function QuizPage() {
           <h3 className="text-2xl md:text-3xl font-extralight tracking-tight text-center leading-tight text-primary">
             {currentQuestion?.question}
           </h3>
-          {phaseHint && <p className="text-xs text-primary/40 tracking-widest uppercase">{phaseHint}</p>}
+          {phaseHint && <p className={`text-xs tracking-widest uppercase ${isEster ? "text-primary font-semibold" : "text-primary/100"}`}>{phaseHint}</p>}
         </div>
 
         {phase === "confirm" ? (

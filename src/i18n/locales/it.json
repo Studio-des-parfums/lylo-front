@@ -192,7 +192,11 @@
     "error": "Si è verificato un errore. Riprova.",
     "close": "Chiudi",
     "logout": "Esci",
-    "welcome": "Ciao"
+    "welcome": "Ciao",
+    "orDivider": "oppure",
+    "emailPlaceholder": "La tua email",
+    "emailSubmit": "Continua con l'email",
+    "invalidEmail": "Inserisci un indirizzo email valido."
   },
   "quiz": {
     "label": "Modalità visiva",
@@ -304,9 +308,6 @@
     "resumeQuestion": "Ho una domanda",
     "yourRecommendations": "I tuoi consigli",
     "compareFormulas": "Confronta le due formule in totale chiarezza"
-  },
-  "formulaQr": {
-    "localDevHint": "Se stai testando in locale, configura NEXT_PUBLIC_APP_URL con l'URL pubblico del frontend."
   },
   "devNav": {
     "home": "Home",

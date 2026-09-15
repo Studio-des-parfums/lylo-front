@@ -192,7 +192,11 @@
     "error": "Se produjo un error. Inténtalo de nuevo.",
     "close": "Cerrar",
     "logout": "Cerrar sesión",
-    "welcome": "Hola"
+    "welcome": "Hola",
+    "orDivider": "o",
+    "emailPlaceholder": "Tu dirección de correo",
+    "emailSubmit": "Continuar con el correo",
+    "invalidEmail": "Introduce una dirección de correo válida."
   },
   "quiz": {
     "label": "Modo visual",
@@ -304,9 +308,6 @@
     "resumeQuestion": "Tengo una pregunta",
     "yourRecommendations": "Tus recomendaciones",
     "compareFormulas": "Compara las dos fórmulas con total claridad"
-  },
-  "formulaQr": {
-    "localDevHint": "Si estás probando en local, configura NEXT_PUBLIC_APP_URL con la URL pública del frontend."
   },
   "devNav": {
     "home": "Inicio",

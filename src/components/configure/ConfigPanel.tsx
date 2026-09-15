@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
 import { useRouter } from "next/navigation";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import PersonaSelector from "./PersonaSelector";
@@ -10,7 +9,6 @@ import LanguagePicker from "./LanguagePicker";
 import ModeSelector from "./ModeSelector";
 import InputModeSelector from "./InputModeSelector";
 import ConnectionTest from "@/components/preparation/ConnectionTest";
-import PrinterModal from "./PrinterModal";
 import { useTranslation } from "@/i18n/LanguageContext";
 import { activeBrand } from "@/lib/brand";
 
@@ -36,10 +34,6 @@ export default function ConfigPanel() {
 
   const [email, setEmail] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
-  const [printerLocation, setPrinterLocation] = useState(() =>
-    typeof window !== "undefined" ? localStorage.getItem("printer_location") ?? "" : ""
-  );
-  const [showPrinterModal, setShowPrinterModal] = useState(false);
 
   // ── Multi-utilisateurs (mode visuel uniquement) ──────────────────────
   const [participantCount, setParticipantCount] = useState(1);
@@ -93,7 +87,6 @@ export default function ConfigPanel() {
     localStorage.setItem("avatar", String(avatar));
     if (email.trim()) localStorage.setItem("recap_email", email.trim());
     else localStorage.removeItem("recap_email");
-    if (printerLocation) localStorage.setItem("printer_location", printerLocation);
 
     if (isQuiz) {
       localStorage.setItem("participant_count", String(participantCount));
@@ -222,25 +215,6 @@ export default function ConfigPanel() {
             )}
 
             <ConnectionTest />
-
-            {/* Printer selector */}
-            {!isEster && (
-              <button
-                type="button"
-                onClick={() => setShowPrinterModal(true)}
-                className="w-full flex items-center justify-between px-3 py-2 rounded-lg border border-primary/15 brand-surface-softer hover:bg-primary/5 transition-all"
-              >
-                <div className="flex items-center gap-2.5">
-                  <MaterialIcon name="print" className="text-primary text-[18px]" />
-                  <span className="text-xs font-semibold text-primary">
-                    {printerLocation ? <span className="capitalize">{printerLocation}</span> : t("configure.choosePrinter")}
-                  </span>
-                </div>
-                {printerLocation && (
-                  <MaterialIcon name="check_circle" className="text-primary text-[16px]" />
-                )}
-              </button>
-            )}
           </div>
         </div>
       )}
@@ -275,25 +249,6 @@ export default function ConfigPanel() {
                   </div>
                 </button>
               </div>
-
-              {/* Printer selector */}
-              {!isEster && (
-                <button
-                  type="button"
-                  onClick={() => setShowPrinterModal(true)}
-                  className="w-full flex items-center justify-between px-3 py-2 [@media(max-height:620px)]:py-1.5 rounded-lg border border-primary/15 brand-surface-softer hover:bg-primary/5 transition-all"
-                >
-                  <div className="flex items-center gap-2.5">
-                    <MaterialIcon name="print" className="text-primary text-[18px]" />
-                    <span className="text-xs font-semibold text-primary">
-                      {printerLocation ? <span className="capitalize">{printerLocation}</span> : t("configure.choosePrinter")}
-                    </span>
-                  </div>
-                  {printerLocation && (
-                    <MaterialIcon name="check_circle" className="text-primary text-[16px]" />
-                  )}
-                </button>
-              )}
             </div>
           </div>
 
@@ -382,18 +337,6 @@ export default function ConfigPanel() {
         <span>{t("configure.start")}</span>
         <MaterialIcon name="arrow_forward" />
       </button>
-
-      {/* ── Printer modal ── */}
-      {showPrinterModal && createPortal(
-        <PrinterModal
-          selected={printerLocation}
-          onSelect={(loc) => {
-            setPrinterLocation(loc);
-          }}
-          onClose={() => setShowPrinterModal(false)}
-        />,
-        document.body
-      )}
     </div>
   );
 }

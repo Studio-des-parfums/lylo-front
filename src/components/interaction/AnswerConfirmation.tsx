@@ -1,6 +1,9 @@
 "use client";
 
 import { useTranslation } from "@/i18n/LanguageContext";
+import { activeBrand } from "@/lib/brand";
+
+const isEster = activeBrand.id === "ester";
 
 export interface ChoiceWithImage {
   label: string;
@@ -44,13 +47,13 @@ export default function AnswerConfirmation({ top2, bottom2 }: AnswerConfirmation
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 px-2">
-      <p className="text-center text-sm tracking-widest uppercase text-primary/50 font-medium">
+      <p className={`text-center text-sm tracking-widest uppercase font-medium ${isEster ? "text-primary" : "text-primary/100"}`}>
         {t("confirmation.subtitle")}
       </p>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="flex flex-col gap-3">
-          <span className="text-xs tracking-widest uppercase text-primary/40 font-semibold text-center">
+          <span className={`text-xs tracking-widest uppercase font-semibold text-center ${isEster ? "text-primary" : "text-primary/40"}`}>
             {t("confirmation.preferred")}
           </span>
           <div className="flex flex-col gap-2">

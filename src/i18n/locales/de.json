@@ -192,7 +192,11 @@
     "error": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
     "close": "Schließen",
     "logout": "Abmelden",
-    "welcome": "Hallo"
+    "welcome": "Hallo",
+    "orDivider": "oder",
+    "emailPlaceholder": "Ihre E-Mail-Adresse",
+    "emailSubmit": "Mit E-Mail fortfahren",
+    "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
   },
   "quiz": {
     "label": "Visueller Modus",
@@ -304,9 +308,6 @@
     "resumeQuestion": "Ich habe eine Frage",
     "yourRecommendations": "Ihre Empfehlungen",
     "compareFormulas": "Vergleichen Sie die beiden Formeln übersichtlich"
-  },
-  "formulaQr": {
-    "localDevHint": "Wenn Sie lokal testen, konfigurieren Sie NEXT_PUBLIC_APP_URL mit der öffentlichen Frontend-URL."
   },
   "devNav": {
     "home": "Start",

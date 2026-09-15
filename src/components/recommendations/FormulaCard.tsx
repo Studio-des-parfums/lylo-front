@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import SizeToggle, { SizeOption } from "./SizeToggle";
+import MaterialIcon from "@/components/ui/MaterialIcon";
 import { FormulaSize, FormulaNote } from "@/context/SessionContext";
 import { useTranslation } from "@/i18n/LanguageContext";
 
@@ -16,6 +17,12 @@ interface FormulaCardProps {
   className?: string;
   selectedSize?: SizeOption;
   onSelectedSizeChange?: (size: SizeOption) => void;
+  /** Fourni uniquement dans l'écran de personnalisation : affiche un bouton "modifier" à
+   * côté de chaque note (sauf les boosters), qui remonte la note cliquée au parent. */
+  onNoteEdit?: (noteType: "top" | "heart" | "base", note: FormulaNote) => void;
+  /** Nom de la note actuellement mise en avant (dont les alternatives sont affichées à
+   * côté) — surlignée pour indiquer quelle note est en cours de modification. */
+  activeNoteName?: string | null;
 }
 
 const MAX_NOTES = 3;
@@ -24,10 +31,16 @@ function NoteList({
   label,
   notes,
   variant,
+  noteType,
+  onNoteEdit,
+  activeNoteName,
 }: {
   label: string;
   notes: FormulaNote[];
   variant: "default" | "comparison";
+  noteType?: "top" | "heart" | "base";
+  onNoteEdit?: (noteType: "top" | "heart" | "base", note: FormulaNote) => void;
+  activeNoteName?: string | null;
 }) {
   if (notes.length === 0) return null;
   const visible = notes.slice(0, MAX_NOTES);
@@ -53,11 +66,11 @@ function NoteList({
         {visible.map((note) => (
           <li
             key={note.name}
-            className={`flex justify-between gap-1.5 sm:gap-3 min-w-0 ${
+            className={`flex items-center justify-between gap-1.5 sm:gap-3 min-w-0 ${
               variant === "comparison"
                 ? "py-0.5 sm:py-1 text-[#4f443e] border-b border-primary/8 last:border-b-0"
                 : "text-gray-600"
-            }`}
+            } ${activeNoteName === note.name ? "text-primary font-medium" : ""}`}
           >
             <span
               className={`min-w-0 truncate ${
@@ -66,14 +79,29 @@ function NoteList({
             >
               {note.name}
             </span>
-            <span
-              className={`shrink-0 font-medium ${
-                variant === "comparison"
-                  ? "text-primary text-xs sm:text-[0.95rem]"
-                  : "text-primary/70 text-xs sm:text-sm"
-              }`}
-            >
-              {note.ml} ml
+            <span className="flex items-center gap-1 shrink-0">
+              <span
+                className={`font-medium ${
+                  variant === "comparison"
+                    ? "text-primary text-xs sm:text-[0.95rem]"
+                    : "text-primary/70 text-xs sm:text-sm"
+                }`}
+              >
+                {note.ml} ml
+              </span>
+              {onNoteEdit && noteType && note.alternatives && note.alternatives.length > 0 && (
+                <button
+                  onClick={() => onNoteEdit(noteType, note)}
+                  title={note.name}
+                  className={`flex items-center justify-center size-7 rounded-full border transition-all ${
+                    activeNoteName === note.name
+                      ? "bg-primary border-primary text-white"
+                      : "border-primary/25 text-primary/70 hover:border-primary hover:text-primary hover:bg-primary/10"
+                  }`}
+                >
+                  <MaterialIcon name="swap_horiz" className="text-[16px]" />
+                </button>
+              )}
             </span>
           </li>
         ))}
@@ -89,6 +117,8 @@ export default function FormulaCard({
   className = "",
   selectedSize: controlledSelectedSize,
   onSelectedSizeChange,
+  onNoteEdit,
+  activeNoteName,
 }: FormulaCardProps) {
   const [uncontrolledSelectedSize, setUncontrolledSelectedSize] = useState<SizeOption>("30ml");
   const { t } = useTranslation();
@@ -136,16 +166,25 @@ export default function FormulaCard({
           label={t("recommendations.noteLabels.top")}
           notes={sizeData.top_notes}
           variant={variant}
+          noteType="top"
+          onNoteEdit={onNoteEdit}
+          activeNoteName={activeNoteName}
         />
         <NoteList
           label={t("recommendations.noteLabels.heart")}
           notes={sizeData.heart_notes}
           variant={variant}
+          noteType="heart"
+          onNoteEdit={onNoteEdit}
+          activeNoteName={activeNoteName}
         />
         <NoteList
           label={t("recommendations.noteLabels.base")}
           notes={sizeData.base_notes}
           variant={variant}
+          noteType="base"
+          onNoteEdit={onNoteEdit}
+          activeNoteName={activeNoteName}
         />
         <NoteList
           label={t("recommendations.noteLabels.boosters")}

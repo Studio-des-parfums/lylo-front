@@ -9,6 +9,8 @@ import AvatarVideo from "@/components/interaction/AvatarVideo";
 import FormulaCard from "@/components/recommendations/FormulaCard";
 import CatalogFormulaCard from "@/components/recommendations/CatalogFormulaCard";
 import FormulaQrCode from "@/components/recommendations/FormulaQrCode";
+import PrintableFormula from "@/components/recommendations/PrintableFormula";
+import SendFormulaMailButton from "@/components/recommendations/SendFormulaMailButton";
 import nextDynamic from "next/dynamic";
 const BottomBar = nextDynamic(() => import("@/components/livekit/BottomBar"), { ssr: false });
 import { useTranslation } from "@/i18n/LanguageContext";
@@ -20,8 +22,6 @@ import { SizeOption } from "@/components/recommendations/SizeToggle";
 import { activeBrand } from "@/lib/brand";
 
 const isEster = activeBrand.id === "ester";
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 
 function renderFormula(
   formula: Formula,
@@ -63,45 +63,14 @@ function renderFormula(
 export default function RecommendationsPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { formulas: sessionFormulas, endSession, agentName, sessionData } = useSession();
-  const [printStatus, setPrintStatus] = useState<"idle" | "printing" | "done" | "error">("idle");
+  const { formulas: sessionFormulas, formulaReference, endSession, agentName, sessionData } = useSession();
   const [selectedSize, setSelectedSize] = useState<SizeOption>("30ml");
-
-  const printerLocation = typeof window !== "undefined" ? localStorage.getItem("printer_location") ?? "" : "";
 
   const [devSingleFormula, setDevSingleFormula] = useState(false);
 
   const persona = typeof window !== "undefined" ? localStorage.getItem("persona") : null;
   const avatarUrl = persona === "male" ? "/avatar-h.jpg" : "/avatar-f.jpg";
   const avatarEnabled = typeof window !== "undefined" ? localStorage.getItem("avatar") !== "false" : true;
-
-  const handlePrint = async () => {
-    const formula = sessionFormulas[0];
-    if (!formula || !printerLocation || isCatalogFormula(formula)) return;
-    setPrintStatus("printing");
-    try {
-      const size = formula.sizes![selectedSize];
-      const res = await fetch(`${API_BASE}/printers/print-formula`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          location: printerLocation,
-          formula: {
-            profile: formula.profile,
-            notes: {
-              top: size.top_notes.map((n) => n.name),
-              heart: size.heart_notes.map((n) => n.name),
-              base: size.base_notes.map((n) => n.name),
-            },
-            date: new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" }),
-          },
-        }),
-      });
-      setPrintStatus(res.ok ? "done" : "error");
-    } catch {
-      setPrintStatus("error");
-    }
-  };
 
   const isCatalog = sessionFormulas.length > 0 && isCatalogFormula(sessionFormulas[0]);
   const allFormulas = sessionFormulas.map((f, i) => ({ key: `formula-${i}`, formula: f }));
@@ -198,40 +167,38 @@ export default function RecommendationsPage() {
                   </button>
                 )}
 
-                {/* Bouton Imprimer (indisponible en mode catalogue — pas de formule à imprimer) */}
-                {printerLocation && !isCatalog && (
-                  printStatus === "done" ? (
-                    <div className="flex items-center gap-2 text-sm text-green-700">
-                      <MaterialIcon name="check_circle" className="text-[18px]" />
-                      {t("recommendationsPage.printed")}
-                    </div>
-                  ) : (
+                {/* Imprimer / QR code / Recevoir par mail — côte à côte (indisponibles en mode catalogue) */}
+                {!isCatalog && (
+                  <div className="w-full flex flex-row items-center justify-center gap-2">
                     <button
-                      onClick={handlePrint}
-                      disabled={printStatus === "printing"}
-                      className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full bg-white/90 backdrop-blur-sm text-primary text-xs sm:text-sm font-medium border border-primary/25 cursor-pointer shadow-lg shadow-primary/10 hover:bg-white hover:border-primary/40 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                      onClick={() => window.print()}
+                      title={t("recommendationsPage.print")}
+                      className="flex items-center justify-center size-9 rounded-full bg-white/90 backdrop-blur-sm text-primary border border-primary/25 cursor-pointer shadow-lg shadow-primary/10 hover:bg-white hover:border-primary/40 transition-all"
                     >
-                      {printStatus === "printing"
-                        ? <div className="size-4 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
-                        : <MaterialIcon name="print" className="text-[18px]" />
-                      }
-                      {t("recommendationsPage.print")}
+                      <MaterialIcon name="print" className="text-[18px]" />
                     </button>
-                  )
-                )}
-                {printStatus === "error" && (
-                  <p className="text-xs text-red-500 text-center">{t("recommendationsPage.printError")}</p>
-                )}
 
-                {selectedFormula && !isCatalogFormula(selectedFormula) && (
-                  <FormulaQrCode
-                    formula={createShareableFormula(selectedFormula.profile!, selectedSize, selectedFormula.sizes!)}
-                    language={language}
-                    buttonLabel={t("recommendations.qrButton")}
-                    title={t("recommendations.qrTitle")}
-                    subtitle={t("recommendations.qrSubtitle")}
-                    closeLabel={t("recommendations.qrClose")}
-                  />
+                    {selectedFormula && !isCatalogFormula(selectedFormula) && (
+                      <FormulaQrCode
+                        formula={createShareableFormula(selectedFormula.profile!, selectedSize, selectedFormula.sizes!)}
+                        language={language}
+                        buttonLabel={t("recommendations.qrButton")}
+                        title={t("recommendations.qrTitle")}
+                        subtitle={t("recommendations.qrSubtitle")}
+                        closeLabel={t("recommendations.qrClose")}
+                        iconOnly
+                        className="flex items-center justify-center size-9 rounded-full bg-primary text-white shadow-lg shadow-primary/20 hover:brightness-110 transition-all"
+                      />
+                    )}
+
+                    {formulaReference && (
+                      <SendFormulaMailButton
+                        reference={formulaReference}
+                        iconOnly
+                        className="flex items-center justify-center size-9 rounded-full bg-white/90 backdrop-blur-sm text-primary border border-primary/25 cursor-pointer shadow-lg shadow-primary/10 hover:bg-white hover:border-primary/40 transition-all"
+                      />
+                    )}
+                  </div>
                 )}
 
                 {/* Retour accueil */}
@@ -312,6 +279,18 @@ export default function RecommendationsPage() {
       {/* Décorations fond */}
       <div className="absolute top-0 right-0 -z-10 w-[40%] h-full opacity-[0.03] pointer-events-none bg-gradient-to-l from-primary to-transparent" />
       <div className="absolute bottom-0 left-0 -z-10 w-[40%] h-[60%] opacity-[0.05] pointer-events-none bg-gradient-to-tr from-primary to-transparent blur-[120px]" />
+
+      {selectedFormula && !isCatalogFormula(selectedFormula) && (
+        <PrintableFormula
+          profile={selectedFormula.profile!}
+          date={new Date().toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })}
+          notes={{
+            top: selectedFormula.sizes![selectedSize].top_notes,
+            heart: selectedFormula.sizes![selectedSize].heart_notes,
+            base: selectedFormula.sizes![selectedSize].base_notes,
+          }}
+        />
+      )}
     </div>
   );
 }

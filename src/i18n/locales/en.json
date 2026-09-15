@@ -192,7 +192,11 @@
     "error": "An error occurred. Please try again.",
     "close": "Close",
     "logout": "Log out",
-    "welcome": "Hello"
+    "welcome": "Hello",
+    "orDivider": "or",
+    "emailPlaceholder": "Your email address",
+    "emailSubmit": "Continue with email",
+    "invalidEmail": "Please enter a valid email address."
   },
   "quiz": {
     "label": "Visual Mode",
@@ -215,6 +219,13 @@
     "profileAllergiesPlaceholder": "e.g. jasmine, musk, cedarwood...",
     "yes": "Yes",
     "no": "No",
+    "intensityQuestion": "What fragrance intensity do you prefer?",
+    "intensityFrais": "Light",
+    "intensityFraisDesc": "Fresh and subtle",
+    "intensityMix": "Balanced",
+    "intensityMixDesc": "A mix of both",
+    "intensityPuissant": "Intense",
+    "intensityPuissantDesc": "Powerful and long-lasting",
     "submit": "Generate my formulas",
     "submitCatalog": "See my perfumes",
     "continue": "Continue",
@@ -283,6 +294,9 @@
   },
   "quizResults": {
     "tapOtherCard": "Tap the other card to change your choice",
+    "continue": "Continue",
+    "backToChoices": "Back to choices",
+    "personalizeTitle": "Personalize your formula",
     "printed": "Printed",
     "printError": "Printing error.",
     "chooseYourFormula": "{name}, choose your formula",
@@ -305,8 +319,25 @@
     "yourRecommendations": "Your recommendations",
     "compareFormulas": "Compare the two formulas with full clarity"
   },
-  "formulaQr": {
-    "localDevHint": "If testing locally, configure NEXT_PUBLIC_APP_URL with the public front-end URL."
+  "formulaPersonalizer": {
+    "invite": "Click the icon next to a note to see its alternatives.",
+    "currentNote": "Current note",
+    "alternatives": "Alternatives",
+    "noAlternatives": "No alternative available for this note.",
+    "error": "Could not replace this note. Please try again."
+  },
+  "sendMail": {
+    "button": "Receive by email",
+    "title": "Receive your formula",
+    "subtitle": "Fill in your details to receive your formula by email.",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "email": "Email",
+    "submit": "Send",
+    "sending": "Sending…",
+    "sent": "Formula sent!",
+    "error": "Failed to send. Please try again.",
+    "close": "Close"
   },
   "devNav": {
     "home": "Home",

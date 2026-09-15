@@ -18,8 +18,14 @@
   --radius-xl: 0.75rem;
 }
 
+/* ─────────────────────────────────────────────────────────────────────
+   Palette "lylo" — actuellement alignée sur celle d'Ester (2026-09-14).
+   Pour REVENIR à l'ancienne palette Lylo : commenter le bloc
+   "ACTIF" ci-dessous et décommenter le bloc "ANCIENNE PALETTE".
+   ───────────────────────────────────────────────────────────────────── */
 :root,
 [data-brand="lylo"] {
+  /* ── ANCIENNE PALETTE LYLO (décommenter pour revenir en arrière) ──
   --brand-primary: #996f56;
   --brand-primary-rgb: 153, 111, 86;
   --brand-background-light: #f7f7f6;
@@ -31,11 +37,33 @@
   --brand-secondary: #d7cdc6;
   --brand-text-dark: #171412;
   --brand-brand-light: #fdfbf9;
-  --brand-hero-image: url("/background-lylo.png");
   --brand-surface-rgb: 247, 247, 246;
   --brand-surface-text: #171412;
   --brand-surface-nav-opacity: 0.8;
   --brand-surface-tech-opacity: 0.5;
+  ─────────────────────────────────────────────────────────────── */
+
+  /* ── ACTIF : palette Ester appliquée à Lylo ── */
+  --brand-primary: #d3b184;
+  --brand-primary-rgb: 211, 177, 132;
+  --brand-background-light: #17142e;
+  --brand-background-light-rgb: 23, 20, 46;
+  --brand-background-dark: #17142e;
+  --brand-background-dark-rgb: 23, 20, 46;
+  --brand-accent-tan: #4a2116;
+  --brand-warm-cream: #4a2116;
+  --brand-secondary: #4a2116;
+  --brand-text-dark: #f7f5f1;
+  --brand-brand-light: #17142e;
+  --brand-surface-rgb: 23, 20, 46;
+  --brand-surface-text: #f7f5f1;
+  --brand-surface-nav-opacity: 0.97;
+  --brand-surface-tech-opacity: 0.97;
+  --brand-panel-rgb: 36, 32, 68;
+  --brand-panel-shadow-rgb: 0, 0, 0;
+
+  /* Logo et hero-background restent ceux de Lylo (non concernés par la palette) */
+  --brand-hero-image: url("/background-lylo.png");
 }
 
 [data-brand="ester"] {
@@ -170,4 +198,94 @@ body {
 
 .toggle-checkbox:checked + .toggle-label {
   background-color: var(--brand-primary);
+}
+
+/* ── Impression formule (PrintableFormula) ──────────────────────────────
+   Contenu caché à l'écran, affiché uniquement pendant window.print() via
+   @media print — remplace l'impression PDF réseau (PrintNode/CUPS) par
+   l'impression native du navigateur. */
+.print-formula-page {
+  display: none;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  /* Multi-participants : seul le conteneur marqué actif (voir printTarget côté page) est imprimé.
+     Solo/recommendations : un seul PrintableFormula existe, toujours actif. */
+  .print-formula-page,
+  .print-formula-page * {
+    visibility: visible;
+  }
+  [data-print-target]:not(.print-formula-active) .print-formula-page {
+    display: none !important;
+    visibility: hidden;
+  }
+  .print-formula-page {
+    display: block;
+    position: relative;
+    width: 100%;
+    padding: 2cm 2.5cm;
+    color: var(--brand-text-dark);
+    page-break-after: always;
+  }
+  .print-formula-logo {
+    width: 3.5cm;
+    height: 3.5cm;
+    object-fit: contain;
+    margin-bottom: 0.6cm;
+  }
+  .print-formula-hr {
+    border: none;
+    border-top: 1px solid var(--brand-secondary);
+    margin: 0 0 1cm 0;
+  }
+  .print-formula-hr--thin {
+    border-top-width: 0.5px;
+    margin-top: 0.8cm;
+  }
+  .print-formula-profile {
+    font-family: var(--font-serif);
+    font-size: 26pt;
+    font-weight: bold;
+    margin: 0 0 0.2cm 0;
+  }
+  .print-formula-meta {
+    font-style: italic;
+    font-size: 10pt;
+    color: var(--brand-text-dark);
+    opacity: 0.6;
+    margin: 0;
+  }
+  .print-formula-section {
+    margin-top: 0.6cm;
+  }
+  .print-formula-section-label {
+    display: block;
+    font-weight: bold;
+    font-size: 8pt;
+    letter-spacing: 1.5pt;
+    color: var(--brand-text-dark);
+    opacity: 0.7;
+    margin-bottom: 0.3cm;
+  }
+  .print-formula-notes {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-left: 2px solid var(--brand-primary);
+  }
+  .print-formula-notes li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.4cm;
+    padding: 0.05cm 0 0.05cm 0.4cm;
+    font-size: 12pt;
+  }
+  .print-formula-note-ml {
+    color: var(--brand-primary);
+    font-weight: bold;
+    white-space: nowrap;
+  }
 }

@@ -81,8 +81,10 @@ export default function HeroSection() {
         ) : (
           <>
             {/* Logo */}
-            <div className="flex justify-center mb-6">
+            <div className="flex justify-center items-center gap-4 mb-6">
               <Image src={activeBrand.logo} alt={`Logo ${activeBrand.name}`} width={72} height={72} style={{ width: "auto", height: "auto" }} />
+              <span className="text-primary text-2xl font-light">×</span>
+              <Image src="/logo-lampions.png" alt="Logo Lampion" width={100} height={100} style={{ width: "auto", height: "auto" }} />
             </div>
 
             {/* Title */}

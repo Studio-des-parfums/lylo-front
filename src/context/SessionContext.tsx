@@ -48,6 +48,9 @@ export interface FormulaNote {
   description?: string;
   note_type?: string;
   priority?: string;
+  // Jusqu'à 2 alternatives proposées par le LLM au moment de la génération — permet de
+  // remplacer cette note dans l'écran de personnalisation sans repasser par une recherche.
+  alternatives?: FormulaNote[];
 }
 
 export interface FormulaSize {
@@ -125,6 +128,9 @@ interface SessionContextType {
   missingFields: string[];
   answers: AnswerSaved[];
   formulas: Formula[];
+  // Référence en base de la formule sélectionnée (mode vocal) — remplie par select_formula
+  // côté agent, utilisée pour l'envoi par mail à la demande (SendFormulaMailButton).
+  formulaReference: string | null;
   transcripts: TranscriptMessage[];
   questions: Question[];
   currentQuestionIndex: number;
@@ -161,6 +167,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [missingFields, setMissingFields] = useState<string[]>([]);
   const [answers, setAnswers] = useState<AnswerSaved[]>([]);
   const [formulas, setFormulas] = useState<Formula[]>(DEV_MODE ? MOCK_FORMULAS : []);
+  const [formulaReference, setFormulaReference] = useState<string | null>(null);
   const [transcripts, setTranscripts] = useState<TranscriptMessage[]>([]);
   const [questions, setQuestions] = useState<Question[]>(DEV_MODE ? MOCK_QUESTIONS : []);
   const questionsRef = useRef<Question[]>(questions);
@@ -282,6 +289,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         case "formula_selected":
           console.log("[LiveKit] formula_selected →", event.formula?.profile);
           setFormulas([event.formula]);
+          if (event.reference) setFormulaReference(event.reference);
           setSessionState("customization");
           break;
 
@@ -375,6 +383,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setMissingFields([]);
     setAnswers([]);
     setFormulas([]);
+    setFormulaReference(null);
     setTranscripts([]);
     setQuestions([]);
     setCurrentQuestionIndex(0);
@@ -426,6 +435,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         missingFields,
         answers,
         formulas,
+        formulaReference,
         transcripts,
         questions,
         currentQuestionIndex,

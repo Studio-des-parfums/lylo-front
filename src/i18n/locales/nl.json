@@ -192,7 +192,11 @@
     "error": "Er is een fout opgetreden. Probeer het opnieuw.",
     "close": "Sluiten",
     "logout": "Uitloggen",
-    "welcome": "Hallo"
+    "welcome": "Hallo",
+    "orDivider": "of",
+    "emailPlaceholder": "Uw e-mailadres",
+    "emailSubmit": "Doorgaan met e-mail",
+    "invalidEmail": "Voer een geldig e-mailadres in."
   },
   "quiz": {
     "label": "Visuele modus",
@@ -304,9 +308,6 @@
     "resumeQuestion": "Ik heb een vraag",
     "yourRecommendations": "Uw aanbevelingen",
     "compareFormulas": "Vergelijk de twee formules overzichtelijk"
-  },
-  "formulaQr": {
-    "localDevHint": "Als u lokaal test, configureer dan NEXT_PUBLIC_APP_URL met de openbare front-end-URL."
   },
   "devNav": {
     "home": "Home",

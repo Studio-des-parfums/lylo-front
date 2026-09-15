@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import { AppLanguage } from "@/lib/language";
 import { buildFormulaShareUrl, ShareableFormula } from "@/lib/shareableFormula";
-import { useTranslation } from "@/i18n/LanguageContext";
 
 interface FormulaQrCodeProps {
   formula: ShareableFormula;
@@ -14,6 +13,9 @@ interface FormulaQrCodeProps {
   title: string;
   subtitle: string;
   closeLabel: string;
+  className?: string;
+  /** Icône seule, sans le libellé — pour les emplacements compacts (bouton rond côte à côte). */
+  iconOnly?: boolean;
 }
 
 export default function FormulaQrCode({
@@ -23,8 +25,9 @@ export default function FormulaQrCode({
   title,
   subtitle,
   closeLabel,
+  className,
+  iconOnly,
 }: FormulaQrCodeProps) {
-  const { t } = useTranslation();
   const [shareUrl, setShareUrl] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -58,10 +61,14 @@ export default function FormulaQrCode({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-semibold shadow-lg shadow-primary/20 hover:brightness-110 transition-all"
+        title={iconOnly ? buttonLabel : undefined}
+        className={
+          className ??
+          "w-full flex items-center justify-center gap-2 px-3 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-semibold shadow-lg shadow-primary/20 hover:brightness-110 transition-all"
+        }
       >
         <MaterialIcon name="qr_code_2" className="text-[18px]" />
-        {buttonLabel}
+        {!iconOnly && buttonLabel}
       </button>
 
       {open && (
@@ -96,10 +103,6 @@ export default function FormulaQrCode({
                 className="size-60 rounded-xl border border-primary/10 bg-white p-2"
               />
             </div>
-
-            <p className="mt-3 text-center text-[11px] text-primary/50">
-              {t("formulaQr.localDevHint")}
-            </p>
           </div>
         </div>
       )}

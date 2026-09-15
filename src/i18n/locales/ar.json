@@ -192,7 +192,11 @@
     "error": "حدث خطأ. يرجى المحاولة مرة أخرى.",
     "close": "إغلاق",
     "logout": "تسجيل الخروج",
-    "welcome": "مرحباً"
+    "welcome": "مرحباً",
+    "orDivider": "أو",
+    "emailPlaceholder": "بريدك الإلكتروني",
+    "emailSubmit": "المتابعة بالبريد الإلكتروني",
+    "invalidEmail": "يرجى إدخال بريد إلكتروني صالح."
   },
   "quiz": {
     "label": "الوضع المرئي",
@@ -304,9 +308,6 @@
     "resumeQuestion": "لدي سؤال",
     "yourRecommendations": "توصياتك",
     "compareFormulas": "قارن بين التركيبتين بوضوح تام"
-  },
-  "formulaQr": {
-    "localDevHint": "إذا كنت تختبر محلياً، قم بتكوين NEXT_PUBLIC_APP_URL بعنوان URL العام للواجهة الأمامية."
   },
   "devNav": {
     "home": "الرئيسية",
