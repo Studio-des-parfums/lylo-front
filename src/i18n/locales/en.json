@@ -309,7 +309,9 @@
     "saved": "Saved",
     "saveError": "Save error.",
     "sheetsPrinted": "{count} sheet{plural} printed",
-    "printAllFormulas": "Print the {count} formulas"
+    "printAllFormulas": "Print the {count} formulas",
+    "giveReferenceToPerfumer": "Give this reference to our perfumer to retrieve your formula.",
+    "referenceLoading": "Generating your reference..."
   },
   "recommendationsPage": {
     "printed": "Printed",
@@ -344,6 +346,25 @@
     "config": "Config",
     "prep": "Prep",
     "interaction": "Interaction",
-    "results": "Results"
+    "results": "Results",
+    "formulas": "Formulas"
+  },
+  "formulas": {
+    "title": "Formulas",
+    "subtitle": "Search and browse generated formulas.",
+    "searchPlaceholder": "Search by reference...",
+    "colReference": "Reference",
+    "colCustomer": "Customer",
+    "colEmail": "Email",
+    "colType": "Type",
+    "colDate": "Date",
+    "loading": "Loading...",
+    "loadError": "Unable to load formulas.",
+    "noResults": "No formulas found.",
+    "totalCount": "{count} formula(s)",
+    "prev": "Previous",
+    "next": "Next",
+    "pageOf": "Page {page} / {totalPages}",
+    "close": "Close"
   }
 }

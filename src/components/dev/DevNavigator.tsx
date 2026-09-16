@@ -11,6 +11,7 @@ const PAGES = [
   { labelKey: "devNav.prep", href: "/preparation" },
   { labelKey: "devNav.interaction", href: "/interaction" },
   { labelKey: "devNav.results", href: "/recommendations" },
+  { labelKey: "devNav.formulas", href: "/formulas" },
 ] as const;
 
 export default function DevNavigator() {

@@ -299,7 +299,9 @@
     "saved": "تم الحفظ",
     "saveError": "خطأ في الحفظ.",
     "sheetsPrinted": "تمت طباعة {count} ورقة",
-    "printAllFormulas": "طباعة التركيبات الـ {count}"
+    "printAllFormulas": "طباعة التركيبات الـ {count}",
+    "giveReferenceToPerfumer": "أعط هذا المرجع لعطّارنا لاسترجاع تركيبتك.",
+    "referenceLoading": "جارٍ إنشاء مرجعك..."
   },
   "recommendationsPage": {
     "printed": "تمت الطباعة",
@@ -314,6 +316,25 @@
     "config": "الإعدادات",
     "prep": "تحضير",
     "interaction": "التفاعل",
-    "results": "النتائج"
+    "results": "النتائج",
+    "formulas": "التركيبات"
+  },
+  "formulas": {
+    "title": "التركيبات",
+    "subtitle": "بحث واستعراض التركيبات المُنشأة.",
+    "searchPlaceholder": "البحث بالمرجع...",
+    "colReference": "المرجع",
+    "colCustomer": "العميل",
+    "colEmail": "البريد الإلكتروني",
+    "colType": "النوع",
+    "colDate": "التاريخ",
+    "loading": "جارٍ التحميل...",
+    "loadError": "تعذّر تحميل التركيبات.",
+    "noResults": "لم يتم العثور على تركيبات.",
+    "totalCount": "{count} تركيبة",
+    "prev": "السابق",
+    "next": "التالي",
+    "pageOf": "صفحة {page} / {totalPages}",
+    "close": "إغلاق"
   }
 }

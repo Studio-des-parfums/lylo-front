@@ -299,7 +299,9 @@
     "saved": "Opgeslagen",
     "saveError": "Opslagfout.",
     "sheetsPrinted": "{count} blad(en) afgedrukt",
-    "printAllFormulas": "De {count} formules afdrukken"
+    "printAllFormulas": "De {count} formules afdrukken",
+    "giveReferenceToPerfumer": "Geef deze referentie aan onze parfumeur om uw formule terug te vinden.",
+    "referenceLoading": "Uw referentie wordt gegenereerd..."
   },
   "recommendationsPage": {
     "printed": "Afgedrukt",
@@ -314,6 +316,25 @@
     "config": "Config",
     "prep": "Voorb.",
     "interaction": "Interactie",
-    "results": "Resultaten"
+    "results": "Resultaten",
+    "formulas": "Formules"
+  },
+  "formulas": {
+    "title": "Formules",
+    "subtitle": "Doorzoek en blader door gegenereerde formules.",
+    "searchPlaceholder": "Zoeken op referentie...",
+    "colReference": "Referentie",
+    "colCustomer": "Klant",
+    "colEmail": "E-mail",
+    "colType": "Type",
+    "colDate": "Datum",
+    "loading": "Laden...",
+    "loadError": "Kan formules niet laden.",
+    "noResults": "Geen formules gevonden.",
+    "totalCount": "{count} formule(s)",
+    "prev": "Vorige",
+    "next": "Volgende",
+    "pageOf": "Pagina {page} / {totalPages}",
+    "close": "Sluiten"
   }
 }

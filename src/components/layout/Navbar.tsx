@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Button from "@/components/ui/Button";
 import LanguageSelector from "@/components/ui/LanguageSelector";
+import MaterialIcon from "@/components/ui/MaterialIcon";
 import { useTranslation } from "@/i18n/LanguageContext";
 import MicCalibrator from "@/components/preparation/MicCalibrator";
 import { useAuth } from "@/context/AuthContext";
@@ -13,6 +14,7 @@ import LoginModal from "@/components/auth/LoginModal";
 import { activeBrand } from "@/lib/brand";
 
 const isEster = activeBrand.id === "ester";
+const FORMULAS_ACCESS_EMAIL = "it@sdp-paris.com";
 
 interface NavbarProps {
   showActions?: boolean;
@@ -52,6 +54,16 @@ export default function Navbar({ showActions = true, transparent = false }: Navb
             <div className="flex items-center gap-4 sm:gap-8">
               <div className="flex items-center gap-3 sm:gap-6">
                 <MicCalibrator />
+                {user?.email === FORMULAS_ACCESS_EMAIL && (
+                  <button
+                    onClick={() => router.push("/formulas")}
+                    aria-label="Formulas"
+                    title="Formulas"
+                    className="flex items-center justify-center size-9 rounded-full text-primary/70 hover:text-primary hover:bg-primary/10 transition-colors"
+                  >
+                    <MaterialIcon name="science" className="text-[20px]" />
+                  </button>
+                )}
                 <LanguageSelector />
                 <div className="flex gap-3 items-center">
                   {user ? (

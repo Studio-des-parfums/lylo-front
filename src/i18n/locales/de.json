@@ -299,7 +299,9 @@
     "saved": "Gespeichert",
     "saveError": "Speicherfehler.",
     "sheetsPrinted": "{count} Blatt/Blätter gedruckt",
-    "printAllFormulas": "Die {count} Formeln drucken"
+    "printAllFormulas": "Die {count} Formeln drucken",
+    "giveReferenceToPerfumer": "Geben Sie diese Referenz unserem Parfümeur, um Ihre Formel wiederzufinden.",
+    "referenceLoading": "Ihre Referenz wird erstellt..."
   },
   "recommendationsPage": {
     "printed": "Gedruckt",
@@ -314,6 +316,25 @@
     "config": "Konfig",
     "prep": "Vorb.",
     "interaction": "Interaktion",
-    "results": "Ergebnisse"
+    "results": "Ergebnisse",
+    "formulas": "Formeln"
+  },
+  "formulas": {
+    "title": "Formeln",
+    "subtitle": "Generierte Formeln durchsuchen und durchblättern.",
+    "searchPlaceholder": "Nach Referenz suchen...",
+    "colReference": "Referenz",
+    "colCustomer": "Kunde",
+    "colEmail": "E-Mail",
+    "colType": "Typ",
+    "colDate": "Datum",
+    "loading": "Wird geladen...",
+    "loadError": "Formeln konnten nicht geladen werden.",
+    "noResults": "Keine Formeln gefunden.",
+    "totalCount": "{count} Formel(n)",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "pageOf": "Seite {page} / {totalPages}",
+    "close": "Schließen"
   }
 }

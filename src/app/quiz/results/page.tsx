@@ -101,6 +101,11 @@ function SoloResults() {
   // + actions), à la place du récap immédiat après sélection d'une carte.
   const [confirmed, setConfirmed] = useState(false);
   const [reference, setReference] = useState<string>("");
+  const [savingReference, setSavingReference] = useState(false);
+  // Référence déjà obtenue pour une formule (par index) — évite de recréer une nouvelle
+  // entrée en base (et une nouvelle référence) quand l'utilisateur revient sur une carte
+  // déjà choisie après avoir consulté l'autre.
+  const [referencesByIndex, setReferencesByIndex] = useState<Record<number, string>>({});
   const [language, setLanguage] = useState("fr");
   const [selectedSizes, setSelectedSizes] = useState<Record<number, SizeOption>>({});
   // Note actuellement mise en avant (bouton "modifier" cliqué sur la carte formule) — pilote
@@ -119,7 +124,16 @@ function SoloResults() {
 
   const handleChoose = async (index: number) => {
     setChosen(index);
+
+    const existingReference = referencesByIndex[index];
+    if (existingReference) {
+      setReference(existingReference);
+      return;
+    }
+
     const formula = formulas[index];
+    setReference("");
+    setSavingReference(true);
     try {
       const res = await fetch(`${API_BASE}/api/formulas/save`, {
         method: "POST",
@@ -133,9 +147,13 @@ function SoloResults() {
       });
       if (res.ok) {
         const data = await res.json();
-        if (data.reference) setReference(data.reference);
+        if (data.reference) {
+          setReference(data.reference);
+          setReferencesByIndex((prev) => ({ ...prev, [index]: data.reference }));
+        }
       }
     } catch { /* non bloquant */ }
+    finally { setSavingReference(false); }
   };
 
   if (formulas.length === 0) return null;
@@ -292,6 +310,21 @@ function SoloResults() {
               </div>
             </div>
             <div className="w-full flex flex-col items-center gap-2.5">
+              {savingReference ? (
+                <div className="flex items-center justify-center gap-2 text-primary/70 text-sm py-2">
+                  <span className="size-4 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+                  {t("quizResults.referenceLoading")}
+                </div>
+              ) : reference && (
+                <div className="flex flex-col items-center gap-1 text-center">
+                  <span className="font-mono font-bold text-primary text-2xl sm:text-3xl tracking-wide">
+                    {reference}
+                  </span>
+                  <p className="text-sm text-primary/80">
+                    {t("quizResults.giveReferenceToPerfumer")}
+                  </p>
+                </div>
+              )}
               {!isCatalogFormula(selectedFormula) && (
                 <div className="flex flex-row items-center justify-center gap-2">
                   <button
