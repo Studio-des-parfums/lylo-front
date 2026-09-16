@@ -47,12 +47,27 @@ export default function FormulasPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedFormula, setSelectedFormula] = useState<FormulaRow | null>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
   useEffect(() => {
     if (isInitialized && !user) {
       router.replace("/");
     }
   }, [isInitialized, user]);
+
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", handler);
+    return () => document.removeEventListener("fullscreenchange", handler);
+  }, []);
+
+  const toggleFullscreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  };
 
   useEffect(() => {
     const id = setTimeout(() => {
@@ -90,9 +105,19 @@ export default function FormulasPage() {
       <Navbar showActions={false} />
 
       <main className="flex-1 flex flex-col px-4 sm:px-8 lg:px-20 pt-24 pb-12 max-w-[1200px] w-full mx-auto">
-        <h1 className="text-2xl sm:text-3xl font-bold text-primary mb-1">
-          {t("formulas.title")}
-        </h1>
+        <div className="flex items-start justify-between gap-4 mb-1">
+          <h1 className="text-2xl sm:text-3xl font-bold text-primary">
+            {t("formulas.title")}
+          </h1>
+          <button
+            onClick={toggleFullscreen}
+            title={isFullscreen ? t("configure.fullscreenExit") : t("configure.fullscreenEnter")}
+            aria-label={isFullscreen ? t("configure.fullscreenExit") : t("configure.fullscreenEnter")}
+            className="shrink-0 flex items-center justify-center size-9 rounded-full border border-primary/15 text-primary/70 hover:text-primary hover:bg-primary/5 transition-colors"
+          >
+            <MaterialIcon name={isFullscreen ? "fullscreen_exit" : "fullscreen"} className="text-[20px]" />
+          </button>
+        </div>
         <p className="text-primary/80 text-sm mb-6">{t("formulas.subtitle")}</p>
 
         <input
