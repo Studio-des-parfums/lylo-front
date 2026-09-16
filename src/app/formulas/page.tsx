@@ -77,8 +77,7 @@ export default function FormulasPage() {
     return () => clearTimeout(id);
   }, [search]);
 
-  useEffect(() => {
-    if (!user) return;
+  const fetchFormulas = () => {
     setLoading(true);
     setError(null);
     const params = new URLSearchParams({
@@ -94,6 +93,11 @@ export default function FormulasPage() {
       .then((json: FormulasResponse) => setData(json))
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    if (!user) return;
+    fetchFormulas();
   }, [user, page, debouncedSearch]);
 
   if (!isInitialized || !user) return null;
@@ -109,14 +113,25 @@ export default function FormulasPage() {
           <h1 className="text-2xl sm:text-3xl font-bold text-primary">
             {t("formulas.title")}
           </h1>
-          <button
-            onClick={toggleFullscreen}
-            title={isFullscreen ? t("configure.fullscreenExit") : t("configure.fullscreenEnter")}
-            aria-label={isFullscreen ? t("configure.fullscreenExit") : t("configure.fullscreenEnter")}
-            className="shrink-0 flex items-center justify-center size-9 rounded-full border border-primary/15 text-primary/70 hover:text-primary hover:bg-primary/5 transition-colors"
-          >
-            <MaterialIcon name={isFullscreen ? "fullscreen_exit" : "fullscreen"} className="text-[20px]" />
-          </button>
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={fetchFormulas}
+              disabled={loading}
+              title={t("formulas.refresh")}
+              aria-label={t("formulas.refresh")}
+              className="flex items-center justify-center size-9 rounded-full border border-primary/15 text-primary/70 hover:text-primary hover:bg-primary/5 transition-colors disabled:opacity-40"
+            >
+              <MaterialIcon name="refresh" className={`text-[20px] ${loading ? "animate-spin" : ""}`} />
+            </button>
+            <button
+              onClick={toggleFullscreen}
+              title={isFullscreen ? t("configure.fullscreenExit") : t("configure.fullscreenEnter")}
+              aria-label={isFullscreen ? t("configure.fullscreenExit") : t("configure.fullscreenEnter")}
+              className="flex items-center justify-center size-9 rounded-full border border-primary/15 text-primary/70 hover:text-primary hover:bg-primary/5 transition-colors"
+            >
+              <MaterialIcon name={isFullscreen ? "fullscreen_exit" : "fullscreen"} className="text-[20px]" />
+            </button>
+          </div>
         </div>
         <p className="text-primary/80 text-sm mb-6">{t("formulas.subtitle")}</p>
 

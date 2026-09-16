@@ -21,6 +21,9 @@ interface FormulaPersonalizerProps {
    * null tant qu'aucun bouton n'a été cliqué : la section reste vide/invite. */
   activeNote: { noteType: "top" | "heart" | "base"; note: FormulaNote } | null;
   className?: string;
+  /** Référence déjà sauvegardée en base pour cette formule — si fournie, le remplacement
+   * de note est aussi répercuté sur l'enregistrement existant côté backend. */
+  reference?: string;
 }
 
 /**
@@ -29,7 +32,7 @@ interface FormulaPersonalizerProps {
  * génération. Cliquer une alternative appelle POST /api/formulas/replace-note
  * (recalcule le booster) et remonte la formule mise à jour au parent.
  */
-export default function FormulaPersonalizer({ formula, language, onFormulaChange, activeNote, className }: FormulaPersonalizerProps) {
+export default function FormulaPersonalizer({ formula, language, onFormulaChange, activeNote, className, reference }: FormulaPersonalizerProps) {
   const { t } = useTranslation();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(false);
@@ -48,6 +51,7 @@ export default function FormulaPersonalizer({ formula, language, onFormulaChange
           old_note: activeNote.note.name,
           new_note: newNote,
           language,
+          reference: reference || null,
         }),
       });
       if (!res.ok) { setError(true); return; }

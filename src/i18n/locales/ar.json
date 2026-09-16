@@ -335,6 +335,7 @@
     "prev": "السابق",
     "next": "التالي",
     "pageOf": "صفحة {page} / {totalPages}",
-    "close": "إغلاق"
+    "close": "إغلاق",
+    "refresh": "تحديث"
   }
 }

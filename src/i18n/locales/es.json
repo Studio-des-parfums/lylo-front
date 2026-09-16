@@ -335,6 +335,7 @@
     "prev": "Anterior",
     "next": "Siguiente",
     "pageOf": "Página {page} / {totalPages}",
-    "close": "Cerrar"
+    "close": "Cerrar",
+    "refresh": "Actualizar"
   }
 }

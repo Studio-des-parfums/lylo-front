@@ -305,6 +305,7 @@ function SoloResults() {
                     language={language as "fr" | "en"}
                     onFormulaChange={(updated) => handleFormulaReplaced(chosen, updated)}
                     activeNote={activeNote}
+                    reference={reference || undefined}
                   />
                 )}
               </div>

@@ -365,6 +365,7 @@
     "prev": "Précédent",
     "next": "Suivant",
     "pageOf": "Page {page} / {totalPages}",
-    "close": "Fermer"
+    "close": "Fermer",
+    "refresh": "Rafraîchir"
   }
 }

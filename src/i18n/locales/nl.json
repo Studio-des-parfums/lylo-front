@@ -335,6 +335,7 @@
     "prev": "Vorige",
     "next": "Volgende",
     "pageOf": "Pagina {page} / {totalPages}",
-    "close": "Sluiten"
+    "close": "Sluiten",
+    "refresh": "Vernieuwen"
   }
 }

@@ -335,6 +335,7 @@
     "prev": "Precedente",
     "next": "Successivo",
     "pageOf": "Pagina {page} / {totalPages}",
-    "close": "Chiudi"
+    "close": "Chiudi",
+    "refresh": "Aggiorna"
   }
 }
