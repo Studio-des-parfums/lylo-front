@@ -23,6 +23,9 @@ interface FormulaCardProps {
   /** Nom de la note actuellement mise en avant (dont les alternatives sont affichées à
    * côté) — surlignée pour indiquer quelle note est en cours de modification. */
   activeNoteName?: string | null;
+  /** "lg" agrandit le texte des notes — utilisé sur les écrans plein page où la carte
+   * n'est pas contrainte à un espace compact (ex. /formulas). */
+  size?: "default" | "lg";
 }
 
 const MAX_NOTES = 3;
@@ -34,6 +37,7 @@ function NoteList({
   noteType,
   onNoteEdit,
   activeNoteName,
+  size = "default",
 }: {
   label: string;
   notes: FormulaNote[];
@@ -41,9 +45,11 @@ function NoteList({
   noteType?: "top" | "heart" | "base";
   onNoteEdit?: (noteType: "top" | "heart" | "base", note: FormulaNote) => void;
   activeNoteName?: string | null;
+  size?: "default" | "lg";
 }) {
   if (notes.length === 0) return null;
   const visible = notes.slice(0, MAX_NOTES);
+  const isLarge = size === "lg";
 
   return (
     <section
@@ -57,7 +63,9 @@ function NoteList({
         className={`brand-text text-primary block ${
           variant === "comparison"
             ? "mb-1 sm:mb-2 text-[0.55rem] sm:text-[0.68rem]"
-            : "mb-0.5 text-[0.65rem] sm:text-xs"
+            : isLarge
+              ? "mb-1.5 text-sm"
+              : "mb-0.5 text-[0.65rem] sm:text-xs"
         }`}
       >
         {label}
@@ -69,12 +77,14 @@ function NoteList({
             className={`flex items-center justify-between gap-1.5 sm:gap-3 min-w-0 ${
               variant === "comparison"
                 ? "py-0.5 sm:py-1 text-[#4f443e] border-b border-primary/8 last:border-b-0"
-                : "text-gray-600"
+                : isLarge
+                  ? "py-1.5 text-gray-600"
+                  : "text-gray-600"
             } ${activeNoteName === note.name ? "text-primary font-medium" : ""}`}
           >
             <span
               className={`min-w-0 truncate ${
-                variant === "comparison" ? "text-xs sm:text-[0.95rem]" : "text-xs sm:text-sm"
+                variant === "comparison" ? "text-xs sm:text-[0.95rem]" : isLarge ? "text-lg" : "text-xs sm:text-sm"
               }`}
             >
               {note.name}
@@ -84,7 +94,9 @@ function NoteList({
                 className={`font-medium ${
                   variant === "comparison"
                     ? "text-primary text-xs sm:text-[0.95rem]"
-                    : "text-primary/70 text-xs sm:text-sm"
+                    : isLarge
+                      ? "text-primary/70 text-lg"
+                      : "text-primary/70 text-xs sm:text-sm"
                 }`}
               >
                 {note.ml} ml
@@ -119,6 +131,7 @@ export default function FormulaCard({
   onSelectedSizeChange,
   onNoteEdit,
   activeNoteName,
+  size = "default",
 }: FormulaCardProps) {
   const [uncontrolledSelectedSize, setUncontrolledSelectedSize] = useState<SizeOption>("30ml");
   const { t } = useTranslation();
@@ -169,6 +182,7 @@ export default function FormulaCard({
           noteType="top"
           onNoteEdit={onNoteEdit}
           activeNoteName={activeNoteName}
+          size={size}
         />
         <NoteList
           label={t("recommendations.noteLabels.heart")}
@@ -177,6 +191,7 @@ export default function FormulaCard({
           noteType="heart"
           onNoteEdit={onNoteEdit}
           activeNoteName={activeNoteName}
+          size={size}
         />
         <NoteList
           label={t("recommendations.noteLabels.base")}
@@ -185,11 +200,13 @@ export default function FormulaCard({
           noteType="base"
           onNoteEdit={onNoteEdit}
           activeNoteName={activeNoteName}
+          size={size}
         />
         <NoteList
           label={t("recommendations.noteLabels.boosters")}
           notes={sizeData.boosters}
           variant={variant}
+          size={size}
         />
       </div>
 

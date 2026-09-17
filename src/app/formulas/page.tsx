@@ -104,6 +104,33 @@ export default function FormulasPage() {
 
   const totalPages = data ? Math.max(1, Math.ceil(data.total / PAGE_SIZE)) : 1;
 
+  if (selectedFormula && selectedFormula.sizes) {
+    return (
+      <div className="relative min-h-dvh w-full flex flex-col bg-background-light">
+        <main className="flex-1 flex flex-col px-4 sm:px-8 lg:px-20 pt-8 pb-12 max-w-[500px] w-full mx-auto">
+          <div className="flex items-center gap-3 mb-6">
+            <button
+              onClick={() => setSelectedFormula(null)}
+              aria-label={t("formulas.close")}
+              className="flex items-center justify-center size-9 rounded-full text-primary hover:bg-primary/10 transition-colors"
+            >
+              <MaterialIcon name="arrow_back" className="text-[20px]" />
+            </button>
+            <h1 className="text-lg sm:text-xl font-bold text-primary font-mono">
+              {selectedFormula.reference}
+            </h1>
+          </div>
+          <FormulaCard
+            name={selectedFormula.reference}
+            sizes={selectedFormula.sizes}
+            className="flex-1"
+            size="lg"
+          />
+        </main>
+      </div>
+    );
+  }
+
   return (
     <div className="relative min-h-dvh w-full flex flex-col bg-background-light">
       <Navbar showActions={false} />
@@ -221,30 +248,6 @@ export default function FormulasPage() {
           </div>
         </div>
       </main>
-
-      {selectedFormula && selectedFormula.sizes && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 px-4"
-          onClick={() => setSelectedFormula(null)}
-        >
-          <div
-            className="relative w-full max-w-sm"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setSelectedFormula(null)}
-              aria-label={t("formulas.close")}
-              className="absolute -top-3 -right-3 z-10 flex items-center justify-center size-8 rounded-full bg-white text-primary/70 shadow-md hover:text-primary"
-            >
-              <MaterialIcon name="close" className="text-[18px]" />
-            </button>
-            <FormulaCard
-              name={selectedFormula.reference}
-              sizes={selectedFormula.sizes}
-            />
-          </div>
-        </div>
-      )}
     </div>
   );
 }
