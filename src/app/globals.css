@@ -25,7 +25,7 @@
    ───────────────────────────────────────────────────────────────────── */
 :root,
 [data-brand="lylo"] {
-  /* ── ANCIENNE PALETTE LYLO (décommenter pour revenir en arrière) ──
+  /* ── ACTIF : ANCIENNE PALETTE LYLO ── */
   --brand-primary: #996f56;
   --brand-primary-rgb: 153, 111, 86;
   --brand-background-light: #f7f7f6;
@@ -41,9 +41,8 @@
   --brand-surface-text: #171412;
   --brand-surface-nav-opacity: 0.8;
   --brand-surface-tech-opacity: 0.5;
-  ─────────────────────────────────────────────────────────────── */
 
-  /* ── ACTIF : palette Ester appliquée à Lylo ── */
+  /* ── PALETTE ESTER (décommenter pour revenir à ce thème) ──
   --brand-primary: #d3b184;
   --brand-primary-rgb: 211, 177, 132;
   --brand-background-light: #17142e;
@@ -61,6 +60,7 @@
   --brand-surface-tech-opacity: 0.97;
   --brand-panel-rgb: 36, 32, 68;
   --brand-panel-shadow-rgb: 0, 0, 0;
+  ─────────────────────────────────────────────────────────────── */
 
   /* Logo et hero-background restent ceux de Lylo (non concernés par la palette) */
   --brand-hero-image: url("/background-lylo.png");
