@@ -176,6 +176,10 @@
     "submit": "Valider",
     "submitted": "Envoyé !"
   },
+  "choiceGrid": {
+    "validate": "Valider",
+    "submitted": "Envoyé !"
+  },
   "transcript": {
     "toggle": "Conversation",
     "title": "Conversation",

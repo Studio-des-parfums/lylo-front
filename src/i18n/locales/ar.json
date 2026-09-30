@@ -176,6 +176,10 @@
     "submit": "تأكيد",
     "submitted": "تم الإرسال!"
   },
+  "choiceGrid": {
+    "validate": "تأكيد",
+    "submitted": "تم الإرسال!"
+  },
   "transcript": {
     "toggle": "المحادثة",
     "title": "المحادثة",

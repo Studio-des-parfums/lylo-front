@@ -266,6 +266,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         case "top_2_selected":
           console.log("[LiveKit] top_2_selected →", event.top_2);
           setHiddenChoices(event.top_2 || []);
+          // Le choix est acté (oral ou clic) — les cartes redeviennent non cliquables
+          // jusqu'à la prochaine étape qui les réactivera (step_asking_bottom_2).
+          setClickSelectionMode(null);
+          break;
+
+        case "bottom_2_selected":
+          console.log("[LiveKit] bottom_2_selected →", event.bottom_2);
+          setClickSelectionMode(null);
           break;
 
         case "answer_saved": {
@@ -318,14 +326,17 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           setAgentState(event.state as AgentState);
           break;
 
-        case "waiting_for_top_2":
-          console.warn("🟡 [CLICK MODE] waiting_for_top_2 reçu → question_id:", event.question_id, "| clickSelectionMode → top_2");
+        // Envoyés systématiquement (pas seulement en input_mode="click") — active les cartes
+        // cliquables en plus de la réponse orale, voir ChoiceGrid.tsx. Le premier des deux
+        // (clic ou réponse orale comprise par l'agent) qui arrive fait avancer la question.
+        case "step_asking_top_2":
+          console.log("[LiveKit] step_asking_top_2 → question_id:", event.question_id, "| clickSelectionMode → top_2");
           setClickSelectionMode("top_2");
           setClickQuestionId(event.question_id);
           break;
 
-        case "waiting_for_bottom_2":
-          console.warn("🟡 [CLICK MODE] waiting_for_bottom_2 reçu → question_id:", event.question_id, "| clickSelectionMode → bottom_2");
+        case "step_asking_bottom_2":
+          console.log("[LiveKit] step_asking_bottom_2 → question_id:", event.question_id, "| clickSelectionMode → bottom_2");
           setClickSelectionMode("bottom_2");
           setClickQuestionId(event.question_id);
           break;

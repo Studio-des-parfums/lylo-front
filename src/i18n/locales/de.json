@@ -176,6 +176,10 @@
     "submit": "Bestätigen",
     "submitted": "Gesendet!"
   },
+  "choiceGrid": {
+    "validate": "Bestätigen",
+    "submitted": "Gesendet!"
+  },
   "transcript": {
     "toggle": "Gespräch",
     "title": "Gespräch",

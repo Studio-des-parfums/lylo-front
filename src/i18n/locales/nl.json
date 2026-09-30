@@ -176,6 +176,10 @@
     "submit": "Bevestigen",
     "submitted": "Verzonden!"
   },
+  "choiceGrid": {
+    "validate": "Bevestigen",
+    "submitted": "Verzonden!"
+  },
   "transcript": {
     "toggle": "Gesprek",
     "title": "Gesprek",
