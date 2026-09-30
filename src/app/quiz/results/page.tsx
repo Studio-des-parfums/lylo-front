@@ -6,6 +6,7 @@ import Navbar from "@/components/layout/Navbar";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import FormulaCard from "@/components/recommendations/FormulaCard";
 import CatalogFormulaCard from "@/components/recommendations/CatalogFormulaCard";
+import MoodboardButton from "@/components/recommendations/MoodboardButton";
 import FormulaQrCode from "@/components/recommendations/FormulaQrCode";
 import PrintableFormula from "@/components/recommendations/PrintableFormula";
 import FormulaPersonalizer from "@/components/recommendations/FormulaPersonalizer";
@@ -43,6 +44,7 @@ interface Formula {
   family?: string;
   match_reason?: string;
   image_url?: string;
+  moodboard_image_url?: string | null;
 }
 
 function isCatalogFormula(formula: Formula): boolean {
@@ -113,6 +115,8 @@ function SoloResults() {
   // aux choix ou changement de taille, pour ne jamais pointer vers une note obsolète.
   const [activeNote, setActiveNote] = useState<{ noteType: "top" | "heart" | "base"; note: FormulaNote } | null>(null);
 
+  // La génération des moodboards démarre déjà côté back, en tâche de fond, dès
+  // POST /api/formulas/generate (voir _queue_moodboards côté sessions.py).
   useEffect(() => {
     const storedLanguage = resolveStoredLanguage();
     persistLanguage(storedLanguage);
@@ -356,6 +360,12 @@ function SoloResults() {
                       className="flex items-center justify-center size-9 rounded-full brand-surface border border-primary/25 text-primary shadow-sm hover:bg-primary/5 transition-all"
                     />
                   )}
+                  <MoodboardButton
+                    reference={reference || undefined}
+                    initialImageUrl={selectedFormula.moodboard_image_url}
+                    iconOnly
+                    className="flex items-center justify-center size-9 rounded-full brand-surface border border-primary/25 text-primary shadow-sm hover:bg-primary/5 transition-all"
+                  />
                 </div>
               )}
               <button
@@ -418,6 +428,8 @@ function MultiResults() {
 
   const RECAP = -1;
 
+  // La génération des moodboards démarre déjà côté back, en tâche de fond, dès
+  // POST /api/formulas/generate-multi (voir _queue_moodboards côté sessions.py).
   useEffect(() => {
     const raw = localStorage.getItem("quiz_multi_results");
     if (!raw) { router.push("/quiz"); return; }
@@ -667,6 +679,12 @@ function MultiResults() {
                         className="flex items-center justify-center size-8 rounded-full brand-surface border border-primary/25 text-primary shadow-sm hover:bg-primary/5 transition-all"
                       />
                     )}
+                    <MoodboardButton
+                      reference={ref}
+                      initialImageUrl={formula.moodboard_image_url}
+                      iconOnly
+                      className="flex items-center justify-center size-8 rounded-full brand-surface border border-primary/25 text-primary shadow-sm hover:bg-primary/5 transition-all"
+                    />
                   </div>
                 )}
               </div>

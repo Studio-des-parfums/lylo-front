@@ -170,6 +170,12 @@
     "modérée": "معتدلة",
     "intense": "قوية"
   },
+  "perfumeName": {
+    "subtitle": "أعطِ عطرك اسمًا",
+    "placeholder": "اسم عطرك",
+    "submit": "تأكيد",
+    "submitted": "تم الإرسال!"
+  },
   "transcript": {
     "toggle": "المحادثة",
     "title": "المحادثة",
@@ -272,6 +278,12 @@
       "base": "نفحات القاعدة",
       "boosters": "معززات"
     }
+  },
+  "moodboard": {
+    "title": "لوحة أجواء العطر",
+    "loading": "جارٍ إنشاء صورة عطرك…",
+    "alt": "صورة أجواء العطر",
+    "close": "إغلاق لوحة الأجواء"
   },
   "printerModal": {
     "title": "الطابعة",

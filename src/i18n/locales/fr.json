@@ -170,6 +170,12 @@
     "modérée": "Modérée",
     "intense": "Intense"
   },
+  "perfumeName": {
+    "subtitle": "Donnez un nom à votre parfum",
+    "placeholder": "Le nom de votre parfum",
+    "submit": "Valider",
+    "submitted": "Envoyé !"
+  },
   "transcript": {
     "toggle": "Conversation",
     "title": "Conversation",
@@ -226,6 +232,7 @@
     "intensityMixDesc": "Un mix des deux",
     "intensityPuissant": "Intense",
     "intensityPuissantDesc": "Puissant et tenace",
+    "perfumeNameQuestion": "Pour finir, donnez un nom à votre parfum",
     "submit": "Générer mes formules",
     "submitCatalog": "Voir mes parfums",
     "continue": "Continuer",
@@ -279,6 +286,12 @@
       "base": "Notes de fond",
       "boosters": "Boosters"
     }
+  },
+  "moodboard": {
+    "title": "Ambiance du parfum",
+    "loading": "Création du visuel de votre parfum…",
+    "alt": "Visuel d'ambiance du parfum",
+    "close": "Fermer le moodboard"
   },
   "printerModal": {
     "title": "Imprimante",

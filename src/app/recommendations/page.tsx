@@ -8,6 +8,7 @@ import AvatarVideo from "@/components/interaction/AvatarVideo";
 
 import FormulaCard from "@/components/recommendations/FormulaCard";
 import CatalogFormulaCard from "@/components/recommendations/CatalogFormulaCard";
+import MoodboardButton from "@/components/recommendations/MoodboardButton";
 import FormulaQrCode from "@/components/recommendations/FormulaQrCode";
 import PrintableFormula from "@/components/recommendations/PrintableFormula";
 import SendFormulaMailButton from "@/components/recommendations/SendFormulaMailButton";
@@ -194,6 +195,15 @@ export default function RecommendationsPage() {
                     {formulaReference && (
                       <SendFormulaMailButton
                         reference={formulaReference}
+                        iconOnly
+                        className="flex items-center justify-center size-9 rounded-full bg-white/90 backdrop-blur-sm text-primary border border-primary/25 cursor-pointer shadow-lg shadow-primary/10 hover:bg-white hover:border-primary/40 transition-all"
+                      />
+                    )}
+
+                    {selectedFormula && !isCatalogFormula(selectedFormula) && (
+                      <MoodboardButton
+                        reference={formulaReference}
+                        initialImageUrl={selectedFormula.moodboard_image_url}
                         iconOnly
                         className="flex items-center justify-center size-9 rounded-full bg-white/90 backdrop-blur-sm text-primary border border-primary/25 cursor-pointer shadow-lg shadow-primary/10 hover:bg-white hover:border-primary/40 transition-all"
                       />

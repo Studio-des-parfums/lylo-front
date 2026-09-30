@@ -170,6 +170,12 @@
     "modérée": "Moderada",
     "intense": "Intensa"
   },
+  "perfumeName": {
+    "subtitle": "Dale un nombre a tu perfume",
+    "placeholder": "El nombre de tu perfume",
+    "submit": "Confirmar",
+    "submitted": "¡Enviado!"
+  },
   "transcript": {
     "toggle": "Conversación",
     "title": "Conversación",
@@ -272,6 +278,12 @@
       "base": "Notas de Fondo",
       "boosters": "Potenciadores"
     }
+  },
+  "moodboard": {
+    "title": "Ambiente del perfume",
+    "loading": "Creando el visual de tu perfume…",
+    "alt": "Visual de ambiente del perfume",
+    "close": "Cerrar el moodboard"
   },
   "printerModal": {
     "title": "Impresora",

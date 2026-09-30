@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import ChoiceCard from "@/components/interaction/ChoiceCard";
@@ -22,7 +22,7 @@ interface QuizAnswer { question_id: number; question_text: string; top_2: string
 interface Profile { gender: "homme" | "femme" | ""; age: string; pregnant: boolean | null; has_allergies: boolean | null; allergies: string; }
 
 type Step = "profile" | "questionnaire";
-type Phase = "top2" | "bottom2" | "confirm" | "intensity";
+type Phase = "top2" | "bottom2" | "confirm" | "intensity" | "perfumeName";
 type ProfileStep = "gender" | "age" | "pregnant" | "allergies" | "allergies_detail";
 type FormulaType = "frais" | "mix" | "puissant";
 
@@ -32,6 +32,7 @@ interface ParticipantState {
   profile: Profile;
   answers: QuizAnswer[];
   formulaType: FormulaType | null;
+  perfumeName: string;
 }
 
 function BigButton({ label, selected, onClick }: { label: string; selected: boolean; onClick: () => void }) {
@@ -66,6 +67,43 @@ function IntensityCard({ icon, label, description, selected, onClick }: { icon: 
       <span className="text-base font-semibold">{label}</span>
       <span className={`text-xs ${selected ? "text-white/80" : "text-primary/50"}`}>{description}</span>
     </button>
+  );
+}
+
+// ── Nom du parfum ────────────────────────────────────────────────────────
+function PerfumeNameStep({ onSubmit }: { onSubmit: (name: string) => void }) {
+  const { t } = useTranslation();
+  const [value, setValue] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmed = value.trim();
+    if (!trimmed || submitted) return;
+    setSubmitted(true);
+    onSubmit(trimmed);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
+      <input
+        type="text"
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        placeholder={t("perfumeName.placeholder")}
+        maxLength={60}
+        disabled={submitted}
+        autoFocus
+        className="w-full rounded-xl border border-primary/20 bg-white px-5 py-4 text-center text-lg font-light tracking-wide text-primary placeholder:text-primary/30 focus:outline-none focus:border-primary/50 disabled:opacity-60 transition-colors"
+      />
+      <button
+        type="submit"
+        disabled={!value.trim() || submitted}
+        className="w-full rounded-full bg-primary text-white text-sm font-semibold py-3 shadow-lg shadow-primary/20 hover:brightness-110 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+      >
+        {submitted ? t("perfumeName.submitted") : t("perfumeName.submit")}
+      </button>
+    </form>
   );
 }
 
@@ -123,6 +161,7 @@ export default function QuizPage() {
   });
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [formulaType, setFormulaType] = useState<FormulaType | null>(null);
+  const [perfumeName, setPerfumeName] = useState("");
 
   // ── Mode multi ─────────────────────────────────────────────────────
   const initParticipants = (): ParticipantState[] =>
@@ -131,6 +170,7 @@ export default function QuizPage() {
       profile: { gender: "", age: "", pregnant: null, has_allergies: null, allergies: "" },
       answers: [],
       formulaType: null,
+      perfumeName: "",
     }));
   const [participants, setParticipants] = useState<ParticipantState[]>(initParticipants);
   const [currentParticipantIndex, setCurrentParticipantIndex] = useState(0);
@@ -302,27 +342,44 @@ export default function QuizPage() {
   }, [currentQuestion, top2, bottom2, answers, currentIndex, questions.length, isMulti, currentParticipantIndex, participantColors.length, participants]);
 
   // ── Choix d'intensité (solo + multi) ───────────────────────────────
+  // Avant de générer, on demande le nom du parfum (une étape par personne en mode multi,
+  // comme pour l'intensité) — voir phase "perfumeName" et handlePerfumeNameSubmit.
   const handleIntensitySelect = useCallback((type: FormulaType) => {
     if (isMulti) {
       const updatedParticipants = participants.map((p, i) =>
         i === currentParticipantIndex ? { ...p, formulaType: type } : p
       );
       setParticipants(updatedParticipants);
+      setPhase("perfumeName");
+    } else {
+      setFormulaType(type);
+      setPhase("perfumeName");
+    }
+  }, [isMulti, participants, currentParticipantIndex]);
+
+  // ── Nom du parfum (solo + multi) — dernière étape avant génération ──
+  const handlePerfumeNameSubmit = useCallback((name: string) => {
+    if (isMulti) {
+      const updatedParticipants = participants.map((p, i) =>
+        i === currentParticipantIndex ? { ...p, perfumeName: name } : p
+      );
+      setParticipants(updatedParticipants);
 
       const nextParticipantIdx = currentParticipantIndex + 1;
       if (nextParticipantIdx < participantColors.length) {
         setCurrentParticipantIndex(nextParticipantIdx);
+        setPhase("intensity");
       } else {
         submitMultiAnswers(updatedParticipants);
       }
     } else {
-      setFormulaType(type);
-      submitAnswers(answers, type);
+      setPerfumeName(name);
+      submitAnswers(answers, formulaType, name);
     }
-  }, [isMulti, participants, currentParticipantIndex, participantColors.length, answers]);
+  }, [isMulti, participants, currentParticipantIndex, participantColors.length, answers, formulaType]);
 
   // ── Soumission solo ────────────────────────────────────────────────
-  const submitAnswers = async (finalAnswers: QuizAnswer[], type?: FormulaType | null) => {
+  const submitAnswers = async (finalAnswers: QuizAnswer[], type?: FormulaType | null, name?: string) => {
     setGenerating(true);
     try {
       const res = await fetch(`${API_BASE}/api/formulas/generate`, {
@@ -338,6 +395,7 @@ export default function QuizPage() {
           pregnant: profile.pregnant ?? false,
           answers: finalAnswers,
           formula_type: type ?? formulaType ?? undefined,
+          perfume_name: (name ?? perfumeName) || undefined,
         }),
       });
       if (!res.ok) throw new Error(t("quiz.errorGenerating"));
@@ -369,6 +427,7 @@ export default function QuizPage() {
             pregnant: p.profile.pregnant ?? false,
             answers: p.answers,
             formula_type: p.formulaType ?? undefined,
+            perfume_name: p.perfumeName || undefined,
           })),
         }),
       });
@@ -604,6 +663,30 @@ export default function QuizPage() {
                   onClick={() => handleIntensitySelect("puissant")}
                 />
               </div>
+            </div>
+          </div>
+        </main>
+        <div className="absolute top-0 right-0 -z-10 w-[40%] h-full opacity-[0.03] pointer-events-none bg-gradient-to-l from-primary to-transparent" />
+        <div className="absolute bottom-0 left-0 -z-10 w-[40%] h-[60%] opacity-[0.05] pointer-events-none bg-gradient-to-tr from-primary to-transparent blur-[120px]" />
+      </div>
+    );
+  }
+
+  // ════════════════════════════════════════════════════════════════════
+  // NOM DU PARFUM — dernière étape avant génération
+  // ════════════════════════════════════════════════════════════════════
+  if (phase === "perfumeName") {
+    return (
+      <div className="relative flex h-dvh w-full flex-col transition-colors duration-500" style={isMulti && colorDef ? { backgroundColor: colorDef.bg } : {}}>
+        <Navbar showActions={false} transparent />
+        <main className="flex-1 flex flex-col items-center justify-center px-4 relative z-10">
+          <div className="w-full max-w-lg flex flex-col items-center gap-5">
+            {isMulti && currentColor && <ColorTurnBanner colorId={currentColor} />}
+            <div className="w-full bg-white rounded-2xl shadow-lg px-8 py-8 flex flex-col items-center gap-6">
+              <h2 className="text-2xl md:text-3xl font-extralight tracking-tight text-center leading-tight text-primary">
+                {t("quiz.perfumeNameQuestion")}
+              </h2>
+              <PerfumeNameStep onSubmit={handlePerfumeNameSubmit} />
             </div>
           </div>
         </main>

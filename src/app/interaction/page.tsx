@@ -10,6 +10,7 @@ import StepProgress from "@/components/interaction/StepProgress";
 import ChoiceGrid from "@/components/interaction/ChoiceGrid";
 import AnswerConfirmation from "@/components/interaction/AnswerConfirmation";
 import IntensitySelector from "@/components/interaction/IntensitySelector";
+import PerfumeNameForm from "@/components/interaction/PerfumeNameForm";
 import nextDynamic from "next/dynamic";
 const BottomBar = nextDynamic(() => import("@/components/livekit/BottomBar"), { ssr: false });
 import GeneratingLoader from "@/components/livekit/GeneratingLoader";
@@ -72,6 +73,8 @@ export default function InteractionPage() {
           />
         ) : sessionState === "asking_intensity" ? (
           <IntensitySelector />
+        ) : sessionState === "asking_perfume_name" ? (
+          <PerfumeNameForm />
         ) : (
           <ChoiceGrid choices={currentQuestion?.choices || []} />
         )}

@@ -24,7 +24,8 @@ export type SessionState =
   | "customization"
   | "standby"
   | "awaiting_confirmation"
-  | "asking_intensity";
+  | "asking_intensity"
+  | "asking_perfume_name";
 
 export type AgentState = "speaking" | "listening" | "thinking" | "idle" | "initializing";
 
@@ -81,6 +82,9 @@ export interface Formula {
   family?: string;
   match_reason?: string;
   image_url?: string;
+  // Visuel d'ambiance généré à partir des notes de la formule (voir moodboard_service côté
+  // back) — absent tant que la génération en arrière-plan n'est pas terminée.
+  moodboard_image_url?: string | null;
 }
 
 export function isCatalogFormula(formula: Formula): boolean {
@@ -97,6 +101,11 @@ export interface PendingClickAnswer {
   question_id: number;
   values: string[];
   top_2?: string[];
+}
+
+export interface PendingPerfumeName {
+  type: "perfume_name_submitted";
+  name: string;
 }
 
 export interface Question {
@@ -143,6 +152,7 @@ interface SessionContextType {
   connectionError: boolean;
   clickSelectionMode: "top_2" | "bottom_2" | null;
   pendingClickAnswer: PendingClickAnswer | null;
+  pendingPerfumeName: PendingPerfumeName | null;
   confirmationData: { question_id: number; top_2: string[]; bottom_2: string[] } | null;
   avatarDisabled: boolean;
   setConnectionError: (v: boolean) => void;
@@ -154,6 +164,8 @@ interface SessionContextType {
   upsertTranscript: (msg: TranscriptMessage) => void;
   submitClickAnswer: (values: string[]) => void;
   clearPendingClickAnswer: () => void;
+  submitPerfumeName: (name: string) => void;
+  clearPendingPerfumeName: () => void;
 }
 
 const SessionContext = createContext<SessionContextType | null>(null);
@@ -185,6 +197,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [clickQuestionId, setClickQuestionId] = useState<number | null>(null);
   const [clickTop2Values, setClickTop2Values] = useState<string[]>([]);
   const [pendingClickAnswer, setPendingClickAnswer] = useState<PendingClickAnswer | null>(null);
+  const [pendingPerfumeName, setPendingPerfumeName] = useState<PendingPerfumeName | null>(null);
   const [confirmationData, setConfirmationData] = useState<{ question_id: number; top_2: string[]; bottom_2: string[] } | null>(null);
   const [avatarDisabled, setAvatarDisabled] = useState(false);
 
@@ -282,6 +295,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
         case "formulas_generated":
           console.log("[LiveKit] formulas_generated →", event.formulas?.length, "formulas");
+          // La génération des moodboards démarre déjà côté back, en tâche de fond, dès
+          // POST /api/session/{id}/generate-formulas (voir _queue_moodboards côté sessions.py).
           setFormulas(event.formulas || []);
           setSessionState("completed");
           break;
@@ -326,6 +341,11 @@ export function SessionProvider({ children }: { children: ReactNode }) {
           setSessionState("asking_intensity");
           break;
 
+        case "step_asking_perfume_name":
+          console.log("[LiveKit] step_asking_perfume_name");
+          setSessionState("asking_perfume_name");
+          break;
+
         case "requesting_email":
           console.log("[LiveKit] requesting_email →", event.requesting_email);
           if (event.requesting_email) setRequestingEmail(true);
@@ -368,6 +388,14 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setPendingClickAnswer(null);
   }, []);
 
+  const submitPerfumeName = useCallback((name: string) => {
+    setPendingPerfumeName({ type: "perfume_name_submitted", name });
+  }, []);
+
+  const clearPendingPerfumeName = useCallback(() => {
+    setPendingPerfumeName(null);
+  }, []);
+
   const endSession = useCallback(() => {
     isRetryingRef.current = false;
     // Fire-and-forget : on nettoie en fond, pas besoin d'attendre
@@ -395,6 +423,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     setClickQuestionId(null);
     setClickTop2Values([]);
     setPendingClickAnswer(null);
+    setPendingPerfumeName(null);
     setConfirmationData(null);
   }, [sessionData]);
 
@@ -449,6 +478,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         devMode: DEV_MODE,
         clickSelectionMode,
         pendingClickAnswer,
+        pendingPerfumeName,
         confirmationData,
         avatarDisabled,
         startSession,
@@ -459,6 +489,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         upsertTranscript,
         submitClickAnswer,
         clearPendingClickAnswer,
+        submitPerfumeName,
+        clearPendingPerfumeName,
       }}
     >
       {children}

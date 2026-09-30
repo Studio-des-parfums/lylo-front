@@ -170,6 +170,12 @@
     "modérée": "Moderate",
     "intense": "Intense"
   },
+  "perfumeName": {
+    "subtitle": "Give your perfume a name",
+    "placeholder": "Your perfume's name",
+    "submit": "Confirm",
+    "submitted": "Sent!"
+  },
   "transcript": {
     "toggle": "Conversation",
     "title": "Conversation",
@@ -226,6 +232,7 @@
     "intensityMixDesc": "A mix of both",
     "intensityPuissant": "Intense",
     "intensityPuissantDesc": "Powerful and long-lasting",
+    "perfumeNameQuestion": "To finish, give your perfume a name",
     "submit": "Generate my formulas",
     "submitCatalog": "See my perfumes",
     "continue": "Continue",
@@ -279,6 +286,12 @@
       "base": "Base Notes",
       "boosters": "Boosters"
     }
+  },
+  "moodboard": {
+    "title": "Fragrance moodboard",
+    "loading": "Creating your fragrance visual…",
+    "alt": "Fragrance moodboard visual",
+    "close": "Close moodboard"
   },
   "printerModal": {
     "title": "Printer",

@@ -170,6 +170,12 @@
     "modérée": "Matig",
     "intense": "Intens"
   },
+  "perfumeName": {
+    "subtitle": "Geef uw parfum een naam",
+    "placeholder": "De naam van uw parfum",
+    "submit": "Bevestigen",
+    "submitted": "Verzonden!"
+  },
   "transcript": {
     "toggle": "Gesprek",
     "title": "Gesprek",
@@ -272,6 +278,12 @@
       "base": "Basisnoten",
       "boosters": "Boosters"
     }
+  },
+  "moodboard": {
+    "title": "Sfeerbeeld van het parfum",
+    "loading": "Uw parfumbeeld wordt gemaakt…",
+    "alt": "Sfeerbeeld van het parfum",
+    "close": "Sfeerbeeld sluiten"
   },
   "printerModal": {
     "title": "Printer",

@@ -43,6 +43,21 @@ function ClickModeController() {
   return null;
 }
 
+function PerfumeNameController() {
+  const { pendingPerfumeName, clearPendingPerfumeName } = useSession();
+  const { send } = useDataChannel("control");
+
+  useEffect(() => {
+    if (!pendingPerfumeName) return;
+    console.warn("📤 [PERFUME NAME] Envoi via data channel 'control':", pendingPerfumeName);
+    const msg = new TextEncoder().encode(JSON.stringify(pendingPerfumeName));
+    send(msg, { reliable: true });
+    clearPendingPerfumeName();
+  }, [pendingPerfumeName, send, clearPendingPerfumeName]);
+
+  return null;
+}
+
 function RoomEventLogger() {
   const room = useRoomContext();
   const { handleConnectionTimeout } = useSession();
@@ -305,6 +320,7 @@ export default function LiveKitSession({ children }: LiveKitSessionProps) {
       <DataChannelListener />
       <TranscriptionListener />
       <ClickModeController />
+      <PerfumeNameController />
       {children}
     </LiveKitRoom>
   );

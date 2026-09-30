@@ -170,6 +170,12 @@
     "modérée": "Moderat",
     "intense": "Intensiv"
   },
+  "perfumeName": {
+    "subtitle": "Geben Sie Ihrem Duft einen Namen",
+    "placeholder": "Der Name Ihres Duftes",
+    "submit": "Bestätigen",
+    "submitted": "Gesendet!"
+  },
   "transcript": {
     "toggle": "Gespräch",
     "title": "Gespräch",
@@ -272,6 +278,12 @@
       "base": "Basisnoten",
       "boosters": "Booster"
     }
+  },
+  "moodboard": {
+    "title": "Duft-Moodboard",
+    "loading": "Ihr Duftvisual wird erstellt…",
+    "alt": "Moodboard-Visual des Duftes",
+    "close": "Moodboard schließen"
   },
   "printerModal": {
     "title": "Drucker",
