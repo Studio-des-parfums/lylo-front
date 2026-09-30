@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react";
 import { useDataChannel, useRoomContext } from "@livekit/components-react";
-import { Track } from "livekit-client";
+import { Track, RoomEvent } from "livekit-client";
 import { useSession } from "@/context/SessionContext";
 import { useTranslation } from "@/i18n/LanguageContext";
 import MaterialIcon from "@/components/ui/MaterialIcon";
@@ -25,9 +25,33 @@ export default function BottomBar() {
   const { send } = useDataChannel("control");
   const room = useRoomContext();
   const [interrupted, setInterrupted] = useState(false);
-  const [muted, setMuted] = useState(false);
+  // Initialisé depuis l'état réel de la track micro (pas toujours false) — sinon, en cas de
+  // remontage du composant (changement de page) alors que le micro était mute, l'icône
+  // affichait "actif" par défaut, désynchronisée du vrai état.
+  const [muted, setMuted] = useState(
+    () => room.localParticipant.getTrackPublication(Track.Source.Microphone)?.isMuted ?? false
+  );
   const [transcriptOpen, setTranscriptOpen] = useState(false);
   const [resumeAsked, setResumeAsked] = useState(false);
+
+  // Reste synchronisé avec l'état réel de la track, y compris quand elle change ailleurs
+  // qu'via handleMicToggle (ex: mute forcé par handleInterrupt, ou track pas encore publiée
+  // au premier rendu).
+  useEffect(() => {
+    const syncMuted = () => {
+      const pub = room.localParticipant.getTrackPublication(Track.Source.Microphone);
+      if (pub) setMuted(pub.isMuted);
+    };
+    syncMuted();
+    room.on(RoomEvent.TrackMuted, syncMuted);
+    room.on(RoomEvent.TrackUnmuted, syncMuted);
+    room.on(RoomEvent.LocalTrackPublished, syncMuted);
+    return () => {
+      room.off(RoomEvent.TrackMuted, syncMuted);
+      room.off(RoomEvent.TrackUnmuted, syncMuted);
+      room.off(RoomEvent.LocalTrackPublished, syncMuted);
+    };
+  }, [room]);
 
   // Écoute directement les events "state" pour réafficher le bouton à chaque standby,
   // même si sessionState était déjà "standby" (React ne re-déclenche pas l'effect dans ce cas)

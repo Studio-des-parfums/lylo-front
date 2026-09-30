@@ -88,13 +88,10 @@ export default function RecommendationsPage() {
 
       <main className="flex-1 flex flex-col px-3 sm:px-5 pt-2 sm:pt-3 pb-6 max-w-[1400px] mx-auto w-full relative z-10">
 
-        {/* ── Avatar + Titre ── visible uniquement en vue 2 formules ── */}
+        {/* ── Avatar ── visible uniquement en vue 2 formules ── */}
         {!isSingle && (
           <div className="shrink-0 flex flex-col items-center gap-1 mt-1 sm:mt-3 mb-2 sm:mb-3 [@media(max-height:580px)]:hidden">
             <AvatarSection name="" role="" imageUrl={avatarUrl} avatarEnabled={avatarEnabled} />
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-extralight tracking-tight text-center max-w-2xl leading-tight mt-1 sm:mt-2">
-              {t(isEster ? "recommendations.titleCatalog" : "recommendations.title")}
-            </h3>
           </div>
         )}
 
@@ -231,31 +228,19 @@ export default function RecommendationsPage() {
         ════════════════════════════════════════════════ */
           <div className="flex-1 flex flex-col gap-4 sm:gap-5">
 
-            <div className="shrink-0 text-center max-w-3xl mx-auto">
-              <p className="brand-text text-[0.62rem] sm:text-[0.68rem] text-primary/70 mb-2">
-                {t("recommendationsPage.yourRecommendations")}
-              </p>
-              <h3 className="text-lg sm:text-2xl md:text-3xl font-extralight tracking-tight text-primary leading-tight">
-                {t("recommendationsPage.compareFormulas")}
-              </h3>
-            </div>
-
             <div className="flex flex-col gap-4">
 
-              {/* Cartes */}
-              <div className="min-w-0 grid grid-cols-1 min-[480px]:grid-cols-2 gap-2 sm:gap-4 items-start">
+              {/* Cartes — mêmes dimensions que le mode visuel (quiz/results) */}
+              <div className="w-full flex flex-row flex-wrap items-stretch justify-center gap-2 sm:gap-6">
                 {formulas.length > 0 ? (
-                  formulas.map((item, index) => (
+                  formulas.map((item) => (
                     <div
                       key={item.key}
-                      className={
-                        formulas.length % 2 === 1 && index === formulas.length - 1
-                          ? "min-[480px]:col-span-2 min-[480px]:max-w-[calc(50%-0.5rem)] min-[480px]:mx-auto"
-                          : ""
-                      }
+                      className="w-full max-w-[340px] h-[min(58vh,720px)] sm:h-[min(68vh,720px)]"
                     >
                       {renderFormula(item.formula, {
                         variant: "comparison",
+                        className: "h-full",
                         selectedSize,
                         onSelectedSizeChange: setSelectedSize,
                       })}
