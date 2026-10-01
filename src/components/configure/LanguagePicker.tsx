@@ -6,10 +6,9 @@ import { useTranslation } from "@/i18n/LanguageContext";
 import { persistLanguage, resolveStoredLanguage } from "@/lib/language";
 
 type AvatarLocale = "fr" | "en" | "es" | "de" | "ar" | "ru";
-type PickerLocale = AvatarLocale | "it";
 
 interface Language {
-  code: PickerLocale;
+  code: AvatarLocale;
   nativeName: string;
   englishName: string;
   flag: string;
@@ -50,8 +49,7 @@ export default function LanguagePicker() {
     setTimeout(() => setOpen(false), 300);
   };
 
-  const handleSelect = (code: PickerLocale) => {
-    if (code !== "fr" && code !== "en" && code !== "es" && code !== "de" && code !== "ar" && code !== "ru") return;
+  const handleSelect = (code: AvatarLocale) => {
     setAvatarLocale(code);
     persistLanguage(code);
     closeModal();

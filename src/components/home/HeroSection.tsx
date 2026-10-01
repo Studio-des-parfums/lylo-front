@@ -15,7 +15,6 @@ const isEster = activeBrand.id === "ester";
 const ESTER_INTRO_AUDIO_BY_LOCALE: Record<Locale, string> = {
   en: "/EL-EN.mp3",
   fr: "/EL-FR.mp3",
-  it: "/EL-IT.mp3",
   es: "/EL-ES.mp3",
   de: "/EL-AL.mp3",
   ar: "/EL-CH.mp3",
