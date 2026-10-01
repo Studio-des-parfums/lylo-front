@@ -38,7 +38,7 @@ function SharedFormulaContent() {
   const lang = searchParams.get("lang");
 
   useEffect(() => {
-    if (lang === "fr" || lang === "en") {
+    if (lang === "fr" || lang === "en" || lang === "es") {
       persistLanguage(lang as AppLanguage);
       setLocale(lang as AppLanguage);
     }

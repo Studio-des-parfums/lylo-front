@@ -257,7 +257,15 @@
     "errorLoadingQuestions": "Error de carga",
     "errorGenerating": "Error de generación",
     "errorGeneratingMulti": "Error de generación múltiple",
-    "errorUnknown": "Error desconocido"
+    "errorUnknown": "Error desconocido",
+    "intensityFrais": "Ligero",
+    "intensityFraisDesc": "Fresco y discreto",
+    "intensityMix": "Equilibrado",
+    "intensityMixDesc": "Una mezcla de ambos",
+    "intensityPuissant": "Intenso",
+    "intensityPuissantDesc": "Potente y duradero",
+    "intensityQuestion": "¿Qué intensidad de perfume prefiere?",
+    "perfumeNameQuestion": "Para terminar, dele un nombre a su perfume"
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",
@@ -317,7 +325,10 @@
     "sheetsPrinted": "{count} hoja(s) impresa(s)",
     "printAllFormulas": "Imprimir las {count} fórmulas",
     "giveReferenceToPerfumer": "Indica esta referencia a nuestro perfumista para encontrar tu fórmula.",
-    "referenceLoading": "Generando tu referencia..."
+    "referenceLoading": "Generando tu referencia...",
+    "backToChoices": "Volver a las opciones",
+    "continue": "Continuar",
+    "personalizeTitle": "Personalice su fórmula"
   },
   "recommendationsPage": {
     "printed": "Impreso",
@@ -353,5 +364,25 @@
     "pageOf": "Página {page} / {totalPages}",
     "close": "Cerrar",
     "refresh": "Actualizar"
+  },
+  "formulaPersonalizer": {
+    "alternatives": "Alternativas",
+    "currentNote": "Nota actual",
+    "error": "No se pudo reemplazar esta nota. Inténtelo de nuevo.",
+    "invite": "Haga clic en el icono junto a una nota para ver sus alternativas.",
+    "noAlternatives": "No hay alternativas disponibles para esta nota."
+  },
+  "sendMail": {
+    "button": "Recibir por correo",
+    "title": "Reciba su fórmula",
+    "subtitle": "Indique sus datos para recibir su fórmula por correo electrónico.",
+    "firstName": "Nombre",
+    "lastName": "Apellido",
+    "email": "Correo electrónico",
+    "submit": "Enviar",
+    "sending": "Enviando…",
+    "sent": "¡Fórmula enviada!",
+    "error": "Error al enviar. Inténtelo de nuevo.",
+    "close": "Cerrar"
   }
 }

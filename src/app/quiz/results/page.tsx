@@ -306,7 +306,7 @@ function SoloResults() {
                 {!isCatalogFormula(selectedFormula) && (
                   <FormulaPersonalizer
                     formula={selectedFormula}
-                    language={language as "fr" | "en"}
+                    language={language as "fr" | "en" | "es"}
                     onFormulaChange={(updated) => handleFormulaReplaced(chosen, updated)}
                     activeNote={activeNote}
                     reference={reference || undefined}
@@ -345,7 +345,7 @@ function SoloResults() {
                       selectedSizes[chosen] ?? "30ml",
                       selectedFormula.sizes!,
                     )}
-                    language={language as "fr" | "en"}
+                    language={language as "fr" | "en" | "es"}
                     buttonLabel={t("recommendations.qrButton")}
                     title={t("recommendations.qrTitle")}
                     subtitle={t("recommendations.qrSubtitle")}
@@ -664,7 +664,7 @@ function MultiResults() {
                     </button>
                     <FormulaQrCode
                       formula={createShareableFormula(formula.profile, selectedSize, formula.sizes!)}
-                      language={language as "fr" | "en"}
+                      language={language as "fr" | "en" | "es"}
                       buttonLabel={t("recommendations.qrButton")}
                       title={`${t("recommendations.qrTitle")} · ${colorDef ? t(colorDef.labelKey) : participant.color}`}
                       subtitle={t("recommendations.qrSubtitle")}
