@@ -345,6 +345,11 @@
     "noAlternatives": "No alternative available for this note.",
     "error": "Could not replace this note. Please try again."
   },
+  "similarPerfumes": {
+    "button": "Similar perfumes",
+    "loading": "Searching for similar perfumes…",
+    "error": "Unable to find similar perfumes right now."
+  },
   "sendMail": {
     "button": "Receive by email",
     "title": "Receive your formula",

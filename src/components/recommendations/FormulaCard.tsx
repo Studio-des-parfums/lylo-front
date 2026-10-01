@@ -3,6 +3,7 @@
 import { useState } from "react";
 import SizeToggle, { SizeOption } from "./SizeToggle";
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import SimilarPerfumesButton, { SimilarPerfume } from "./SimilarPerfumesButton";
 import { FormulaSize, FormulaNote } from "@/context/SessionContext";
 import { useTranslation } from "@/i18n/LanguageContext";
 
@@ -26,6 +27,16 @@ interface FormulaCardProps {
   /** "lg" agrandit le texte des notes — utilisé sur les écrans plein page où la carte
    * n'est pas contrainte à un espace compact (ex. /formulas). */
   size?: "default" | "lg";
+  /** Fourni uniquement sur l'écran final (formule confirmée) : affiche un bouton "?" en
+   * haut à droite de la carte qui affiche 2 parfums du commerce ressemblants. Le résultat et
+   * le chargement sont pilotés par le parent (mis en cache par formule), pour ne jamais
+   * relancer la recherche en revenant sur une formule déjà consultée dans la session. */
+  similarPerfumes?: {
+    cached: SimilarPerfume[] | undefined;
+    onFetch: () => Promise<void>;
+    loading: boolean;
+    error: boolean;
+  };
 }
 
 const MAX_NOTES = 3;
@@ -132,6 +143,7 @@ export default function FormulaCard({
   onNoteEdit,
   activeNoteName,
   size = "default",
+  similarPerfumes,
 }: FormulaCardProps) {
   const [uncontrolledSelectedSize, setUncontrolledSelectedSize] = useState<SizeOption>("30ml");
   const { t } = useTranslation();
@@ -147,12 +159,20 @@ export default function FormulaCard({
 
   return (
     <div
-      className={`min-w-0 bg-white border rounded-xl card-shadow flex flex-col transition-transform hover:scale-[1.01] ${
+      className={`relative min-w-0 bg-white border rounded-xl card-shadow flex flex-col transition-transform hover:scale-[1.01] ${
         isComparison
           ? "border-primary/20 p-2 sm:p-4"
           : "border-secondary/30 p-2 sm:p-3"
       } ${className}`}
     >
+      {similarPerfumes && (
+        <SimilarPerfumesButton
+          cached={similarPerfumes.cached}
+          onFetch={similarPerfumes.onFetch}
+          loading={similarPerfumes.loading}
+          error={similarPerfumes.error}
+        />
+      )}
       <div className={`${isComparison ? "mb-1.5 sm:mb-3 pb-1.5 sm:pb-2.5 border-b border-primary/10" : "mb-1 sm:mb-2"}`}>
         {isComparison && (
           <p className="brand-text text-[0.55rem] sm:text-[0.68rem] text-primary/70 text-center mb-1 sm:mb-2">

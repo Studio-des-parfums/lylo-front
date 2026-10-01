@@ -345,6 +345,11 @@
     "noAlternatives": "Aucune alternative disponible pour cette note.",
     "error": "Impossible de remplacer cette note. Veuillez réessayer."
   },
+  "similarPerfumes": {
+    "button": "Parfums ressemblants",
+    "loading": "Recherche de parfums ressemblants…",
+    "error": "Impossible de trouver des parfums ressemblants pour le moment."
+  },
   "sendMail": {
     "button": "Recevoir par mail",
     "title": "Recevoir votre formule",

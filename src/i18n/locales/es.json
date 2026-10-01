@@ -372,6 +372,11 @@
     "invite": "Haga clic en el icono junto a una nota para ver sus alternativas.",
     "noAlternatives": "No hay alternativas disponibles para esta nota."
   },
+  "similarPerfumes": {
+    "button": "Perfumes similares",
+    "loading": "Buscando perfumes similares…",
+    "error": "No se pudieron encontrar perfumes similares por el momento."
+  },
   "sendMail": {
     "button": "Recibir por correo",
     "title": "Reciba su fórmula",

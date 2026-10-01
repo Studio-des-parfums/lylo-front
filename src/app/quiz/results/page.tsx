@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "@/components/layout/Navbar";
 import MaterialIcon from "@/components/ui/MaterialIcon";
 import FormulaCard from "@/components/recommendations/FormulaCard";
+import { SimilarPerfume } from "@/components/recommendations/SimilarPerfumesButton";
 import CatalogFormulaCard from "@/components/recommendations/CatalogFormulaCard";
 import MoodboardButton from "@/components/recommendations/MoodboardButton";
 import FormulaQrCode from "@/components/recommendations/FormulaQrCode";
@@ -60,6 +61,12 @@ function renderFormula(
     onSelectedSizeChange: (size: SizeOption) => void;
     onNoteEdit?: (noteType: "top" | "heart" | "base", note: FormulaNote) => void;
     activeNoteName?: string | null;
+    similarPerfumes?: {
+      cached: SimilarPerfume[] | undefined;
+      onFetch: () => Promise<void>;
+      loading: boolean;
+      error: boolean;
+    };
   }
 ) {
   if (isCatalogFormula(formula)) {
@@ -88,6 +95,7 @@ function renderFormula(
       onSelectedSizeChange={opts.onSelectedSizeChange}
       onNoteEdit={opts.onNoteEdit}
       activeNoteName={opts.activeNoteName}
+      similarPerfumes={opts.similarPerfumes}
     />
   );
 }
@@ -114,6 +122,11 @@ function SoloResults() {
   // le contenu de la section de droite (FormulaPersonalizer). Réinitialisée à chaque retour
   // aux choix ou changement de taille, pour ne jamais pointer vers une note obsolète.
   const [activeNote, setActiveNote] = useState<{ noteType: "top" | "heart" | "base"; note: FormulaNote } | null>(null);
+  // Parfums du commerce ressemblants, mis en cache par index de formule — évite de relancer
+  // la recherche (LLM + web) quand l'utilisateur navigue entre formules pendant la session.
+  const [similarPerfumesByIndex, setSimilarPerfumesByIndex] = useState<Record<number, SimilarPerfume[]>>({});
+  const [similarPerfumesLoading, setSimilarPerfumesLoading] = useState<Record<number, boolean>>({});
+  const [similarPerfumesError, setSimilarPerfumesError] = useState<Record<number, boolean>>({});
 
   // La génération des moodboards démarre déjà côté back, en tâche de fond, dès
   // POST /api/formulas/generate (voir _queue_moodboards côté sessions.py).
@@ -182,6 +195,35 @@ function SoloResults() {
       ...current,
       [formulaIndex]: size,
     }));
+  };
+
+  const fetchSimilarPerfumes = async (index: number) => {
+    const formula = formulas[index];
+    setSimilarPerfumesLoading((current) => ({ ...current, [index]: true }));
+    setSimilarPerfumesError((current) => ({ ...current, [index]: false }));
+    try {
+      const res = await fetch(`${API_BASE}/api/formulas/similar-perfumes`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          formula: {
+            profile: formula.profile,
+            description: formula.description,
+            top_notes: formula.top_notes,
+            heart_notes: formula.heart_notes,
+            base_notes: formula.base_notes,
+          },
+          language: resolveStoredLanguage(),
+        }),
+      });
+      if (!res.ok) { setSimilarPerfumesError((current) => ({ ...current, [index]: true })); return; }
+      const data = await res.json();
+      setSimilarPerfumesByIndex((current) => ({ ...current, [index]: data.similar_perfumes ?? [] }));
+    } catch {
+      setSimilarPerfumesError((current) => ({ ...current, [index]: true }));
+    } finally {
+      setSimilarPerfumesLoading((current) => ({ ...current, [index]: false }));
+    }
   };
 
   return (
@@ -300,6 +342,14 @@ function SoloResults() {
                   onSelectedSizeChange: (size) => { handleFormulaSizeChange(chosen, size); setActiveNote(null); },
                   onNoteEdit: (noteType, note) => setActiveNote({ noteType, note }),
                   activeNoteName: activeNote?.note.name ?? null,
+                  similarPerfumes: isCatalogFormula(selectedFormula)
+                    ? undefined
+                    : {
+                        cached: similarPerfumesByIndex[chosen],
+                        onFetch: () => fetchSimilarPerfumes(chosen),
+                        loading: similarPerfumesLoading[chosen] ?? false,
+                        error: similarPerfumesError[chosen] ?? false,
+                      },
                 })}
               </div>
               <div className="w-full sm:flex-1 sm:max-w-[380px] min-h-[280px] sm:min-h-0 rounded-xl border border-secondary/30 bg-white card-shadow overflow-hidden">

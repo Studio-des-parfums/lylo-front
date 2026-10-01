@@ -372,6 +372,11 @@
     "invite": "Klicken Sie auf das Symbol neben einer Note, um ihre Alternativen zu sehen.",
     "noAlternatives": "Keine Alternativen für diese Note verfügbar."
   },
+  "similarPerfumes": {
+    "button": "Ähnliche Düfte",
+    "loading": "Suche nach ähnlichen Düften…",
+    "error": "Derzeit können keine ähnlichen Düfte gefunden werden."
+  },
   "sendMail": {
     "button": "Per E-Mail erhalten",
     "title": "Erhalten Sie Ihre Formel",

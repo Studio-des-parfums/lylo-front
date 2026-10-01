@@ -353,5 +353,13 @@
     "pageOf": "Pagina {page} / {totalPages}",
     "close": "Chiudi",
     "refresh": "Aggiorna"
+  },
+  "similarPerfumes": {
+    "button": "Profumi simili",
+    "title": "Profumi in commercio simili alla tua formula",
+    "loading": "Ricerca di profumi simili…",
+    "error": "Impossibile trovare profumi simili al momento.",
+    "source": "Fonte",
+    "close": "Chiudi"
   }
 }
