@@ -1,4 +1,4 @@
-export type AppLanguage = "fr" | "en" | "es";
+export type AppLanguage = "fr" | "en" | "es" | "de" | "ar" | "ru";
 
 // Note: this only governs the AI voice avatar's spoken language. It is
 // intentionally separate from the UI text language, which is stored under
@@ -14,7 +14,7 @@ export function resolveStoredLanguage(): AppLanguage {
   ];
 
   for (const value of candidates) {
-    if (value === "fr" || value === "en" || value === "es") {
+    if (value === "fr" || value === "en" || value === "es" || value === "de" || value === "ar" || value === "ru") {
       return value;
     }
   }

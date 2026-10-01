@@ -13,7 +13,7 @@ interface FormulaPersonalizerProps {
   /** Formule complète (top_notes/heart_notes/base_notes + sizes), au format backend. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formula: any;
-  language: "fr" | "en" | "es";
+  language: "fr" | "en" | "es" | "de" | "ar" | "ru";
   /** Appelée avec la formule mise à jour après un remplacement de note réussi. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onFormulaChange: (formula: any) => void;

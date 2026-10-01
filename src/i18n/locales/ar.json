@@ -257,7 +257,15 @@
     "errorLoadingQuestions": "خطأ في التحميل",
     "errorGenerating": "خطأ في التوليد",
     "errorGeneratingMulti": "خطأ في التوليد الجماعي",
-    "errorUnknown": "خطأ غير معروف"
+    "errorUnknown": "خطأ غير معروف",
+    "intensityFrais": "خفيف",
+    "intensityFraisDesc": "منعش وخفيف",
+    "intensityMix": "متوازن",
+    "intensityMixDesc": "مزيج من الاثنين",
+    "intensityPuissant": "مكثف",
+    "intensityPuissantDesc": "قوي وثابت",
+    "intensityQuestion": "ما شدة العطر التي تفضلها؟",
+    "perfumeNameQuestion": "أخيرًا، أعطِ عطرك اسمًا"
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",
@@ -317,7 +325,10 @@
     "sheetsPrinted": "تمت طباعة {count} ورقة",
     "printAllFormulas": "طباعة التركيبات الـ {count}",
     "giveReferenceToPerfumer": "أعط هذا المرجع لعطّارنا لاسترجاع تركيبتك.",
-    "referenceLoading": "جارٍ إنشاء مرجعك..."
+    "referenceLoading": "جارٍ إنشاء مرجعك...",
+    "backToChoices": "العودة إلى الخيارات",
+    "continue": "متابعة",
+    "personalizeTitle": "خصص تركيبتك"
   },
   "recommendationsPage": {
     "printed": "تمت الطباعة",
@@ -353,5 +364,25 @@
     "pageOf": "صفحة {page} / {totalPages}",
     "close": "إغلاق",
     "refresh": "تحديث"
+  },
+  "formulaPersonalizer": {
+    "alternatives": "البدائل",
+    "currentNote": "النوتة الحالية",
+    "error": "تعذر استبدال هذه النوتة. يرجى المحاولة مرة أخرى.",
+    "invite": "انقر على الأيقونة بجانب أي نوتة لرؤية بدائلها.",
+    "noAlternatives": "لا توجد بدائل متاحة لهذه النوتة."
+  },
+  "sendMail": {
+    "button": "استلام عبر البريد الإلكتروني",
+    "title": "استلم تركيبتك",
+    "subtitle": "أدخل بياناتك لاستلام تركيبتك عبر البريد الإلكتروني.",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "submit": "إرسال",
+    "sending": "جارٍ الإرسال…",
+    "sent": "تم إرسال التركيبة!",
+    "error": "خطأ في الإرسال. يرجى المحاولة مرة أخرى.",
+    "close": "إغلاق"
   }
 }

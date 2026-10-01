@@ -4,18 +4,18 @@ import { createContext, useContext, useState, useEffect, ReactNode } from "react
 import en from "./locales/en.json";
 import fr from "./locales/fr.json";
 import de from "./locales/de.json";
-import nl from "./locales/nl.json";
 import it from "./locales/it.json";
 import es from "./locales/es.json";
 import ar from "./locales/ar.json";
+import ru from "./locales/ru.json";
 
-export type Locale = "en" | "fr" | "de" | "nl" | "it" | "es" | "ar";
+export type Locale = "en" | "fr" | "de" | "it" | "es" | "ar" | "ru";
 
-export const SUPPORTED_LOCALES: Locale[] = ["fr", "en", "de", "nl", "it", "es", "ar"];
+export const SUPPORTED_LOCALES: Locale[] = ["fr", "en", "de", "it", "es", "ar", "ru"];
 
 const RTL_LOCALES: Locale[] = ["ar"];
 
-const translations: Record<Locale, Record<string, unknown>> = { en, fr, de, nl, it, es, ar };
+const translations: Record<Locale, Record<string, unknown>> = { en, fr, de, it, es, ar, ru };
 
 interface LanguageContextType {
   locale: Locale;

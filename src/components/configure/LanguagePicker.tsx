@@ -5,8 +5,8 @@ import MaterialIcon from "@/components/ui/MaterialIcon";
 import { useTranslation } from "@/i18n/LanguageContext";
 import { persistLanguage, resolveStoredLanguage } from "@/lib/language";
 
-type AvatarLocale = "fr" | "en" | "es";
-type PickerLocale = AvatarLocale | "de" | "nl" | "it" | "ar";
+type AvatarLocale = "fr" | "en" | "es" | "de" | "ar" | "ru";
+type PickerLocale = AvatarLocale | "it";
 
 interface Language {
   code: PickerLocale;
@@ -21,10 +21,9 @@ const LANGUAGES: Language[] = [
   { code: "fr", nativeName: "Français", englishName: "French", flag: "🇫🇷", region: "France", available: true },
   { code: "en", nativeName: "English", englishName: "English", flag: "🇬🇧", region: "United Kingdom", available: true },
   { code: "es", nativeName: "Español", englishName: "Spanish", flag: "🇪🇸", region: "España", available: true },
-  { code: "de", nativeName: "Deutsch", englishName: "German", flag: "🇩🇪", region: "Deutschland", available: false },
-  { code: "nl", nativeName: "Nederlands", englishName: "Dutch", flag: "🇳🇱", region: "Nederland", available: false },
-  { code: "it", nativeName: "Italiano", englishName: "Italian", flag: "🇮🇹", region: "Italia", available: false },
-  { code: "ar", nativeName: "العربية", englishName: "Arabic", flag: "🇸🇦", region: "العربية", available: false },
+  { code: "de", nativeName: "Deutsch", englishName: "German", flag: "🇩🇪", region: "Deutschland", available: true },
+  { code: "ar", nativeName: "العربية", englishName: "Arabic", flag: "🇸🇦", region: "العربية", available: true },
+  { code: "ru", nativeName: "Русский", englishName: "Russian", flag: "🇷🇺", region: "Россия", available: true },
 ];
 
 export default function LanguagePicker() {
@@ -52,7 +51,7 @@ export default function LanguagePicker() {
   };
 
   const handleSelect = (code: PickerLocale) => {
-    if (code !== "fr" && code !== "en" && code !== "es") return;
+    if (code !== "fr" && code !== "en" && code !== "es" && code !== "de" && code !== "ar" && code !== "ru") return;
     setAvatarLocale(code);
     persistLanguage(code);
     closeModal();

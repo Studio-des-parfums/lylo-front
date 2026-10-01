@@ -257,7 +257,15 @@
     "errorLoadingQuestions": "Ladefehler",
     "errorGenerating": "Generierungsfehler",
     "errorGeneratingMulti": "Fehler bei der Mehrfachgenerierung",
-    "errorUnknown": "Unbekannter Fehler"
+    "errorUnknown": "Unbekannter Fehler",
+    "intensityFrais": "Leicht",
+    "intensityFraisDesc": "Frisch und dezent",
+    "intensityMix": "Ausgewogen",
+    "intensityMixDesc": "Eine Mischung aus beidem",
+    "intensityPuissant": "Intensiv",
+    "intensityPuissantDesc": "Kräftig und langanhaltend",
+    "intensityQuestion": "Welche Parfumintensität bevorzugen Sie?",
+    "perfumeNameQuestion": "Geben Sie zum Abschluss Ihrem Parfum einen Namen"
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",
@@ -317,7 +325,10 @@
     "sheetsPrinted": "{count} Blatt/Blätter gedruckt",
     "printAllFormulas": "Die {count} Formeln drucken",
     "giveReferenceToPerfumer": "Geben Sie diese Referenz unserem Parfümeur, um Ihre Formel wiederzufinden.",
-    "referenceLoading": "Ihre Referenz wird erstellt..."
+    "referenceLoading": "Ihre Referenz wird erstellt...",
+    "backToChoices": "Zurück zur Auswahl",
+    "continue": "Weiter",
+    "personalizeTitle": "Personalisieren Sie Ihre Formel"
   },
   "recommendationsPage": {
     "printed": "Gedruckt",
@@ -353,5 +364,25 @@
     "pageOf": "Seite {page} / {totalPages}",
     "close": "Schließen",
     "refresh": "Aktualisieren"
+  },
+  "formulaPersonalizer": {
+    "alternatives": "Alternativen",
+    "currentNote": "Aktuelle Note",
+    "error": "Diese Note konnte nicht ersetzt werden. Bitte versuchen Sie es erneut.",
+    "invite": "Klicken Sie auf das Symbol neben einer Note, um ihre Alternativen zu sehen.",
+    "noAlternatives": "Keine Alternativen für diese Note verfügbar."
+  },
+  "sendMail": {
+    "button": "Per E-Mail erhalten",
+    "title": "Erhalten Sie Ihre Formel",
+    "subtitle": "Geben Sie Ihre Daten ein, um Ihre Formel per E-Mail zu erhalten.",
+    "firstName": "Vorname",
+    "lastName": "Nachname",
+    "email": "E-Mail",
+    "submit": "Senden",
+    "sending": "Wird gesendet…",
+    "sent": "Formel gesendet!",
+    "error": "Fehler beim Senden. Bitte versuchen Sie es erneut.",
+    "close": "Schließen"
   }
 }
