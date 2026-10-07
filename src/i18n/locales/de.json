@@ -295,7 +295,8 @@
     "title": "Duft-Moodboard",
     "loading": "Ihr Duftvisual wird erstellt…",
     "alt": "Moodboard-Visual des Duftes",
-    "close": "Moodboard schließen"
+    "close": "Moodboard schließen",
+    "print": "Moodboard drucken"
   },
   "printerModal": {
     "title": "Drucker",

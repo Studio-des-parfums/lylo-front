@@ -295,7 +295,8 @@
     "title": "Fragrance moodboard",
     "loading": "Creating your fragrance visual…",
     "alt": "Fragrance moodboard visual",
-    "close": "Close moodboard"
+    "close": "Close moodboard",
+    "print": "Print moodboard"
   },
   "printerModal": {
     "title": "Printer",

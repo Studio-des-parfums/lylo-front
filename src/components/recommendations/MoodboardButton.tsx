@@ -67,6 +67,32 @@ export default function MoodboardButton({ reference, initialImageUrl, iconOnly, 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [open]);
 
+  const handlePrint = () => {
+    if (!imageUrl) return;
+    const printWindow = window.open("", "_blank", "width=800,height=1000");
+    if (!printWindow) return;
+    printWindow.document.write(`<!DOCTYPE html>
+<html>
+  <head>
+    <title>moodboard</title>
+    <style>
+      @page { size: A5; margin: 0; }
+      html, body { margin: 0; padding: 0; height: 100%; }
+      img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    </style>
+  </head>
+  <body>
+    <img src="${imageUrl}" alt="" />
+  </body>
+</html>`);
+    printWindow.document.close();
+    printWindow.onafterprint = () => printWindow.close();
+    printWindow.onload = () => {
+      printWindow.focus();
+      printWindow.print();
+    };
+  };
+
   if (!reference && !imageUrl) return null;
 
   const isLoading = !imageUrl;
@@ -103,8 +129,16 @@ export default function MoodboardButton({ reference, initialImageUrl, iconOnly, 
             onClick={(event) => event.stopPropagation()}
           >
             <button
+              onClick={handlePrint}
+              title={t("moodboard.print")}
+              className="absolute -top-3 right-9 flex items-center justify-center size-8 rounded-full bg-white text-primary shadow-lg hover:bg-white hover:brightness-95 transition-colors"
+              aria-label={t("moodboard.print")}
+            >
+              <MaterialIcon name="print" className="text-[20px]" />
+            </button>
+            <button
               onClick={() => setOpen(false)}
-              className="absolute -top-3 -right-3 flex items-center justify-center size-8 rounded-full bg-white text-primary shadow-lg hover:bg-primary/5 transition-colors"
+              className="absolute -top-3 -right-3 flex items-center justify-center size-8 rounded-full bg-white text-primary shadow-lg hover:bg-white hover:brightness-95 transition-colors"
               aria-label={t("moodboard.close")}
             >
               <MaterialIcon name="close" className="text-[20px]" />

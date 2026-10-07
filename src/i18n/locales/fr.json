@@ -295,7 +295,8 @@
     "title": "Ambiance du parfum",
     "loading": "Création du visuel de votre parfum…",
     "alt": "Visuel d'ambiance du parfum",
-    "close": "Fermer le moodboard"
+    "close": "Fermer le moodboard",
+    "print": "Imprimer le moodboard"
   },
   "printerModal": {
     "title": "Imprimante",

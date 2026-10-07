@@ -287,7 +287,8 @@
     "title": "Sfeerbeeld van het parfum",
     "loading": "Uw parfumbeeld wordt gemaakt…",
     "alt": "Sfeerbeeld van het parfum",
-    "close": "Sfeerbeeld sluiten"
+    "close": "Sfeerbeeld sluiten",
+    "print": "Sfeerbeeld afdrukken"
   },
   "printerModal": {
     "title": "Printer",
