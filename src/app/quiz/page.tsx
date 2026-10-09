@@ -19,11 +19,11 @@ const isEster = activeBrand.id === "ester";
 interface QuestionChoice { label: string; image?: string; }
 interface Question { id: number; question: string; choices: QuestionChoice[]; }
 interface QuizAnswer { question_id: number; question_text: string; top_2: string[]; bottom_2: string[]; }
-interface Profile { gender: "homme" | "femme" | ""; age: string; pregnant: boolean | null; has_allergies: boolean | null; allergies: string; }
+interface Profile { gender: "homme" | "femme" | ""; age: string; pregnant: boolean | null; has_disliked_notes: boolean | null; disliked_notes: string; has_allergies: boolean | null; allergies: string; }
 
 type Step = "profile" | "questionnaire";
 type Phase = "top2" | "bottom2" | "confirm" | "intensity" | "perfumeName";
-type ProfileStep = "gender" | "age" | "pregnant" | "allergies" | "allergies_detail";
+type ProfileStep = "gender" | "age" | "pregnant" | "dislikes" | "dislikes_detail" | "allergies" | "allergies_detail";
 type FormulaType = "frais" | "mix" | "puissant";
 
 // ── Mode multi ───────────────────────────────────────────────────────────
@@ -157,7 +157,7 @@ export default function QuizPage() {
 
   // ── Mode solo ──────────────────────────────────────────────────────
   const [profile, setProfile] = useState<Profile>({
-    gender: "", age: "", pregnant: null, has_allergies: null, allergies: "",
+    gender: "", age: "", pregnant: null, has_disliked_notes: null, disliked_notes: "", has_allergies: null, allergies: "",
   });
   const [answers, setAnswers] = useState<QuizAnswer[]>([]);
   const [formulaType, setFormulaType] = useState<FormulaType | null>(null);
@@ -167,7 +167,7 @@ export default function QuizPage() {
   const initParticipants = (): ParticipantState[] =>
     participantColors.map((color) => ({
       color,
-      profile: { gender: "", age: "", pregnant: null, has_allergies: null, allergies: "" },
+      profile: { gender: "", age: "", pregnant: null, has_disliked_notes: null, disliked_notes: "", has_allergies: null, allergies: "" },
       answers: [],
       formulaType: null,
       perfumeName: "",
@@ -206,8 +206,13 @@ export default function QuizPage() {
     if (profileStep === "gender") {
       setProfileStep("age");
     } else if (profileStep === "age") {
-      setProfileStep(next.gender === "femme" ? "pregnant" : "allergies");
+      setProfileStep(next.gender === "femme" ? "pregnant" : "dislikes");
     } else if (profileStep === "pregnant") {
+      setProfileStep("dislikes");
+    } else if (profileStep === "dislikes") {
+      if (updates.has_disliked_notes === true) setProfileStep("dislikes_detail");
+      else setProfileStep("allergies");
+    } else if (profileStep === "dislikes_detail") {
       setProfileStep("allergies");
     } else if (profileStep === "allergies") {
       if (updates.has_allergies === true) setProfileStep("allergies_detail");
@@ -238,8 +243,13 @@ export default function QuizPage() {
     if (multiProfileStep === "gender") {
       setMultiProfileStep("age");
     } else if (multiProfileStep === "age") {
-      setMultiProfileStep(next.gender === "femme" ? "pregnant" : "allergies");
+      setMultiProfileStep(next.gender === "femme" ? "pregnant" : "dislikes");
     } else if (multiProfileStep === "pregnant") {
+      setMultiProfileStep("dislikes");
+    } else if (multiProfileStep === "dislikes") {
+      if (updates.has_disliked_notes === true) setMultiProfileStep("dislikes_detail");
+      else setMultiProfileStep("allergies");
+    } else if (multiProfileStep === "dislikes_detail") {
       setMultiProfileStep("allergies");
     } else if (multiProfileStep === "allergies") {
       if (updates.has_allergies === true) {
@@ -390,6 +400,8 @@ export default function QuizPage() {
           brand: activeBrand.id,
           gender: profile.gender,
           age: profile.age,
+          has_disliked_notes: profile.has_disliked_notes ? "oui" : "non",
+          disliked_notes: profile.disliked_notes || undefined,
           has_allergies: profile.has_allergies ? "oui" : "non",
           allergies: profile.allergies || undefined,
           pregnant: profile.pregnant ?? false,
@@ -422,6 +434,8 @@ export default function QuizPage() {
             color: p.color,
             gender: p.profile.gender,
             age: p.profile.age,
+            has_disliked_notes: p.profile.has_disliked_notes ? "oui" : "non",
+            disliked_notes: p.profile.disliked_notes || undefined,
             has_allergies: p.profile.has_allergies ? "oui" : "non",
             allergies: p.profile.allergies || undefined,
             pregnant: p.profile.pregnant ?? false,
@@ -460,9 +474,10 @@ export default function QuizPage() {
     const activeProfileStep = isMulti ? multiProfileStep : profileStep;
     const activeAdvance = isMulti ? advanceMultiProfile : advanceProfile;
 
-    const profileSteps: ProfileStep[] = ["gender", "age", "pregnant", "allergies", "allergies_detail"];
+    const profileSteps: ProfileStep[] = ["gender", "age", "pregnant", "dislikes", "dislikes_detail", "allergies", "allergies_detail"];
     const visibleSteps = profileSteps.filter((s) => {
       if (s === "pregnant" && activeProfile.gender !== "femme") return false;
+      if (s === "dislikes_detail" && !activeProfile.has_disliked_notes) return false;
       if (s === "allergies_detail" && !activeProfile.has_allergies) return false;
       return true;
     });
@@ -546,6 +561,50 @@ export default function QuizPage() {
                     <BigButton label={t("quiz.yes")} selected={activeProfile.pregnant === true} onClick={() => activeAdvance({ pregnant: true })} />
                     <BigButton label={t("quiz.no")} selected={activeProfile.pregnant === false} onClick={() => activeAdvance({ pregnant: false })} />
                   </div>
+                </div>
+              )}
+
+              {/* Question notes/odeurs non désirées */}
+              {activeProfileStep === "dislikes" && (
+                <div className="w-full flex flex-col items-center gap-6">
+                  <h2 className="text-2xl md:text-3xl font-extralight tracking-tight text-center leading-tight text-primary">
+                    {t("quiz.profileDislikesQuestion")}
+                  </h2>
+                  <div className="flex gap-4 w-full max-w-xs">
+                    <BigButton label={t("quiz.yes")} selected={activeProfile.has_disliked_notes === true} onClick={() => activeAdvance({ has_disliked_notes: true })} />
+                    <BigButton label={t("quiz.no")} selected={activeProfile.has_disliked_notes === false} onClick={() => activeAdvance({ has_disliked_notes: false })} />
+                  </div>
+                </div>
+              )}
+
+              {/* Détail notes/odeurs non désirées */}
+              {activeProfileStep === "dislikes_detail" && (
+                <div className="w-full flex flex-col items-center gap-6">
+                  <h2 className="text-2xl md:text-3xl font-extralight tracking-tight text-center leading-tight text-primary">
+                    {t("quiz.profileDislikesDetailQuestion")}
+                  </h2>
+                  <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border-2 border-primary/15 bg-stone-50 w-full max-w-xs">
+                    <MaterialIcon name="block" className="text-primary text-[20px] shrink-0" />
+                    <input
+                      type="text"
+                      value={activeProfile.disliked_notes}
+                      onChange={(e) => {
+                        if (isMulti) updateCurrentParticipantProfile({ disliked_notes: e.target.value });
+                        else setProfile((p) => ({ ...p, disliked_notes: e.target.value }));
+                      }}
+                      onKeyDown={(e) => e.key === "Enter" && activeProfile.disliked_notes.trim() && activeAdvance({})}
+                      placeholder={t("quiz.profileDislikesPlaceholder")}
+                      autoFocus
+                      className="flex-1 bg-transparent text-base font-medium text-primary placeholder:text-primary/35 outline-none"
+                    />
+                  </div>
+                  <button
+                    disabled={!activeProfile.disliked_notes.trim()}
+                    onClick={() => activeAdvance({})}
+                    className="bg-primary hover:bg-primary/90 text-white font-bold px-10 py-3 rounded-lg shadow-xl transition-all hover:scale-[1.02] disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center gap-2"
+                  >
+                    {t("quiz.continue")} <MaterialIcon name="arrow_forward" />
+                  </button>
                 </div>
               )}
 
