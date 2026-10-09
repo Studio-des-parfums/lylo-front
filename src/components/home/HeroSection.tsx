@@ -9,6 +9,7 @@ import { useTranslation, type Locale } from "@/i18n/LanguageContext";
 import { useAuth } from "@/context/AuthContext";
 import { persistLanguage } from "@/lib/language";
 import { activeBrand } from "@/lib/brand";
+import { useBranding } from "@/hooks/useBranding";
 
 const isEster = activeBrand.id === "ester";
 
@@ -30,6 +31,7 @@ export default function HeroSection() {
   const router = useRouter();
   const { t, locale } = useTranslation();
   const { user, openLoginModal } = useAuth();
+  const { logoUrl: secondaryLogoUrl } = useBranding();
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -79,6 +81,11 @@ export default function HeroSection() {
           </div>
         ) : (
           <>
+            {secondaryLogoUrl && (
+              <div className="flex justify-center mb-6">
+                <Image src={secondaryLogoUrl} alt="Logo partenaire" width={200} height={80} className="w-auto h-16 md:h-20" priority />
+              </div>
+            )}
             {/* Title */}
             <h1 className="text-white font-light tracking-tight mb-4 font-display flex flex-col items-center leading-tight">
               <span className="text-4xl md:text-5xl lg:text-7xl">{activeBrand.name}</span>

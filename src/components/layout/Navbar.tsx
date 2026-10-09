@@ -12,6 +12,7 @@ import MicCalibrator from "@/components/preparation/MicCalibrator";
 import { useAuth } from "@/context/AuthContext";
 import LoginModal from "@/components/auth/LoginModal";
 import { activeBrand } from "@/lib/brand";
+import { useBranding } from "@/hooks/useBranding";
 
 const isEster = activeBrand.id === "ester";
 const FORMULAS_ACCESS_EMAIL = "it@sdp-paris.com";
@@ -25,6 +26,7 @@ export default function Navbar({ showActions = true, transparent = false }: Navb
   const { t } = useTranslation();
   const { user, logout, loginModalOpen, openLoginModal, closeLoginModal } = useAuth();
   const router = useRouter();
+  const { logoUrl: secondaryLogoUrl } = useBranding();
 
   const handleLogoClick = useCallback(() => {
     if (document.fullscreenElement) {
@@ -39,6 +41,12 @@ export default function Navbar({ showActions = true, transparent = false }: Navb
           {/* Logo */}
           <Link href="/" className="flex items-center gap-3" onClick={handleLogoClick}>
             <Image src={activeBrand.logo} alt={`Logo ${activeBrand.name}`} width={activeBrand.navLogoSize} height={activeBrand.navLogoSize} style={{ width: "auto", height: "auto" }} />
+            {secondaryLogoUrl && (
+              <>
+                <span className="text-primary/40 text-lg font-light">×</span>
+                <Image src={secondaryLogoUrl} alt="Logo partenaire" width={activeBrand.navLogoSize} height={activeBrand.navLogoSize} style={{ width: "auto", height: "auto" }} />
+              </>
+            )}
             {isEster && (
               <div className="flex items-center gap-2">
                 <span className="text-primary text-xs font-semibold">v1.0</span>
