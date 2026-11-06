@@ -7,6 +7,11 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "*.s3.*.amazonaws.com",
       },
+      // Images publiques Lylo sur Cloudflare R2 (bucket lylo).
+      {
+        protocol: "https",
+        hostname: "files.lylo-ai.com",
+      },
     ],
   },
 };
