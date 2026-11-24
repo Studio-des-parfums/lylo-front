@@ -13,10 +13,10 @@ interface DepthSelectorProps {
 export default function DepthSelector({ value, onChange }: DepthSelectorProps) {
   const { t } = useTranslation();
   const [showInfo, setShowInfo] = useState(false);
-  const isEster = activeBrand.id === "ester";
+  const fixed = activeBrand.fixedQuestionCount;
 
-  const depths = isEster
-    ? [{ value: "4", label: "4" }]
+  const depths = fixed
+    ? [{ value: fixed, label: fixed }]
     : [
         { value: "1", label: "1" },
         { value: "4", label: "4" },
@@ -24,10 +24,10 @@ export default function DepthSelector({ value, onChange }: DepthSelectorProps) {
       ];
 
   useEffect(() => {
-    if (isEster && value !== "4") {
-      onChange("4");
+    if (fixed && value !== fixed) {
+      onChange(fixed);
     }
-  }, [isEster, value, onChange]);
+  }, [fixed, value, onChange]);
 
   return (
     <section className="relative">
@@ -53,7 +53,7 @@ export default function DepthSelector({ value, onChange }: DepthSelectorProps) {
         </div>
       )}
 
-      <div className={`grid gap-2 ${isEster ? "grid-cols-1" : "grid-cols-3"}`}>
+      <div className={`grid gap-2 ${fixed ? "grid-cols-1" : "grid-cols-3"}`}>
         {depths.map((depth) => (
           <label key={depth.value} className="group relative cursor-pointer">
             <input

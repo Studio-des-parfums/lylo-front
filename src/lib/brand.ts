@@ -1,5 +1,5 @@
 /** Marques ayant un thème (logo, couleurs) codé dans le front. */
-export type ThemeId = "lylo" | "ester";
+export type ThemeId = "lylo" | "ester" | "help";
 
 export interface BrandConfig {
   /** Identifiant de la marque côté back (questionnaires, sessions) — n'importe quel slug créé dans le dashboard. */
@@ -10,6 +10,8 @@ export interface BrandConfig {
   logo: string;
   navLogoSize: number;
   heroBackground: string;
+  /** Nombre de questions imposé (un seul choix affiché dans la configuration). */
+  fixedQuestionCount?: string;
 }
 
 const brands: Record<ThemeId, Omit<BrandConfig, "id">> = {
@@ -26,6 +28,15 @@ const brands: Record<ThemeId, Omit<BrandConfig, "id">> = {
     logo: "/logo-ester.png",
     navLogoSize: 64,
     heroBackground: "/background-ester.png",
+    fixedQuestionCount: "4",
+  },
+  help: {
+    theme: "help",
+    name: "H.E.L.P",
+    logo: "/logo-help.png",
+    navLogoSize: 120, // logo horizontal (4:1)
+    heroBackground: "/background-lylo.png",
+    fixedQuestionCount: "4",
   },
 };
 
