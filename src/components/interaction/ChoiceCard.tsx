@@ -2,13 +2,15 @@
 
 interface ChoiceCardProps {
   name: string;
+  /** Numéro affiché dans une pastille (l'utilisateur peut dire « le 4 ») */
+  number?: number;
   imageUrl?: string;
   selected?: boolean;
   clickable?: boolean;
   onSelect: (name: string) => void;
 }
 
-export default function ChoiceCard({ name, imageUrl, selected, clickable = true, onSelect }: ChoiceCardProps) {
+export default function ChoiceCard({ name, number, imageUrl, selected, clickable = true, onSelect }: ChoiceCardProps) {
   return (
     <div
       onClick={() => clickable && onSelect(name)}
@@ -26,6 +28,14 @@ export default function ChoiceCard({ name, imageUrl, selected, clickable = true,
         </>
       ) : (
         <div className="w-full h-full bg-gradient-to-br from-stone-800 to-stone-900" />
+      )}
+
+      {number !== undefined && (
+        <div className={`absolute top-2 left-2 w-7 h-7 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold shadow-md ${
+          selected ? "bg-primary text-white" : "bg-white/90 text-stone-900"
+        }`}>
+          {number}
+        </div>
       )}
 
       {/* Label en bas */}
