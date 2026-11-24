@@ -185,7 +185,7 @@ export default function QuizPage() {
   useEffect(() => {
     if (step !== "questionnaire") return;
     setLoading(true);
-    fetch(`${API_BASE}/api/questions?count=${questionCount}&language=${language}`)
+    fetch(`${API_BASE}/api/questions?count=${questionCount}&language=${language}&brand=${activeBrand.id}`)
       .then((r) => { if (!r.ok) throw new Error(t("quiz.errorLoadingQuestions")); return r.json(); })
       .then((data) => setQuestions(Array.isArray(data) ? data : data.questions ?? []))
       .catch((e) => setError(e.message))
