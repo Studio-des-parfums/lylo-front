@@ -70,7 +70,8 @@ export default function InteractionPage() {
           <AnswerConfirmation
             top2={confirmationData.top_2}
             bottom2={confirmationData.bottom_2}
-            framing={answerFormat.framing}
+            positiveLabel={answerFormat.positive_label}
+            negativeLabel={answerFormat.negative_label}
           />
         ) : sessionState === "asking_intensity" ? (
           <IntensitySelector />

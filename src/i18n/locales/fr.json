@@ -162,9 +162,7 @@
   "confirmation": {
     "subtitle": "Récapitulatif de vos choix",
     "preferred": "Vos préférés",
-    "leastFavored": "Les moins aimés",
-    "traitMost": "Ce qui vous représente le plus",
-    "traitLeast": "Ce qui vous représente le moins"
+    "leastFavored": "Les moins aimés"
   },
   "intensity": {
     "subtitle": "Quelle intensité souhaitez-vous ?",
@@ -271,27 +269,9 @@
     "errorGenerating": "Erreur génération",
     "errorGeneratingMulti": "Erreur génération multi",
     "errorUnknown": "Erreur inconnue",
-    "hint": {
-      "preference": {
-        "positive": {
-          "one": "Choisissez votre préféré",
-          "many": "Choisissez vos {n} préférés"
-        },
-        "negative": {
-          "one": "Choisissez votre moins aimé",
-          "many": "Choisissez vos {n} moins aimés"
-        }
-      },
-      "trait": {
-        "positive": {
-          "one": "Choisissez ce qui vous représente le plus",
-          "many": "Choisissez les {n} qui vous représentent le plus"
-        },
-        "negative": {
-          "one": "Choisissez ce qui vous représente le moins",
-          "many": "Choisissez les {n} qui vous représentent le moins"
-        }
-      }
+    "pickCount": {
+      "one": "1 réponse",
+      "many": "{n} réponses"
     }
   },
   "recommendations": {

@@ -162,9 +162,7 @@
   "confirmation": {
     "subtitle": "ملخص اختياراتك",
     "preferred": "المفضلة لديك",
-    "leastFavored": "الأقل تفضيلاً",
-    "traitMost": "ما يمثّلك أكثر",
-    "traitLeast": "ما يمثّلك أقل"
+    "leastFavored": "الأقل تفضيلاً"
   },
   "intensity": {
     "subtitle": "ما هي الشدة التي ترغب بها؟",
@@ -271,27 +269,9 @@
     "intensityPuissantDesc": "قوي وثابت",
     "intensityQuestion": "ما شدة العطر التي تفضلها؟",
     "perfumeNameQuestion": "أخيرًا، أعطِ عطرك اسمًا",
-    "hint": {
-      "preference": {
-        "positive": {
-          "one": "اختر المفضل لديك",
-          "many": "اختر {n} من مفضلاتك"
-        },
-        "negative": {
-          "one": "اختر الأقل تفضيلاً",
-          "many": "اختر {n} الأقل تفضيلاً"
-        }
-      },
-      "trait": {
-        "positive": {
-          "one": "اختر ما يمثّلك أكثر",
-          "many": "اختر {n} مما يمثّلك أكثر"
-        },
-        "negative": {
-          "one": "اختر ما يمثّلك أقل",
-          "many": "اختر {n} مما يمثّلك أقل"
-        }
-      }
+    "pickCount": {
+      "one": "إجابة واحدة",
+      "many": "{n} إجابات"
     }
   },
   "recommendations": {

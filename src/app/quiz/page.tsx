@@ -12,14 +12,14 @@ import { useTranslation } from "@/i18n/LanguageContext";
 import { PARTICIPANT_COLORS } from "@/components/configure/ConfigPanel";
 import { persistLanguage, resolveStoredLanguage } from "@/lib/language";
 import { activeBrand } from "@/lib/brand";
-import { AnswerFormat, DEFAULT_ANSWER_FORMAT, Framing, hintKey, parseAnswerFormat } from "@/lib/answerFormat";
+import { AnswerFormat, DEFAULT_ANSWER_FORMAT, parseAnswerFormat, selectionHint } from "@/lib/answerFormat";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 const isEster = activeBrand.id === "ester";
 
 interface QuestionChoice { label: string; image?: string; }
 interface Question { id: number; question: string; choices: QuestionChoice[]; }
-interface QuizAnswer { question_id: number; question_text: string; top_2: string[]; bottom_2: string[]; framing: Framing; }
+interface QuizAnswer { question_id: number; question_text: string; top_2: string[]; bottom_2: string[]; positive_label: string; negative_label: string; }
 interface Profile { gender: "homme" | "femme" | ""; age: string; pregnant: boolean | null; has_disliked_notes: boolean | null; disliked_notes: string; has_allergies: boolean | null; allergies: string; }
 
 type Step = "profile" | "questionnaire";
@@ -312,7 +312,8 @@ export default function QuizPage() {
       question_text: currentQuestion.question,
       top_2: top2,
       bottom_2: bottom2.length === negativeCount ? bottom2 : [...bottom2, ...remaining].slice(0, negativeCount),
-      framing: answerFormat.framing,
+      positive_label: answerFormat.positive_label,
+      negative_label: answerFormat.negative_label,
     };
 
     if (isMulti) {
@@ -358,7 +359,7 @@ export default function QuizPage() {
         setPhase("intensity");
       }
     }
-  }, [currentQuestion, top2, bottom2, answers, currentIndex, questions.length, isMulti, currentParticipantIndex, participantColors.length, participants, negativeCount, answerFormat.framing]);
+  }, [currentQuestion, top2, bottom2, answers, currentIndex, questions.length, isMulti, currentParticipantIndex, participantColors.length, participants, negativeCount, answerFormat.positive_label, answerFormat.negative_label]);
 
   // ── Choix d'intensité (solo + multi) ───────────────────────────────
   // Avant de générer, on demande le nom du parfum (une étape par personne en mode multi,
@@ -768,8 +769,8 @@ export default function QuizPage() {
     ? currentQuestion?.choices.filter((c) => !top2.includes(c.label)) ?? []
     : currentQuestion?.choices ?? [];
   const selected = phase === "top2" ? top2 : phase === "bottom2" ? bottom2 : [];
-  const hint = phase === "top2" ? hintKey(answerFormat, "positive") : phase === "bottom2" ? hintKey(answerFormat, "negative") : null;
-  const phaseHint = hint ? t(hint.key).replace("{n}", String(hint.n)) : "";
+  const phaseHint = phase === "top2" ? selectionHint(answerFormat, "positive", t)
+    : phase === "bottom2" ? selectionHint(answerFormat, "negative", t) : "";
 
   // En mode multi, le fond change selon le participant courant
   const questionBgStyle = isMulti && colorDef ? { backgroundColor: colorDef.bg } : {};
@@ -800,7 +801,8 @@ export default function QuizPage() {
             <AnswerConfirmation
               top2={top2.map((label) => { const img = currentQuestion?.choices.find((c) => c.label === label)?.image; return { label, image: img ? (img.startsWith("http") ? img : `${API_BASE}${img}`) : undefined }; })}
               bottom2={bottom2.map((label) => { const img = currentQuestion?.choices.find((c) => c.label === label)?.image; return { label, image: img ? (img.startsWith("http") ? img : `${API_BASE}${img}`) : undefined }; })}
-              framing={answerFormat.framing}
+              positiveLabel={answerFormat.positive_label}
+              negativeLabel={answerFormat.negative_label}
             />
           </div>
         ) : (

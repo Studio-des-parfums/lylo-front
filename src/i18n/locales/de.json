@@ -162,9 +162,7 @@
   "confirmation": {
     "subtitle": "Zusammenfassung Ihrer Auswahl",
     "preferred": "Ihre Favoriten",
-    "leastFavored": "Am wenigsten bevorzugt",
-    "traitMost": "Beschreibt Sie am besten",
-    "traitLeast": "Beschreibt Sie am wenigsten"
+    "leastFavored": "Am wenigsten bevorzugt"
   },
   "intensity": {
     "subtitle": "Welche Intensität wünschen Sie?",
@@ -271,27 +269,9 @@
     "intensityPuissantDesc": "Kräftig und langanhaltend",
     "intensityQuestion": "Welche Parfumintensität bevorzugen Sie?",
     "perfumeNameQuestion": "Geben Sie zum Abschluss Ihrem Parfum einen Namen",
-    "hint": {
-      "preference": {
-        "positive": {
-          "one": "Wählen Sie Ihren Favoriten",
-          "many": "Wählen Sie Ihre {n} Favoriten"
-        },
-        "negative": {
-          "one": "Wählen Sie, was Ihnen am wenigsten gefällt",
-          "many": "Wählen Sie die {n}, die Ihnen am wenigsten gefallen"
-        }
-      },
-      "trait": {
-        "positive": {
-          "one": "Wählen Sie, was Sie am besten beschreibt",
-          "many": "Wählen Sie die {n}, die Sie am besten beschreiben"
-        },
-        "negative": {
-          "one": "Wählen Sie, was Sie am wenigsten beschreibt",
-          "many": "Wählen Sie die {n}, die Sie am wenigsten beschreiben"
-        }
-      }
+    "pickCount": {
+      "one": "1 Antwort",
+      "many": "{n} Antworten"
     }
   },
   "recommendations": {

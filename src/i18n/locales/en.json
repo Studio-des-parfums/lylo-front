@@ -162,9 +162,7 @@
   "confirmation": {
     "subtitle": "Summary of your choices",
     "preferred": "Your favorites",
-    "leastFavored": "Least favored",
-    "traitMost": "Describes you best",
-    "traitLeast": "Describes you least"
+    "leastFavored": "Least favored"
   },
   "intensity": {
     "subtitle": "What intensity would you like?",
@@ -271,27 +269,9 @@
     "errorGenerating": "Generation error",
     "errorGeneratingMulti": "Multi-generation error",
     "errorUnknown": "Unknown error",
-    "hint": {
-      "preference": {
-        "positive": {
-          "one": "Pick your favorite",
-          "many": "Pick your {n} favorites"
-        },
-        "negative": {
-          "one": "Pick your least favorite",
-          "many": "Pick your {n} least favorites"
-        }
-      },
-      "trait": {
-        "positive": {
-          "one": "Pick what describes you best",
-          "many": "Pick the {n} that describe you best"
-        },
-        "negative": {
-          "one": "Pick what describes you least",
-          "many": "Pick the {n} that describe you least"
-        }
-      }
+    "pickCount": {
+      "one": "1 answer",
+      "many": "{n} answers"
     }
   },
   "recommendations": {
