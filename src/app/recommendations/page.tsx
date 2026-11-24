@@ -83,10 +83,11 @@ export default function RecommendationsPage() {
   const language = resolveStoredLanguage();
 
   return (
-    <div className="relative flex min-h-dvh w-full flex-col overflow-x-hidden overflow-y-auto">
+    // Vue 2 formules : tout tient dans l'écran (cartes réduites et scrollables) pour garder la barre d'outils visible
+    <div className={`relative flex w-full flex-col overflow-x-hidden ${isSingle ? "min-h-dvh overflow-y-auto" : "h-dvh overflow-hidden"}`}>
       <Navbar showActions={false} transparent />
 
-      <main className="flex-1 flex flex-col px-3 sm:px-5 pt-2 sm:pt-3 pb-6 max-w-[1400px] mx-auto w-full relative z-10">
+      <main className={`flex-1 flex flex-col px-3 sm:px-5 pt-2 sm:pt-3 max-w-[1400px] mx-auto w-full relative z-10 ${isSingle ? "pb-6" : "min-h-0 pb-1"}`}>
 
         {/* ── Avatar ── visible uniquement en vue 2 formules ── */}
         {!isSingle && (
@@ -226,17 +227,18 @@ export default function RecommendationsPage() {
             VUE 2 FORMULES
             [carte 1] [carte 2]
         ════════════════════════════════════════════════ */
-          <div className="flex-1 flex flex-col gap-4 sm:gap-5">
+          <div className="flex-1 min-h-0 flex flex-col gap-2 sm:gap-3">
 
-            <div className="flex flex-col gap-4">
+            {/* Zone des cartes : prend la hauteur restante, scroll si l'écran est trop petit */}
+            <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
 
-              {/* Cartes — mêmes dimensions que le mode visuel (quiz/results) */}
-              <div className="w-full flex flex-row flex-wrap items-stretch justify-center gap-2 sm:gap-6">
+              {/* Mobile : cartes empilées (scroll) ; sm+ : côte à côte, hauteur = espace disponible */}
+              <div className="w-full sm:h-full flex flex-col sm:flex-row items-center sm:items-stretch justify-center gap-2 sm:gap-6">
                 {formulas.length > 0 ? (
                   formulas.map((item) => (
                     <div
                       key={item.key}
-                      className="w-full max-w-[340px] h-[min(58vh,720px)] sm:h-[min(68vh,720px)]"
+                      className="w-full max-w-[340px] shrink-0 h-[min(55dvh,520px)] sm:shrink sm:flex-1 sm:h-auto sm:max-h-[720px] sm:min-h-[260px]"
                     >
                       {renderFormula(item.formula, {
                         variant: "comparison",
@@ -255,7 +257,7 @@ export default function RecommendationsPage() {
             </div>
 
             {/* Retour accueil */}
-            <div className="shrink-0 flex justify-center pb-4">
+            <div className="shrink-0 flex justify-center">
               <button
                 onClick={() => { endSession(); router.push("/"); }}
                 className="text-gray-400 brand-text text-xs hover:text-primary transition-colors cursor-pointer py-1"
@@ -266,7 +268,7 @@ export default function RecommendationsPage() {
           </div>
         )}
 
-        <div className="flex justify-center shrink-0 py-3">
+        <div className={`flex justify-center shrink-0 ${isSingle ? "py-3" : "py-2"}`}>
           {sessionData && <BottomBar />}
         </div>
       </main>

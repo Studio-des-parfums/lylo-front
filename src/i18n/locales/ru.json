@@ -268,7 +268,11 @@
     "errorLoadingQuestions": "Ошибка загрузки",
     "errorGenerating": "Ошибка генерации",
     "errorGeneratingMulti": "Ошибка множественной генерации",
-    "errorUnknown": "Неизвестная ошибка"
+    "errorUnknown": "Неизвестная ошибка",
+    "pickCount": {
+      "one": "1 ответ",
+      "many": "{n} ответа"
+    }
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",

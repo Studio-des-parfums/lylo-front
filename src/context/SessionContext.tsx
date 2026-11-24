@@ -11,6 +11,7 @@ import {
 import { MOCK_FORMULAS, MOCK_QUESTIONS } from "@/lib/mockData";
 import { persistLanguage, resolveStoredLanguage } from "@/lib/language";
 import { activeBrand } from "@/lib/brand";
+import { AnswerFormat, DEFAULT_ANSWER_FORMAT, parseAnswerFormat } from "@/lib/answerFormat";
 
 export const DEV_MODE = process.env.NEXT_PUBLIC_DEV_MODE === "true";
 
@@ -151,6 +152,8 @@ interface SessionContextType {
   noCreditsError: boolean;
   connectionError: boolean;
   clickSelectionMode: "top_2" | "bottom_2" | null;
+  /** Format de réponse du questionnaire de la session (nb de choix, cadrage). */
+  answerFormat: AnswerFormat;
   pendingClickAnswer: PendingClickAnswer | null;
   pendingPerfumeName: PendingPerfumeName | null;
   confirmationData: { question_id: number; top_2: string[]; bottom_2: string[] } | null;
@@ -194,6 +197,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [agentState, setAgentState] = useState<AgentState>("initializing");
   const isRetryingRef = useRef(false);
   const [clickSelectionMode, setClickSelectionMode] = useState<"top_2" | "bottom_2" | null>(null);
+  const [answerFormat, setAnswerFormat] = useState<AnswerFormat>(DEFAULT_ANSWER_FORMAT);
   const [clickQuestionId, setClickQuestionId] = useState<number | null>(null);
   const [clickTop2Values, setClickTop2Values] = useState<string[]>([]);
   const [pendingClickAnswer, setPendingClickAnswer] = useState<PendingClickAnswer | null>(null);
@@ -241,6 +245,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       setQuestions(sessionInfo.questions);
       setQuestionCount(sessionInfo.questions.length);
     }
+    setAnswerFormat(parseAnswerFormat(sessionInfo.answer_format));
   }, []);
 
   const handleDataMessage = useCallback((payload: Uint8Array) => {
@@ -469,6 +474,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     <SessionContext.Provider
       value={{
         sessionData,
+        answerFormat,
         sessionState,
         agentState,
         profile,

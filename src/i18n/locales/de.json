@@ -268,7 +268,11 @@
     "intensityPuissant": "Intensiv",
     "intensityPuissantDesc": "Kräftig und langanhaltend",
     "intensityQuestion": "Welche Parfumintensität bevorzugen Sie?",
-    "perfumeNameQuestion": "Geben Sie zum Abschluss Ihrem Parfum einen Namen"
+    "perfumeNameQuestion": "Geben Sie zum Abschluss Ihrem Parfum einen Namen",
+    "pickCount": {
+      "one": "1 Antwort",
+      "many": "{n} Antworten"
+    }
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",

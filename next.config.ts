@@ -5,7 +5,13 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "*.s3.*.amazonaws.com",
+        hostname: "lylo-back-production-78a9.up.railway.app",
+        pathname: "/files/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
+        pathname: "/files/**",
       },
     ],
   },

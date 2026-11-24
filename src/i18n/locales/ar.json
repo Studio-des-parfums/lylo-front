@@ -268,7 +268,11 @@
     "intensityPuissant": "مكثف",
     "intensityPuissantDesc": "قوي وثابت",
     "intensityQuestion": "ما شدة العطر التي تفضلها؟",
-    "perfumeNameQuestion": "أخيرًا، أعطِ عطرك اسمًا"
+    "perfumeNameQuestion": "أخيرًا، أعطِ عطرك اسمًا",
+    "pickCount": {
+      "one": "إجابة واحدة",
+      "many": "{n} إجابات"
+    }
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",

@@ -268,7 +268,11 @@
     "errorLoadingQuestions": "Loading error",
     "errorGenerating": "Generation error",
     "errorGeneratingMulti": "Multi-generation error",
-    "errorUnknown": "Unknown error"
+    "errorUnknown": "Unknown error",
+    "pickCount": {
+      "one": "1 answer",
+      "many": "{n} answers"
+    }
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",

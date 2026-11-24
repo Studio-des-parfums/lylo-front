@@ -52,6 +52,7 @@ export default function FormulaPersonalizer({ formula, language, onFormulaChange
           new_note: newNote,
           language,
           reference: reference || null,
+          brand: activeBrand.id,
         }),
       });
       if (!res.ok) { setError(true); return; }

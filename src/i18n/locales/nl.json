@@ -260,7 +260,11 @@
     "errorLoadingQuestions": "Laadfout",
     "errorGenerating": "Genereerfout",
     "errorGeneratingMulti": "Fout bij multi-generatie",
-    "errorUnknown": "Onbekende fout"
+    "errorUnknown": "Onbekende fout",
+    "pickCount": {
+      "one": "1 antwoord",
+      "many": "{n} antwoorden"
+    }
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",

@@ -14,7 +14,9 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [clickSelected, setClickSelected] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const { hiddenChoices, clickSelectionMode, submitClickAnswer } = useSession();
+  const { hiddenChoices, clickSelectionMode, submitClickAnswer, answerFormat } = useSession();
+  // Nombre de cartes à sélectionner pour l'étape en cours (format du questionnaire)
+  const required = clickSelectionMode === "bottom_2" ? answerFormat.negative_count : answerFormat.positive_count;
 
   // Reset selection when choices change (new question)
   useEffect(() => {
@@ -33,17 +35,21 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
 
   const normalize = (s: string) =>
     s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().trim();
-  const visibleChoices = choices.filter(
-    (choice) => !hiddenChoices.some((h) => normalize(h) === normalize(choice.label))
-  );
+  // Le numéro reste celui d'origine (1…n) même quand des cartes sont masquées
+  const visibleChoices = choices
+    .map((choice, i) => ({ choice, number: i + 1 }))
+    .filter(({ choice }) => !hiddenChoices.some((h) => normalize(h) === normalize(choice.label)));
+  // Lignes complètes, dernière ligne centrée (5 cartes = 3 + 2 centrées)
+  const rows = Math.max(1, Math.ceil(visibleChoices.length / 3));
+  const mobileRows = Math.max(1, Math.ceil(visibleChoices.length / 2));
 
   const handleCardSelect = (label: string) => {
     if (clickSelectionMode !== null) {
       if (submitted) return;
-      // Mode clic : sélection multiple jusqu'à 2, le bouton Valider envoie ensuite
+      // Mode clic : sélection jusqu'à `required` cartes, le bouton Valider envoie ensuite
       setClickSelected((prev) => {
         if (prev.includes(label)) return prev.filter((l) => l !== label);
-        if (prev.length >= 2) return prev;
+        if (prev.length >= required) return prev;
         return [...prev, label];
       });
     } else {
@@ -53,18 +59,25 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
   };
 
   const handleValidate = () => {
-    if (clickSelected.length !== 2 || submitted) return;
+    if (clickSelected.length !== required || submitted) return;
     setSubmitted(true);
     submitClickAnswer(clickSelected);
   };
 
   return (
     <div className="relative w-full max-w-5xl flex-1 min-h-0 flex flex-col gap-3">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-3 w-full py-2 flex-1 min-h-0 max-h-[52vh] sm:max-h-[48vh]">
-        {visibleChoices.map((choice) => (
-          <ChoiceCard
+      <div
+        className="flex flex-wrap justify-center content-stretch gap-2 sm:gap-3 w-full py-2 flex-1 min-h-0 max-h-[52vh] sm:max-h-[48vh]"
+        style={{ "--rows": rows, "--mobile-rows": mobileRows } as React.CSSProperties}
+      >
+        {visibleChoices.map(({ choice, number }) => (
+          <div
             key={choice.label}
+            className="w-[calc((100%-0.5rem)/2)] h-[calc((100%-(var(--mobile-rows)-1)*0.5rem)/var(--mobile-rows))] sm:w-[calc((100%-1.5rem)/3)] sm:h-[calc((100%-(var(--rows)-1)*0.75rem)/var(--rows))]"
+          >
+          <ChoiceCard
             name={choice.label}
+            number={number}
             imageUrl={
               choice.image
                 ? /^https?:\/\//.test(choice.image)
@@ -80,9 +93,10 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
             clickable={clickSelectionMode !== null && !submitted}
             onSelect={handleCardSelect}
           />
+          </div>
         ))}
       </div>
-      {clickSelectionMode !== null && clickSelected.length === 2 && (
+      {clickSelectionMode !== null && clickSelected.length === required && (
         <div className="shrink-0 flex justify-center">
           <button
             type="button"

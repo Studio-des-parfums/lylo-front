@@ -163,10 +163,16 @@ function TranscriptionListener() {
  *
  * Pourquoi c'est nécessaire : dès que la page capture le micro (LiveKitRoom audio={true}),
  * l'OS bascule le Bluetooth du profil A2DP (sortie seule, haute qualité) vers HFP/mains-libres
- * (entrée+sortie). Beaucoup de tablettes gèrent mal ce switch et retombent sur le haut-parleur
- * interne pour la sortie, même si le device Bluetooth reste connecté. On corrige ça en
- * sélectionnant explicitement le device de sortie via setSinkId (room.switchActiveDevice),
- * au lieu de laisser le navigateur choisir seul.
+ * (entrée+sortie, SCO). Beaucoup de tablettes gèrent mal ce switch et retombent sur le
+ * haut-parleur interne pour la sortie, même si le device Bluetooth reste connecté.
+ *
+ * Important : `room.getActiveDevice("audiooutput")` ne lit PAS l'état réel de l'OS — c'est
+ * juste le dernier device que le SDK a lui-même sélectionné via switchActiveDevice/devicechange.
+ * Si l'OS fait silencieusement retomber le son sur le haut-parleur (SCO qui lâche), ce champ
+ * continue de pointer vers le Bluetooth : comparer dessus pour décider de ne "rien faire"
+ * est donc un faux négatif. setSinkId (sortie) seul ne force pas non plus l'OS à ré-ouvrir
+ * SCO ; ce qui la redéclenche, c'est le redémarrage du track d'ENTRÉE micro. On force donc
+ * systématiquement les deux à chaque tentative, sans se fier à l'état mémorisé du SDK.
  */
 function BluetoothOutputEnforcer() {
   const room = useRoomContext();
@@ -191,26 +197,22 @@ function BluetoothOutputEnforcer() {
       try {
         const devices = await navigator.mediaDevices.enumerateDevices();
         const outputs = devices.filter((d) => d.kind === "audiooutput");
+        const inputs = devices.filter((d) => d.kind === "audioinput");
         // "default"/"communications" sont des alias virtuels ajoutés par Chrome, pas de vrais
         // périphériques : on ne veut que les entrées physiques pour repérer le casque.
         const realOutputs = outputs.filter(
           (d) => d.deviceId !== "default" && d.deviceId !== "communications"
         );
-        // TODO(diagnostic-bluetooth): log temporaire pour comparer prod vs ngrok — à retirer
-        // une fois le comportement de setSinkId confirmé côté tablette.
-        console.log(
-          "[LiveKit][diag] outputs:",
-          outputs.map((d) => ({ id: d.deviceId, label: d.label || "(vide)" })),
-          "| realOutputs:",
-          realOutputs.map((d) => ({ id: d.deviceId, label: d.label || "(vide)" })),
-          "| currentSink:",
-          room.getActiveDevice("audiooutput")
+        const realInputs = inputs.filter(
+          (d) => d.deviceId !== "default" && d.deviceId !== "communications"
         );
+
         if (realOutputs.length === 0) return;
 
         // Cas nominal : le label du device est disponible (permission micro déjà accordée
         // pour cette origine) → on peut identifier le casque par son nom.
-        let target = realOutputs.find((d) => isLikelyBluetooth(d.label));
+        let targetOutput = realOutputs.find((d) => isLikelyBluetooth(d.label));
+        let targetInput = realInputs.find((d) => isLikelyBluetooth(d.label));
 
         // Cas dégradé : labels vides (permission tout juste accordée, pas encore propagée
         // à enumerateDevices — fréquent sur un domaine de prod jamais visité auparavant, par
@@ -218,17 +220,32 @@ function BluetoothOutputEnforcer() {
         // identifier le casque par son nom ; s'il n'y a qu'un seul device de sortie non-défaut,
         // c'est très probablement lui (le haut-parleur interne est en général exposé comme
         // "default" et n'apparaît pas séparément une fois un device externe connecté).
-        if (!target && realOutputs.length === 1 && !realOutputs[0].label) {
-          target = realOutputs[0];
+        if (!targetOutput && realOutputs.length === 1 && !realOutputs[0].label) {
+          targetOutput = realOutputs[0];
+        }
+        if (!targetInput && realInputs.length === 1 && !realInputs[0].label) {
+          targetInput = realInputs[0];
         }
 
-        if (!target) return;
+        if (!targetOutput) return;
 
-        const currentSink = room.getActiveDevice("audiooutput");
-        if (currentSink === target.deviceId) return;
+        console.log(
+          "[LiveKit] Forçage sortie Bluetooth →",
+          targetOutput.label || targetOutput.deviceId,
+          "| sdk pense actuellement:",
+          room.getActiveDevice("audiooutput")
+        );
+        // On ne regarde jamais getActiveDevice pour décider de sauter cet appel : voir le
+        // commentaire au-dessus du composant — cet état peut mentir après un flip SCO silencieux.
+        await room.switchActiveDevice("audiooutput", targetOutput.deviceId);
 
-        console.log("[LiveKit] Sortie audio → device Bluetooth détecté:", target.label || target.deviceId);
-        await room.switchActiveDevice("audiooutput", target.deviceId);
+        // Le vrai déclencheur de la renégociation SCO côté OS est le redémarrage du track
+        // d'ENTRÉE micro (pas seulement le changement de sink de sortie) — sans ça, l'OS peut
+        // rester sur le haut-parleur même si le SDK pointe "correctement" vers le Bluetooth.
+        if (targetInput) {
+          console.log("[LiveKit] Redémarrage du track micro pour forcer la renégociation SCO →", targetInput.label || targetInput.deviceId);
+          await room.switchActiveDevice("audioinput", targetInput.deviceId);
+        }
       } catch (err) {
         console.warn("[LiveKit] Impossible de forcer la sortie audio sur le casque Bluetooth:", err);
       }
@@ -237,8 +254,10 @@ function BluetoothOutputEnforcer() {
     // Plusieurs tentatives espacées : à la connexion, les labels des devices peuvent ne pas
     // encore être disponibles (permission micro tout juste accordée, pas encore propagée à
     // enumerateDevices), et l'OS re-route souvent l'audio juste après l'activation du micro
-    // (bascule A2DP → HFP). On réessaie donc plusieurs fois plutôt qu'une seule.
-    const scheduleAttempts = [0, 800, 1800, 3500];
+    // (bascule A2DP → HFP). On réessaie donc plusieurs fois plutôt qu'une seule — et comme on
+    // ne se fie plus à getActiveDevice pour sauter une tentative "déjà bonne", chaque passage
+    // redemande réellement SCO au lieu de ne rien faire par faux négatif.
+    const scheduleAttempts = [0, 800, 1800, 3500, 6000];
     const timeouts = scheduleAttempts.map((delay) =>
       setTimeout(() => {
         if (!cancelled) applyOutputDevice();
@@ -249,10 +268,19 @@ function BluetoothOutputEnforcer() {
     const onDeviceChange = () => applyOutputDevice();
     navigator.mediaDevices?.addEventListener?.("devicechange", onDeviceChange);
 
+    // Log diagnostic propre : ne reflète que ce que le SDK a lui-même observé (pas un vrai
+    // signal de l'état OS, voir le commentaire du composant), mais utile pour corréler avec
+    // les tentatives ci-dessus pendant les tests.
+    const onActiveDeviceChanged = (kind: string, deviceId: string) => {
+      console.log("[LiveKit][sdk] device actif changé →", kind, deviceId);
+    };
+    room.on(RoomEvent.ActiveDeviceChanged, onActiveDeviceChanged);
+
     return () => {
       cancelled = true;
       timeouts.forEach(clearTimeout);
       navigator.mediaDevices?.removeEventListener?.("devicechange", onDeviceChange);
+      room.off(RoomEvent.ActiveDeviceChanged, onActiveDeviceChanged);
     };
   }, [room]);
 

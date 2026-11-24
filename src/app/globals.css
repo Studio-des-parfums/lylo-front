@@ -66,6 +66,27 @@
   --brand-hero-image: url("/background-lylo.png");
 }
 
+/* Palette "help" : base claire de Lylo, couleurs reprises du logo H.E.L.P
+   (bleu nuit #071b2a pour les éléments principaux). */
+[data-brand="help"] {
+  --brand-primary: #071b2a;
+  --brand-primary-rgb: 7, 27, 42;
+  --brand-background-light: #f7f7f6;
+  --brand-background-light-rgb: 247, 247, 246;
+  --brand-background-dark: #071b2a;
+  --brand-background-dark-rgb: 7, 27, 42;
+  --brand-accent-tan: #d9dee3;
+  --brand-warm-cream: #d9dee3;
+  --brand-secondary: #d9dee3;
+  --brand-text-dark: #071b2a;
+  --brand-brand-light: #fdfbf9;
+  --brand-hero-image: url("/background-lylo.png");
+  --brand-surface-rgb: 247, 247, 246;
+  --brand-surface-text: #071b2a;
+  --brand-surface-nav-opacity: 0.8;
+  --brand-surface-tech-opacity: 0.5;
+}
+
 [data-brand="ester"] {
   --brand-primary: #d3b184;
   --brand-primary-rgb: 211, 177, 132;
