@@ -162,7 +162,9 @@
   "confirmation": {
     "subtitle": "Overzicht van uw keuzes",
     "preferred": "Uw favorieten",
-    "leastFavored": "Minst favoriet"
+    "leastFavored": "Minst favoriet",
+    "traitMost": "Beschrijft u het best",
+    "traitLeast": "Beschrijft u het minst"
   },
   "intensity": {
     "subtitle": "Welke intensiteit wilt u?",
@@ -260,7 +262,29 @@
     "errorLoadingQuestions": "Laadfout",
     "errorGenerating": "Genereerfout",
     "errorGeneratingMulti": "Fout bij multi-generatie",
-    "errorUnknown": "Onbekende fout"
+    "errorUnknown": "Onbekende fout",
+    "hint": {
+      "preference": {
+        "positive": {
+          "one": "Kies uw favoriet",
+          "many": "Kies uw {n} favorieten"
+        },
+        "negative": {
+          "one": "Kies wat u het minst mooi vindt",
+          "many": "Kies de {n} die u het minst mooi vindt"
+        }
+      },
+      "trait": {
+        "positive": {
+          "one": "Kies wat u het best beschrijft",
+          "many": "Kies de {n} die u het best beschrijven"
+        },
+        "negative": {
+          "one": "Kies wat u het minst beschrijft",
+          "many": "Kies de {n} die u het minst beschrijven"
+        }
+      }
+    }
   },
   "recommendations": {
     "brand": "Le Studio Des Parfums",

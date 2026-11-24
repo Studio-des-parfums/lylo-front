@@ -14,7 +14,9 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [clickSelected, setClickSelected] = useState<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
-  const { hiddenChoices, clickSelectionMode, submitClickAnswer } = useSession();
+  const { hiddenChoices, clickSelectionMode, submitClickAnswer, answerFormat } = useSession();
+  // Nombre de cartes à sélectionner pour l'étape en cours (format du questionnaire)
+  const required = clickSelectionMode === "bottom_2" ? answerFormat.negative_count : answerFormat.positive_count;
 
   // Reset selection when choices change (new question)
   useEffect(() => {
@@ -40,10 +42,10 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
   const handleCardSelect = (label: string) => {
     if (clickSelectionMode !== null) {
       if (submitted) return;
-      // Mode clic : sélection multiple jusqu'à 2, le bouton Valider envoie ensuite
+      // Mode clic : sélection jusqu'à `required` cartes, le bouton Valider envoie ensuite
       setClickSelected((prev) => {
         if (prev.includes(label)) return prev.filter((l) => l !== label);
-        if (prev.length >= 2) return prev;
+        if (prev.length >= required) return prev;
         return [...prev, label];
       });
     } else {
@@ -53,7 +55,7 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
   };
 
   const handleValidate = () => {
-    if (clickSelected.length !== 2 || submitted) return;
+    if (clickSelected.length !== required || submitted) return;
     setSubmitted(true);
     submitClickAnswer(clickSelected);
   };
@@ -82,7 +84,7 @@ export default function ChoiceGrid({ choices }: ChoiceGridProps) {
           />
         ))}
       </div>
-      {clickSelectionMode !== null && clickSelected.length === 2 && (
+      {clickSelectionMode !== null && clickSelected.length === required && (
         <div className="shrink-0 flex justify-center">
           <button
             type="button"

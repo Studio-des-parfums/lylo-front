@@ -2,6 +2,7 @@
 
 import { useTranslation } from "@/i18n/LanguageContext";
 import { activeBrand } from "@/lib/brand";
+import type { Framing } from "@/lib/answerFormat";
 
 const isEster = activeBrand.id === "ester";
 
@@ -13,6 +14,8 @@ export interface ChoiceWithImage {
 interface AnswerConfirmationProps {
   top2: string[] | ChoiceWithImage[];
   bottom2: string[] | ChoiceWithImage[];
+  /** Cadrage du questionnaire : libellés « préférés » ou « vous représente le plus ». */
+  framing?: Framing;
 }
 
 function normalize(items: string[] | ChoiceWithImage[]): ChoiceWithImage[] {
@@ -40,10 +43,12 @@ function ConfirmCard({ item, variant }: { item: ChoiceWithImage; variant: "top" 
   );
 }
 
-export default function AnswerConfirmation({ top2, bottom2 }: AnswerConfirmationProps) {
+export default function AnswerConfirmation({ top2, bottom2, framing = "preference" }: AnswerConfirmationProps) {
   const { t } = useTranslation();
   const top = normalize(top2);
   const bottom = normalize(bottom2);
+  const isTrait = framing === "trait";
+  const hasBottom = bottom.length > 0;
 
   return (
     <div className="w-full max-w-2xl mx-auto flex flex-col gap-6 px-2">
@@ -51,10 +56,10 @@ export default function AnswerConfirmation({ top2, bottom2 }: AnswerConfirmation
         {t("confirmation.subtitle")}
       </p>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className={`grid gap-4 ${hasBottom ? "grid-cols-2" : "grid-cols-1"}`}>
         <div className="flex flex-col gap-3">
           <span className={`text-xs tracking-widest uppercase font-semibold text-center ${isEster ? "text-primary" : "text-primary/40"}`}>
-            {t("confirmation.preferred")}
+            {t(isTrait ? "confirmation.traitMost" : "confirmation.preferred")}
           </span>
           <div className="flex flex-col gap-2">
             {top.map((item) => (
@@ -63,16 +68,18 @@ export default function AnswerConfirmation({ top2, bottom2 }: AnswerConfirmation
           </div>
         </div>
 
-        <div className="flex flex-col gap-3">
-          <span className="text-xs tracking-widest uppercase text-stone-400 font-semibold text-center">
-            {t("confirmation.leastFavored")}
-          </span>
-          <div className="flex flex-col gap-2">
-            {bottom.map((item) => (
-              <ConfirmCard key={item.label} item={item} variant="bottom" />
-            ))}
+        {hasBottom && (
+          <div className="flex flex-col gap-3">
+            <span className="text-xs tracking-widest uppercase text-stone-400 font-semibold text-center">
+              {t(isTrait ? "confirmation.traitLeast" : "confirmation.leastFavored")}
+            </span>
+            <div className="flex flex-col gap-2">
+              {bottom.map((item) => (
+                <ConfirmCard key={item.label} item={item} variant="bottom" />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

@@ -21,7 +21,7 @@ import { activeBrand } from "@/lib/brand";
 export default function InteractionPage() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { sessionState, questionCount, questions, currentQuestionIndex, confirmationData, sessionData } = useSession();
+  const { sessionState, questionCount, questions, currentQuestionIndex, confirmationData, sessionData, answerFormat } = useSession();
 
   useEffect(() => {
     if (DEV_MODE) return;
@@ -70,6 +70,7 @@ export default function InteractionPage() {
           <AnswerConfirmation
             top2={confirmationData.top_2}
             bottom2={confirmationData.bottom_2}
+            framing={answerFormat.framing}
           />
         ) : sessionState === "asking_intensity" ? (
           <IntensitySelector />
