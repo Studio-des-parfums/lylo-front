@@ -220,12 +220,20 @@ export function SessionProvider({ children }: { children: ReactNode }) {
     const mode = localStorage.getItem("mode") || "guided";
     const input_mode = (localStorage.getItem("input_mode") as "voice" | "click") || "voice";
     const avatar = localStorage.getItem("avatar") !== "false";
-    const email = localStorage.getItem("recap_email") || null;
+    // Compte connecté (client ou membre de l'équipe) : rattache la session à son
+    // propriétaire et décompte le quota du client côté back. L'email du visiteur,
+    // lui, est saisi à la fin (modale "Recevoir par mail").
+    let owner_email: string | null = null;
+    try {
+      owner_email = JSON.parse(localStorage.getItem("auth_user") || "null")?.email ?? null;
+    } catch {
+      owner_email = null;
+    }
 
     const res = await fetch(`${API_BASE}/api/session/start`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ language, voice_gender, question_count, mode, input_mode, brand: activeBrand.id, email, avatar }),
+      body: JSON.stringify({ language, voice_gender, question_count, mode, input_mode, brand: activeBrand.id, owner_email, avatar }),
     });
 
     if (res.status === 403) {

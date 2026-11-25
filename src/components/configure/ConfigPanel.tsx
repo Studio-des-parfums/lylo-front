@@ -10,7 +10,6 @@ import ModeSelector from "./ModeSelector";
 import InputModeSelector from "./InputModeSelector";
 import ConnectionTest from "@/components/preparation/ConnectionTest";
 import { useTranslation } from "@/i18n/LanguageContext";
-import { activeBrand } from "@/lib/brand";
 
 export const PARTICIPANT_COLORS = [
   { id: "rouge",   labelKey: "configure.colorRouge",     bg: "#FFADAD", text: "#7A1A1A" },
@@ -32,7 +31,6 @@ export default function ConfigPanel() {
   const [avatar, setAvatar] = useState(true);
   const { t } = useTranslation();
 
-  const [email, setEmail] = useState("");
   const [isFullscreen, setIsFullscreen] = useState(false);
 
   // ── Multi-utilisateurs (mode visuel uniquement) ──────────────────────
@@ -67,7 +65,6 @@ export default function ConfigPanel() {
   };
 
   const isQuiz = inputMode === "quiz";
-  const isEster = activeBrand.id === "ester";
 
   const colorsValid =
     !isQuiz ||
@@ -85,8 +82,9 @@ export default function ConfigPanel() {
     localStorage.setItem("mode", mode);
     localStorage.setItem("input_mode", inputMode);
     localStorage.setItem("avatar", String(avatar));
-    if (email.trim()) localStorage.setItem("recap_email", email.trim());
-    else localStorage.removeItem("recap_email");
+    // L'email n'est plus demandé ici (saisi à la fin, modale "Recevoir par mail") :
+    // on purge une éventuelle valeur restée d'une ancienne version.
+    localStorage.removeItem("recap_email");
 
     if (isQuiz) {
       localStorage.setItem("participant_count", String(participantCount));
@@ -191,28 +189,6 @@ export default function ConfigPanel() {
                 </div>
               </button>
             </div>
-
-            {/* Email recap */}
-            {!isEster && (
-              <div className="space-y-1.5">
-                <p className="text-[10px] uppercase tracking-[0.2em] text-primary/60 font-bold">
-                  {t("configure.emailTitle")}
-                </p>
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg border border-primary/15 brand-surface-softer">
-                  <MaterialIcon name="mail" className="text-primary text-[18px] shrink-0" />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder={t("configure.emailPlaceholder")}
-                    className="flex-1 bg-transparent text-xs font-medium text-primary placeholder:text-primary/35 outline-none"
-                  />
-                </div>
-                <p className="text-[10px] text-primary/50 leading-relaxed px-1">
-                  {t("configure.emailHint")}
-                </p>
-              </div>
-            )}
 
             <ConnectionTest />
           </div>
