@@ -8,7 +8,7 @@ import AvatarVideo from "@/components/interaction/AvatarVideo";
 
 import FormulaCard from "@/components/recommendations/FormulaCard";
 import CatalogFormulaCard from "@/components/recommendations/CatalogFormulaCard";
-import MoodboardButton from "@/components/recommendations/MoodboardButton";
+import MoodboardButton, { MOODBOARD_ENABLED } from "@/components/recommendations/MoodboardButton";
 import FormulaQrCode from "@/components/recommendations/FormulaQrCode";
 import PrintableFormula from "@/components/recommendations/PrintableFormula";
 import SendFormulaMailButton from "@/components/recommendations/SendFormulaMailButton";
@@ -198,7 +198,7 @@ export default function RecommendationsPage() {
                       />
                     )}
 
-                    {selectedFormula && !isCatalogFormula(selectedFormula) && (
+                    {MOODBOARD_ENABLED && selectedFormula && !isCatalogFormula(selectedFormula) && (
                       <MoodboardButton
                         reference={formulaReference}
                         initialImageUrl={selectedFormula.moodboard_image_url}
