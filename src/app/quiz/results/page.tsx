@@ -10,11 +10,8 @@ import CatalogFormulaCard from "@/components/recommendations/CatalogFormulaCard"
 import MoodboardButton, { MOODBOARD_ENABLED } from "@/components/recommendations/MoodboardButton";
 import FormulaQrCode from "@/components/recommendations/FormulaQrCode";
 import PrintableFormula from "@/components/recommendations/PrintableFormula";
-import FormulaPersonalizer from "@/components/recommendations/FormulaPersonalizer";
 import SendFormulaMailButton from "@/components/recommendations/SendFormulaMailButton";
-import OlfactoryPyramid from "@/components/recommendations/OlfactoryPyramid";
-import SimilarPerfumesButton from "@/components/recommendations/SimilarPerfumesButton";
-import SizeToggle from "@/components/recommendations/SizeToggle";
+import FormulaPyramidPanel, { PyramidFormula } from "@/components/recommendations/FormulaPyramidPanel";
 import { SizeOption } from "@/components/recommendations/SizeToggle";
 import { useTranslation } from "@/i18n/LanguageContext";
 import { FormulaSize, FormulaNote } from "@/context/SessionContext";
@@ -144,10 +141,6 @@ function FormulaJourney({
   const [referencesByIndex, setReferencesByIndex] = useState<Record<number, string>>({});
   const [language, setLanguage] = useState("fr");
   const [selectedSizes, setSelectedSizes] = useState<Record<number, SizeOption>>({});
-  // Note actuellement mise en avant (bouton "modifier" cliqué sur la carte formule) — pilote
-  // le contenu de la section de droite (FormulaPersonalizer). Réinitialisée à chaque retour
-  // aux choix ou changement de taille, pour ne jamais pointer vers une note obsolète.
-  const [activeNote, setActiveNote] = useState<{ noteType: "top" | "heart" | "base"; note: FormulaNote } | null>(null);
   // Parfums du commerce ressemblants, mis en cache par index de formule — évite de relancer
   // la recherche (LLM + web) quand l'utilisateur navigue entre formules pendant la session.
   const [similarPerfumesByIndex, setSimilarPerfumesByIndex] = useState<Record<number, SimilarPerfume[]>>({});
@@ -216,9 +209,6 @@ function FormulaJourney({
       next[index] = updatedFormula;
       return next;
     });
-    // La note remplacée n'a plus d'alternatives (non redemandées au LLM) — on vide la
-    // sélection plutôt que d'afficher "aucune alternative" pour la nouvelle note.
-    setActiveNote(null);
   };
 
   const handleFormulaSizeChange = (formulaIndex: number, size: SizeOption) => {
@@ -374,7 +364,7 @@ function FormulaJourney({
                 sur le bouton retour même si elle est invisible — voir Navbar.tsx (fixed z-50). */}
             <div className={`w-full ${participant ? "" : "pt-14"} flex items-center justify-center relative`}>
               <button
-                onClick={() => { setConfirmed(false); setActiveNote(null); }}
+                onClick={() => setConfirmed(false)}
                 title={t("quizResults.backToChoices")}
                 className="absolute left-0 flex items-center justify-center size-8 rounded-full text-primary hover:bg-primary/10 transition-all"
               >
@@ -399,83 +389,43 @@ function FormulaJourney({
                 })}
               </div>
             ) : (
-              <div className="relative w-full max-w-3xl flex flex-col items-center gap-3 pt-2">
-                <div className="relative z-30 flex w-full items-center justify-center gap-2">
-                  <h3 className="luxury-title text-primary text-lg sm:text-xl text-center">{selectedFormula.profile}</h3>
-                  {/* SimilarPerfumesButton se positionne en absolute top/right de son parent */}
-                  <div className="relative size-7 shrink-0">
-                    <SimilarPerfumesButton
-                      cached={similarPerfumesByIndex[chosen]}
-                      onFetch={() => fetchSimilarPerfumes(chosen)}
-                      loading={similarPerfumesLoading[chosen] ?? false}
-                      error={similarPerfumesError[chosen] ?? false}
-                    />
+              <FormulaPyramidPanel
+                formula={selectedFormula as PyramidFormula}
+                selectedSize={selectedSizes[chosen] ?? "30ml"}
+                onSelectedSizeChange={(size) => handleFormulaSizeChange(chosen, size)}
+                language={language as "fr" | "en" | "es" | "de" | "ar" | "ru"}
+                onFormulaChange={(updated) => handleFormulaReplaced(chosen, updated as Formula)}
+                reference={reference || undefined}
+                similarPerfumes={{
+                  cached: similarPerfumesByIndex[chosen],
+                  onFetch: () => fetchSimilarPerfumes(chosen),
+                  loading: similarPerfumesLoading[chosen] ?? false,
+                  error: similarPerfumesError[chosen] ?? false,
+                }}
+              />
+            )}
+
+            {/* Référence en haut au centre, sur la ligne du logo (navbar fixe) — comme en voix */}
+            {(reference || savingReference) && (
+              <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center justify-center pointer-events-none">
+                {savingReference ? (
+                  <div className="flex items-center gap-2 text-primary/70 text-xs">
+                    <span className="size-3.5 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+                    {t("quizResults.referenceLoading")}
                   </div>
-                </div>
-                <OlfactoryPyramid
-                  sizeData={selectedFormula.sizes![selectedSizes[chosen] ?? "30ml"]}
-                  onNoteEdit={(noteType, note) => setActiveNote({ noteType, note })}
-                  activeNoteName={activeNote?.note.name ?? null}
-                />
-                <p className="text-[11px] text-primary/50 text-center">{t("pyramid.hint")}</p>
-                <div className="w-full max-w-xs">
-                  <SizeToggle
-                    selected={selectedSizes[chosen] ?? "30ml"}
-                    onSelect={(size) => { handleFormulaSizeChange(chosen, size); setActiveNote(null); }}
-                  />
-                </div>
+                ) : (
+                  <div className="flex flex-col items-center leading-tight">
+                    <span className="font-mono font-bold text-primary text-xl sm:text-2xl tracking-wide">{reference}</span>
+                    <span className="text-[10px] text-primary/70">{t("quizResults.giveReferenceToPerfumer")}</span>
+                  </div>
+                )}
               </div>
             )}
 
-            {/* Personnalisation d'une note : ouverte au clic sur une note de la pyramide,
-                refermée automatiquement après remplacement (handleFormulaReplaced vide activeNote). */}
-            {activeNote && !isCatalogFormula(selectedFormula) && (
-              <div
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm"
-                onClick={() => setActiveNote(null)}
-                role="dialog"
-                aria-modal="true"
-              >
-                <div
-                  className="relative w-full max-w-sm rounded-2xl border border-primary/10 bg-white shadow-2xl"
-                  onClick={(event) => event.stopPropagation()}
-                >
-                  <button
-                    onClick={() => setActiveNote(null)}
-                    className="absolute right-3 top-3 text-primary/50 transition-colors hover:text-primary"
-                    aria-label={t("sendMail.close")}
-                  >
-                    <MaterialIcon name="close" className="text-[20px]" />
-                  </button>
-                  <FormulaPersonalizer
-                    formula={selectedFormula}
-                    language={language as "fr" | "en" | "es" | "de" | "ar" | "ru"}
-                    onFormulaChange={(updated) => handleFormulaReplaced(chosen, updated)}
-                    activeNote={activeNote}
-                    reference={reference || undefined}
-                    className="flex flex-col gap-3 p-4 pt-10"
-                  />
-                </div>
-              </div>
-            )}
-            <div className="w-full flex flex-col items-center gap-2.5">
-              {savingReference ? (
-                <div className="flex items-center justify-center gap-2 text-primary/70 text-sm py-2">
-                  <span className="size-4 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
-                  {t("quizResults.referenceLoading")}
-                </div>
-              ) : reference && (
-                <div className="flex flex-col items-center gap-1 text-center">
-                  <span className="font-mono font-bold text-primary text-2xl sm:text-3xl tracking-wide">
-                    {reference}
-                  </span>
-                  <p className="text-sm text-primary/80">
-                    {t("quizResults.giveReferenceToPerfumer")}
-                  </p>
-                </div>
-              )}
+            {/* Barre d'outils : imprimer, QR, (moodboard), mail en icône, puis Terminer / Personne suivante */}
+            <div className="w-full flex flex-row flex-wrap items-center justify-center gap-2">
               {!isCatalogFormula(selectedFormula) && (
-                <div className="flex flex-row items-center justify-center gap-2">
+                <>
                   <button
                     onClick={() => window.print()}
                     title={t("quiz.print")}
@@ -505,45 +455,40 @@ function FormulaJourney({
                       className="flex items-center justify-center size-9 rounded-full brand-surface border border-primary/25 text-primary shadow-sm hover:bg-primary/5 transition-all"
                     />
                   )}
-                  {/* Recevoir par mail : toujours visible et libellé — il nécessite la référence
-                      en base, donc désactivé pendant l'enregistrement, et "Réessayer" en cas d'échec. */}
+                  {/* Mail : nécessite la référence en base — spinner pendant l'enregistrement,
+                      "Réessayer" en cas d'échec. */}
                   {reference ? (
-                    <SendFormulaMailButton reference={reference} />
+                    <SendFormulaMailButton
+                      reference={reference}
+                      iconOnly
+                      className="flex items-center justify-center size-9 rounded-full brand-surface border border-primary/25 text-primary shadow-sm hover:bg-primary/5 transition-all"
+                    />
                   ) : referenceError ? (
                     <button
                       onClick={() => handleChoose(chosen)}
-                      className="flex items-center gap-2 px-4 py-2 rounded-full border border-red-300 bg-white text-red-600 text-xs sm:text-sm font-semibold hover:bg-red-50 transition-all"
+                      title={t("quizResults.referenceRetry")}
+                      className="flex items-center justify-center size-9 rounded-full border border-red-300 bg-white text-red-600 hover:bg-red-50 transition-all"
                     >
                       <MaterialIcon name="refresh" className="text-[18px]" />
-                      {t("quizResults.referenceRetry")}
                     </button>
                   ) : (
                     <button
                       disabled
-                      className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white text-xs sm:text-sm font-semibold opacity-50 cursor-wait"
+                      title={t("sendMail.button")}
+                      className="flex items-center justify-center size-9 rounded-full brand-surface border border-primary/25 text-primary opacity-50 cursor-wait"
                     >
-                      <span className="size-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                      {t("sendMail.button")}
+                      <span className="size-4 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
                     </button>
                   )}
-                </div>
+                </>
               )}
-              {onFinish ? (
-                <button
-                  onClick={onFinish}
-                  className="mt-1 flex items-center gap-2 px-6 py-2.5 rounded-full bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:brightness-110 transition-all"
-                >
-                  {isLastParticipant ? t("quizResults.finish") : t("quizResults.nextPerson")}
-                  <MaterialIcon name={isLastParticipant ? "check" : "arrow_forward"} className="text-[18px]" />
-                </button>
-              ) : (
-                <button
-                  onClick={onExit}
-                  className="text-surface opacity-50 brand-text text-[11px] hover:text-primary hover:opacity-100 transition-colors cursor-pointer py-1"
-                >
-                  {t("recommendations.returnHome")}
-                </button>
-              )}
+              <button
+                onClick={onFinish ?? onExit}
+                className="ml-1 flex items-center gap-2 px-5 py-2 rounded-full bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 hover:brightness-110 transition-all"
+              >
+                {participant && !isLastParticipant ? t("quizResults.nextPerson") : t("quizResults.finish")}
+                <MaterialIcon name="arrow_forward" className="text-[18px]" />
+              </button>
             </div>
           </>
         )}

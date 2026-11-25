@@ -24,6 +24,9 @@ interface FormulaPersonalizerProps {
   /** Référence déjà sauvegardée en base pour cette formule — si fournie, le remplacement
    * de note est aussi répercuté sur l'enregistrement existant côté backend. */
   reference?: string;
+  /** Mode vocal : session en cours — la formule sélectionnée côté session est mise à jour
+   * pour que l'agent voie le remplacement. */
+  sessionId?: string;
 }
 
 /**
@@ -32,7 +35,7 @@ interface FormulaPersonalizerProps {
  * génération. Cliquer une alternative appelle POST /api/formulas/replace-note
  * (recalcule le booster) et remonte la formule mise à jour au parent.
  */
-export default function FormulaPersonalizer({ formula, language, onFormulaChange, activeNote, className, reference }: FormulaPersonalizerProps) {
+export default function FormulaPersonalizer({ formula, language, onFormulaChange, activeNote, className, reference, sessionId }: FormulaPersonalizerProps) {
   const { t } = useTranslation();
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(false);
@@ -52,6 +55,7 @@ export default function FormulaPersonalizer({ formula, language, onFormulaChange
           new_note: newNote,
           language,
           reference: reference || null,
+          session_id: sessionId || null,
           brand: activeBrand.id,
         }),
       });

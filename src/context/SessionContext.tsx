@@ -141,6 +141,8 @@ interface SessionContextType {
   // Référence en base de la formule sélectionnée (mode vocal) — remplie par select_formula
   // côté agent, utilisée pour l'envoi par mail à la demande (SendFormulaMailButton).
   formulaReference: string | null;
+  /** Remplace la formule sélectionnée affichée (ex. note remplacée au clic sur la pyramide). */
+  replaceSelectedFormula: (formula: Formula) => void;
   transcripts: TranscriptMessage[];
   questions: Question[];
   currentQuestionIndex: number;
@@ -490,6 +492,7 @@ export function SessionProvider({ children }: { children: ReactNode }) {
         answers,
         formulas,
         formulaReference,
+        replaceSelectedFormula: (formula: Formula) => setFormulas([formula]),
         transcripts,
         questions,
         currentQuestionIndex,
