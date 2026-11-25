@@ -12,6 +12,8 @@ export interface BrandConfig {
   heroBackground: string;
   /** Nombre de questions imposé (un seul choix affiché dans la configuration). */
   fixedQuestionCount?: string;
+  /** Logo partenaire propre à la marque, affiché dans la barre des partenaires (TechBar). */
+  partnerLogo?: { src: string; alt: string };
 }
 
 const brands: Record<ThemeId, Omit<BrandConfig, "id">> = {
@@ -37,6 +39,7 @@ const brands: Record<ThemeId, Omit<BrandConfig, "id">> = {
     navLogoSize: 120, // logo horizontal (4:1)
     heroBackground: "/background-lylo.png",
     fixedQuestionCount: "4",
+    partnerLogo: { src: "/logo-les-francais-avancent.png", alt: "Les Français avancent" },
   },
 };
 

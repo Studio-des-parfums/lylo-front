@@ -1,7 +1,9 @@
 "use client";
 
 import MaterialIcon from "@/components/ui/MaterialIcon";
+import { useState } from "react";
 import { useTranslation } from "@/i18n/LanguageContext";
+import { activeBrand } from "@/lib/brand";
 
 const techPartners = [
   { icon: "auto_awesome", name: "Mistral" },
@@ -12,11 +14,25 @@ const techPartners = [
 
 export default function TechBar() {
   const { t } = useTranslation();
+  // Logo partenaire de la marque (Help : Les Français avancent) — masqué tant que l'image
+  // n'est pas déposée dans public/, plutôt qu'une icône d'image cassée.
+  const partnerLogo = activeBrand.partnerLogo;
+  const [partnerLogoMissing, setPartnerLogoMissing] = useState(false);
 
   return (
     <section className="tech-bar py-4 px-6 border-y border-primary/5">
       <div className="max-w-[1200px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
         {/* Tech logos */}
+        <div className="flex flex-wrap items-center justify-center gap-6">
+          {partnerLogo && !partnerLogoMissing && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={partnerLogo.src}
+              alt={partnerLogo.alt}
+              className="h-8 md:h-10 w-auto object-contain"
+              onError={() => setPartnerLogoMissing(true)}
+            />
+          )}
         <div className="flex flex-wrap justify-center gap-6 opacity-60 grayscale scale-75 md:scale-90">
           {techPartners.map((partner) => (
             <div key={partner.name} className="flex items-center gap-2">
@@ -26,6 +42,7 @@ export default function TechBar() {
               </span>
             </div>
           ))}
+        </div>
         </div>
 
         {/* Divider */}
