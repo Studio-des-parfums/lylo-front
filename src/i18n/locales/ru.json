@@ -68,7 +68,6 @@
     "fullscreenEnter": "Полный экран",
     "fullscreenExit": "Выйти из полного экрана",
     "choosePrinter": "Выбрать принтер",
-    "participantCountTitle": "Количество участников",
     "participantColorTitle": "Цвет каждого участника",
     "participantLabel": "Участник {n}",
     "participantColorError": "Каждый участник должен выбрать свой цвет.",
@@ -83,7 +82,10 @@
     "colorOrange": "Оранжевый",
     "colorRose": "Розовый",
     "colorTurquoise": "Бирюзовый",
-    "languageComingSoon": "Скоро"
+    "languageComingSoon": "Скоро",
+    "duoTitle": "Режим дуэта",
+    "duoNo": "Нет",
+    "duoYes": "Да"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -333,7 +335,10 @@
     "sheetsPrinted": "{count} лист{plural} напечатано",
     "printAllFormulas": "Распечатать {count} формул(ы)",
     "giveReferenceToPerfumer": "Дайте этот номер нашему парфюмеру, чтобы найти вашу формулу.",
-    "referenceLoading": "Генерация вашего номера..."
+    "referenceLoading": "Генерация вашего номера...",
+    "referenceRetry": "Номер недоступен — повторить",
+    "nextPerson": "Следующий участник",
+    "finish": "Завершить"
   },
   "recommendationsPage": {
     "printed": "Напечатано",
@@ -396,5 +401,11 @@
     "pageOf": "Страница {page} из {totalPages}",
     "close": "Закрыть",
     "refresh": "Обновить"
+  },
+  "pyramid": {
+    "top": "Верх",
+    "heart": "Сердце",
+    "base": "База",
+    "hint": "Нажмите на ноту, чтобы заменить её"
   }
 }

@@ -68,7 +68,6 @@
     "fullscreenEnter": "Vollbild",
     "fullscreenExit": "Vollbild verlassen",
     "choosePrinter": "Drucker auswählen",
-    "participantCountTitle": "Anzahl der Personen",
     "participantColorTitle": "Farbe jedes Teilnehmers",
     "participantLabel": "Teilnehmer {n}",
     "participantColorError": "Jeder Teilnehmer muss eine andere Farbe wählen.",
@@ -83,7 +82,10 @@
     "colorOrange": "Orange",
     "colorRose": "Rosa",
     "colorTurquoise": "Türkis",
-    "languageComingSoon": "Demnächst verfügbar"
+    "languageComingSoon": "Demnächst verfügbar",
+    "duoTitle": "Duo-Modus",
+    "duoNo": "Nein",
+    "duoYes": "Ja"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -333,7 +335,10 @@
     "referenceLoading": "Ihre Referenz wird erstellt...",
     "backToChoices": "Zurück zur Auswahl",
     "continue": "Weiter",
-    "personalizeTitle": "Personalisieren Sie Ihre Formel"
+    "personalizeTitle": "Personalisieren Sie Ihre Formel",
+    "referenceRetry": "Referenz nicht verfügbar — erneut versuchen",
+    "nextPerson": "Zur nächsten Person",
+    "finish": "Beenden"
   },
   "recommendationsPage": {
     "printed": "Gedruckt",
@@ -396,5 +401,11 @@
     "sent": "Formel gesendet!",
     "error": "Fehler beim Senden. Bitte versuchen Sie es erneut.",
     "close": "Schließen"
+  },
+  "pyramid": {
+    "top": "Kopf",
+    "heart": "Herz",
+    "base": "Basis",
+    "hint": "Tippen Sie auf eine Note, um sie zu ersetzen"
   }
 }
