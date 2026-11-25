@@ -64,14 +64,10 @@
     "avatarOn": "Avatar activado",
     "avatarOff": "Solo audio",
     "avatarHint": "Desactívalo si tu conexión es lenta. Ejecuta la prueba de abajo para comprobarlo.",
-    "emailTitle": "Resumen por correo electrónico",
-    "emailPlaceholder": "tu@email.com",
-    "emailHint": "Recibe un resumen de tu sesión olfativa por correo electrónico al final de la experiencia.",
     "displayTitle": "Pantalla",
     "fullscreenEnter": "Pantalla completa",
     "fullscreenExit": "Salir de pantalla completa",
     "choosePrinter": "Elegir una impresora",
-    "participantCountTitle": "Número de personas",
     "participantColorTitle": "Color de cada participante",
     "participantLabel": "Participante {n}",
     "participantColorError": "Cada participante debe elegir un color diferente.",
@@ -86,7 +82,10 @@
     "colorOrange": "Naranja",
     "colorRose": "Rosa",
     "colorTurquoise": "Turquesa",
-    "languageComingSoon": "Próximamente"
+    "languageComingSoon": "Próximamente",
+    "duoTitle": "Modo dúo",
+    "duoNo": "No",
+    "duoYes": "Sí"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -336,7 +335,10 @@
     "referenceLoading": "Generando tu referencia...",
     "backToChoices": "Volver a las opciones",
     "continue": "Continuar",
-    "personalizeTitle": "Personalice su fórmula"
+    "personalizeTitle": "Personalice su fórmula",
+    "referenceRetry": "Referencia no disponible — reintentar",
+    "nextPerson": "Pasar a la siguiente persona",
+    "finish": "Terminar"
   },
   "recommendationsPage": {
     "printed": "Impreso",
@@ -392,10 +394,18 @@
     "firstName": "Nombre",
     "lastName": "Apellido",
     "email": "Correo electrónico",
+    "company": "Empresa (opcional)",
+    "jobTitle": "Cargo (opcional)",
     "submit": "Enviar",
     "sending": "Enviando…",
     "sent": "¡Fórmula enviada!",
     "error": "Error al enviar. Inténtelo de nuevo.",
     "close": "Cerrar"
+  },
+  "pyramid": {
+    "top": "Salida",
+    "heart": "Corazón",
+    "base": "Fondo",
+    "hint": "Toque una nota para sustituirla"
   }
 }

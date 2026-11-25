@@ -15,7 +15,7 @@ interface SendFormulaMailButtonProps {
 }
 
 /**
- * Bouton "Recevoir par mail" + modal (prénom/nom/email) — remplace l'ancien envoi
+ * Bouton "Recevoir par mail" + modal (prénom/nom/email/société/fonction) — remplace l'ancien envoi
  * automatique (déclenché à l'oral ou via la config) : l'utilisateur choisit explicitement
  * quand et à quelle adresse recevoir sa formule, à l'écran de résultats, à côté du QR code
  * et du bouton imprimer. Appelle POST /formulas/{reference}/send-mail, qui persiste aussi
@@ -27,6 +27,8 @@ export default function SendFormulaMailButton({ reference, className, iconOnly }
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
+  const [company, setCompany] = useState("");
+  const [jobTitle, setJobTitle] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -41,6 +43,8 @@ export default function SendFormulaMailButton({ reference, className, iconOnly }
           email: email.trim(),
           first_name: firstName.trim() || null,
           last_name: lastName.trim() || null,
+          company: company.trim() || null,
+          job_title: jobTitle.trim() || null,
         }),
       });
       setStatus(res.ok ? "sent" : "error");
@@ -126,6 +130,24 @@ export default function SendFormulaMailButton({ reference, className, iconOnly }
                   placeholder={t("sendMail.email")}
                   className="w-full px-3 py-2 rounded-lg border border-primary/15 bg-white text-sm text-primary placeholder:text-primary/35 outline-none focus:border-primary/40"
                 />
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    autoComplete="organization"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder={t("sendMail.company")}
+                    className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-primary/15 bg-white text-sm text-primary placeholder:text-primary/35 outline-none focus:border-primary/40"
+                  />
+                  <input
+                    type="text"
+                    autoComplete="organization-title"
+                    value={jobTitle}
+                    onChange={(e) => setJobTitle(e.target.value)}
+                    placeholder={t("sendMail.jobTitle")}
+                    className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-primary/15 bg-white text-sm text-primary placeholder:text-primary/35 outline-none focus:border-primary/40"
+                  />
+                </div>
                 <button
                   type="submit"
                   disabled={status === "sending" || !email.trim()}

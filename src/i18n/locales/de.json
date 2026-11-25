@@ -64,14 +64,10 @@
     "avatarOn": "Avatar aktiviert",
     "avatarOff": "Nur Audio",
     "avatarHint": "Deaktivieren Sie diese Option, wenn Ihre Verbindung langsam ist. Führen Sie den Test unten durch, um dies zu überprüfen.",
-    "emailTitle": "Zusammenfassung per E-Mail",
-    "emailPlaceholder": "ihre@email.com",
-    "emailHint": "Erhalten Sie am Ende des Erlebnisses eine Zusammenfassung Ihrer olfaktorischen Sitzung per E-Mail.",
     "displayTitle": "Anzeige",
     "fullscreenEnter": "Vollbild",
     "fullscreenExit": "Vollbild verlassen",
     "choosePrinter": "Drucker auswählen",
-    "participantCountTitle": "Anzahl der Personen",
     "participantColorTitle": "Farbe jedes Teilnehmers",
     "participantLabel": "Teilnehmer {n}",
     "participantColorError": "Jeder Teilnehmer muss eine andere Farbe wählen.",
@@ -86,7 +82,10 @@
     "colorOrange": "Orange",
     "colorRose": "Rosa",
     "colorTurquoise": "Türkis",
-    "languageComingSoon": "Demnächst verfügbar"
+    "languageComingSoon": "Demnächst verfügbar",
+    "duoTitle": "Duo-Modus",
+    "duoNo": "Nein",
+    "duoYes": "Ja"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -336,7 +335,10 @@
     "referenceLoading": "Ihre Referenz wird erstellt...",
     "backToChoices": "Zurück zur Auswahl",
     "continue": "Weiter",
-    "personalizeTitle": "Personalisieren Sie Ihre Formel"
+    "personalizeTitle": "Personalisieren Sie Ihre Formel",
+    "referenceRetry": "Referenz nicht verfügbar — erneut versuchen",
+    "nextPerson": "Zur nächsten Person",
+    "finish": "Beenden"
   },
   "recommendationsPage": {
     "printed": "Gedruckt",
@@ -392,10 +394,18 @@
     "firstName": "Vorname",
     "lastName": "Nachname",
     "email": "E-Mail",
+    "company": "Unternehmen (optional)",
+    "jobTitle": "Position (optional)",
     "submit": "Senden",
     "sending": "Wird gesendet…",
     "sent": "Formel gesendet!",
     "error": "Fehler beim Senden. Bitte versuchen Sie es erneut.",
     "close": "Schließen"
+  },
+  "pyramid": {
+    "top": "Kopf",
+    "heart": "Herz",
+    "base": "Basis",
+    "hint": "Tippen Sie auf eine Note, um sie zu ersetzen"
   }
 }

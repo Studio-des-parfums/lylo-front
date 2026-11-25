@@ -64,14 +64,10 @@
     "avatarOn": "الصورة الرمزية مفعّلة",
     "avatarOff": "صوت فقط",
     "avatarHint": "عطّلها إذا كان اتصالك بطيئاً. قم بإجراء الاختبار أدناه للتحقق.",
-    "emailTitle": "ملخص عبر البريد الإلكتروني",
-    "emailPlaceholder": "your@email.com",
-    "emailHint": "احصل على ملخص لجلستك الشمّية عبر البريد الإلكتروني في نهاية التجربة.",
     "displayTitle": "العرض",
     "fullscreenEnter": "ملء الشاشة",
     "fullscreenExit": "الخروج من ملء الشاشة",
     "choosePrinter": "اختر طابعة",
-    "participantCountTitle": "عدد الأشخاص",
     "participantColorTitle": "لون كل مشارك",
     "participantLabel": "المشارك {n}",
     "participantColorError": "يجب على كل مشارك اختيار لون مختلف.",
@@ -86,7 +82,10 @@
     "colorOrange": "برتقالي",
     "colorRose": "وردي",
     "colorTurquoise": "فيروزي",
-    "languageComingSoon": "قريباً"
+    "languageComingSoon": "قريباً",
+    "duoTitle": "وضع الثنائي",
+    "duoNo": "لا",
+    "duoYes": "نعم"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -336,7 +335,10 @@
     "referenceLoading": "جارٍ إنشاء مرجعك...",
     "backToChoices": "العودة إلى الخيارات",
     "continue": "متابعة",
-    "personalizeTitle": "خصص تركيبتك"
+    "personalizeTitle": "خصص تركيبتك",
+    "referenceRetry": "المرجع غير متاح — إعادة المحاولة",
+    "nextPerson": "الانتقال إلى الشخص التالي",
+    "finish": "إنهاء"
   },
   "recommendationsPage": {
     "printed": "تمت الطباعة",
@@ -392,10 +394,18 @@
     "firstName": "الاسم الأول",
     "lastName": "اسم العائلة",
     "email": "البريد الإلكتروني",
+    "company": "الشركة (اختياري)",
+    "jobTitle": "المنصب (اختياري)",
     "submit": "إرسال",
     "sending": "جارٍ الإرسال…",
     "sent": "تم إرسال التركيبة!",
     "error": "خطأ في الإرسال. يرجى المحاولة مرة أخرى.",
     "close": "إغلاق"
+  },
+  "pyramid": {
+    "top": "القمة",
+    "heart": "القلب",
+    "base": "القاعدة",
+    "hint": "اضغط على نوتة لاستبدالها"
   }
 }

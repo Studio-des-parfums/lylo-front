@@ -9,6 +9,10 @@ const API_BASE = process.env.NEXT_PUBLIC_API_URL;
 const POLL_INTERVAL_MS = 3000;
 const POLL_TIMEOUT_MS = 90000;
 
+/** Bouton moodboard masqué partout le temps de finaliser la fonctionnalité — repasser à true
+ * pour le réafficher. La génération côté back (tâche de fond) n'est pas affectée. */
+export const MOODBOARD_ENABLED = false;
+
 interface MoodboardButtonProps {
   reference?: string | null;
   initialImageUrl?: string | null;

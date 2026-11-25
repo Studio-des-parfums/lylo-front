@@ -64,14 +64,10 @@
     "avatarOn": "Avatar activé",
     "avatarOff": "Audio uniquement",
     "avatarHint": "Désactivez si votre connexion est lente. Faites le test ci-dessous pour vérifier.",
-    "emailTitle": "Récapitulatif par e-mail",
-    "emailPlaceholder": "votre@email.com",
-    "emailHint": "Recevez un résumé de votre session olfactive par e-mail à la fin de l'expérience.",
     "displayTitle": "Affichage",
     "fullscreenEnter": "Plein écran",
     "fullscreenExit": "Quitter le plein écran",
     "choosePrinter": "Choisir une imprimante",
-    "participantCountTitle": "Nombre de personnes",
     "participantColorTitle": "Couleur de chaque participant",
     "participantLabel": "Participant {n}",
     "participantColorError": "Chaque participant doit choisir une couleur différente.",
@@ -86,7 +82,10 @@
     "colorOrange": "Orange",
     "colorRose": "Rose",
     "colorTurquoise": "Turquoise",
-    "languageComingSoon": "Bientôt disponible"
+    "languageComingSoon": "Bientôt disponible",
+    "duoTitle": "Mode duo",
+    "duoNo": "Non",
+    "duoYes": "Oui"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -336,7 +335,10 @@
     "sheetsPrinted": "{count} feuille{plural} imprimée{plural}",
     "printAllFormulas": "Imprimer les {count} formules",
     "giveReferenceToPerfumer": "Donnez cette référence à notre parfumeur pour retrouver votre formule.",
-    "referenceLoading": "Génération de votre référence..."
+    "referenceLoading": "Génération de votre référence...",
+    "referenceRetry": "Référence indisponible — réessayer",
+    "nextPerson": "Passer à la personne suivante",
+    "finish": "Terminer"
   },
   "recommendationsPage": {
     "printed": "Imprimé",
@@ -365,6 +367,8 @@
     "firstName": "Prénom",
     "lastName": "Nom",
     "email": "Email",
+    "company": "Société (optionnel)",
+    "jobTitle": "Fonction (optionnel)",
     "submit": "Envoyer",
     "sending": "Envoi en cours…",
     "sent": "Formule envoyée !",
@@ -397,5 +401,11 @@
     "pageOf": "Page {page} / {totalPages}",
     "close": "Fermer",
     "refresh": "Rafraîchir"
+  },
+  "pyramid": {
+    "top": "Tête",
+    "heart": "Cœur",
+    "base": "Fond",
+    "hint": "Touchez une note pour la remplacer"
   }
 }

@@ -64,14 +64,10 @@
     "avatarOn": "Avatar enabled",
     "avatarOff": "Audio only",
     "avatarHint": "Disable if your connection is slow. Run the test below to check.",
-    "emailTitle": "Summary by email",
-    "emailPlaceholder": "your@email.com",
-    "emailHint": "Receive a summary of your olfactory session by email at the end of the experience.",
     "displayTitle": "Display",
     "fullscreenEnter": "Fullscreen",
     "fullscreenExit": "Exit fullscreen",
     "choosePrinter": "Choose a printer",
-    "participantCountTitle": "Number of people",
     "participantColorTitle": "Each participant's color",
     "participantLabel": "Participant {n}",
     "participantColorError": "Each participant must choose a different color.",
@@ -86,7 +82,10 @@
     "colorOrange": "Orange",
     "colorRose": "Pink",
     "colorTurquoise": "Turquoise",
-    "languageComingSoon": "Coming soon"
+    "languageComingSoon": "Coming soon",
+    "duoTitle": "Duo mode",
+    "duoNo": "No",
+    "duoYes": "Yes"
   },
   "interaction": {
     "brand": "Le studio des parfums",
@@ -336,7 +335,10 @@
     "sheetsPrinted": "{count} sheet{plural} printed",
     "printAllFormulas": "Print the {count} formulas",
     "giveReferenceToPerfumer": "Give this reference to our perfumer to retrieve your formula.",
-    "referenceLoading": "Generating your reference..."
+    "referenceLoading": "Generating your reference...",
+    "referenceRetry": "Reference unavailable — retry",
+    "nextPerson": "Next person",
+    "finish": "Finish"
   },
   "recommendationsPage": {
     "printed": "Printed",
@@ -365,6 +367,8 @@
     "firstName": "First name",
     "lastName": "Last name",
     "email": "Email",
+    "company": "Company (optional)",
+    "jobTitle": "Job title (optional)",
     "submit": "Send",
     "sending": "Sending…",
     "sent": "Formula sent!",
@@ -397,5 +401,11 @@
     "pageOf": "Page {page} / {totalPages}",
     "close": "Close",
     "refresh": "Refresh"
+  },
+  "pyramid": {
+    "top": "Top",
+    "heart": "Heart",
+    "base": "Base",
+    "hint": "Tap a note to replace it"
   }
 }
