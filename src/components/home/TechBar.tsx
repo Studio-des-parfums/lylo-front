@@ -5,13 +5,6 @@ import { useState } from "react";
 import { useTranslation } from "@/i18n/LanguageContext";
 import { activeBrand } from "@/lib/brand";
 
-const techPartners = [
-  { icon: "auto_awesome", name: "Mistral" },
-  { icon: "cloud_queue", name: "AWS" },
-  { icon: "psychology", name: "OpenAI" },
-  { icon: "search", name: "Google" },
-];
-
 export default function TechBar() {
   const { t } = useTranslation();
   // Logo partenaire de la marque (Help : Les Français avancent) — masqué tant que l'image
@@ -33,16 +26,12 @@ export default function TechBar() {
               onError={() => setPartnerLogoMissing(true)}
             />
           )}
-        <div className="flex flex-wrap justify-center gap-6 opacity-60 grayscale scale-75 md:scale-90">
-          {techPartners.map((partner) => (
-            <div key={partner.name} className="flex items-center gap-2">
-              <MaterialIcon name={partner.icon} className="text-2xl" />
-              <span className="font-bold text-lg tracking-tighter">
-                {partner.name}
-              </span>
-            </div>
-          ))}
-        </div>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/logo-ovh.png"
+            alt="OVHcloud"
+            className="h-8 md:h-10 w-auto object-contain"
+          />
         </div>
 
         {/* Divider */}
