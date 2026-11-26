@@ -12,6 +12,8 @@ interface SendFormulaMailButtonProps {
   className?: string;
   /** Icône seule, sans le libellé — pour les emplacements compacts (ex: une carte par participant). */
   iconOnly?: boolean;
+  /** Prénom donné à l'agent pendant la session vocale : pré-remplit le champ (modifiable). */
+  initialFirstName?: string;
 }
 
 /**
@@ -21,7 +23,7 @@ interface SendFormulaMailButtonProps {
  * et du bouton imprimer. Appelle POST /formulas/{reference}/send-mail, qui persiste aussi
  * le prénom/nom sur la formule en base.
  */
-export default function SendFormulaMailButton({ reference, className, iconOnly }: SendFormulaMailButtonProps) {
+export default function SendFormulaMailButton({ reference, className, iconOnly, initialFirstName }: SendFormulaMailButtonProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -63,7 +65,12 @@ export default function SendFormulaMailButton({ reference, className, iconOnly }
   return (
     <>
       <button
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          // Pré-remplit au moment de l'ouverture (le profil peut arriver après le montage),
+          // sans écraser une saisie déjà faite.
+          if (!firstName && initialFirstName) setFirstName(initialFirstName);
+          setOpen(true);
+        }}
         title={iconOnly ? t("sendMail.button") : undefined}
         className={
           className ??

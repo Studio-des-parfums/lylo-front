@@ -65,7 +65,7 @@ function renderFormula(
 export default function RecommendationsPage() {
   const router = useRouter();
   const { t } = useTranslation();
-  const { formulas: sessionFormulas, formulaReference, endSession, agentName, sessionData, replaceSelectedFormula } = useSession();
+  const { formulas: sessionFormulas, formulaReference, endSession, agentName, sessionData, replaceSelectedFormula, profile } = useSession();
   const [selectedSize, setSelectedSize] = useState<SizeOption>("30ml");
 
   const [devSingleFormula, setDevSingleFormula] = useState(false);
@@ -224,6 +224,7 @@ export default function RecommendationsPage() {
                 {formulaReference ? (
                   <SendFormulaMailButton
                     reference={formulaReference}
+                    initialFirstName={profile.first_name}
                     iconOnly
                     className="flex items-center justify-center size-9 rounded-full bg-white/90 backdrop-blur-sm text-primary border border-primary/25 cursor-pointer shadow-lg shadow-primary/10 hover:bg-white hover:border-primary/40 transition-all"
                   />

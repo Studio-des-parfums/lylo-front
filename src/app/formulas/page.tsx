@@ -17,6 +17,8 @@ interface FormulaRow {
   reference: string;
   customer_name: string | null;
   customer_email: string | null;
+  customer_first_name: string | null;
+  perfume_name: string | null;
   profile: string | null;
   formula_type: string | null;
   language: string | null;
@@ -179,7 +181,8 @@ export default function FormulasPage() {
             <thead>
               <tr className="border-b border-primary/10 text-left text-primary/70 uppercase text-[11px] tracking-wide">
                 <th className="px-4 py-3 font-semibold">{t("formulas.colReference")}</th>
-                <th className="px-4 py-3 font-semibold">{t("formulas.colCustomer")}</th>
+                <th className="px-4 py-3 font-semibold">{t("formulas.colPerfumeName")}</th>
+                <th className="px-4 py-3 font-semibold">{t("formulas.colFirstName")}</th>
                 <th className="px-4 py-3 font-semibold">{t("formulas.colEmail")}</th>
                 <th className="px-4 py-3 font-semibold">{t("formulas.colType")}</th>
                 <th className="px-4 py-3 font-semibold">{t("formulas.colDate")}</th>
@@ -188,7 +191,7 @@ export default function FormulasPage() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-primary/70">
+                  <td colSpan={6} className="px-4 py-8 text-center text-primary/70">
                     {t("formulas.loading")}
                   </td>
                 </tr>
@@ -202,7 +205,8 @@ export default function FormulasPage() {
                     }`}
                   >
                     <td className="px-4 py-3 font-mono text-primary font-medium">{f.reference}</td>
-                    <td className="px-4 py-3 text-primary">{f.customer_name || "—"}</td>
+                    <td className="px-4 py-3 text-primary italic">{f.perfume_name || "—"}</td>
+                    <td className="px-4 py-3 text-primary">{f.customer_first_name || "—"}</td>
                     <td className="px-4 py-3 text-primary">{f.customer_email || "—"}</td>
                     <td className="px-4 py-3 text-primary">{f.formula_type || "—"}</td>
                     <td className="px-4 py-3 text-primary/80">
@@ -212,7 +216,7 @@ export default function FormulasPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-primary/70">
+                  <td colSpan={6} className="px-4 py-8 text-center text-primary/70">
                     {t("formulas.noResults")}
                   </td>
                 </tr>

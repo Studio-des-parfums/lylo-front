@@ -362,6 +362,8 @@
     "searchPlaceholder": "Buscar por referencia...",
     "colReference": "Referencia",
     "colCustomer": "Cliente",
+    "colPerfumeName": "Perfume",
+    "colFirstName": "Nombre",
     "colEmail": "Email",
     "colType": "Tipo",
     "colDate": "Fecha",
