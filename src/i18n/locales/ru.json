@@ -389,6 +389,8 @@
     "searchPlaceholder": "Поиск по номеру...",
     "colReference": "Номер",
     "colCustomer": "Клиент",
+    "colPerfumeName": "Аромат",
+    "colFirstName": "Имя",
     "colEmail": "Email",
     "colType": "Тип",
     "colDate": "Дата",

@@ -349,6 +349,8 @@
     "searchPlaceholder": "Zoeken op referentie...",
     "colReference": "Referentie",
     "colCustomer": "Klant",
+    "colPerfumeName": "Parfum",
+    "colFirstName": "Voornaam",
     "colEmail": "E-mail",
     "colType": "Type",
     "colDate": "Datum",
